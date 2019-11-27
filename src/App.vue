@@ -1,16 +1,27 @@
 <template>
   <div>
-
     <main>
       <router-view />
     </main>
     <footer>
-      <span> menu here {{links}} 
-      <ul>
+  <!-- Image and text -->
+  <b-navbar variant="dark" type="light">
+    <b-navbar-brand > 
+      <!-- <img src="../static/img/nederland-orange.jpeg" class="d-inline-block align-top" alt="Kitten"> -->
+      <b-link :to="'/'">Home</b-link>
+        
+    </b-navbar-brand>
+    <!-- <b-nav-item > -->
+      <b-link :to="'/user'">User</b-link>
+
+    <!-- </b-nav-item> -->
+  </b-navbar>
+      <span> 
+      <!-- <ul>
       <li v-for="(link, index) in links" :key="index">
         <router-link :to="link.to">{{ link.name }}</router-link>
       </li>
-    </ul>
+    </ul> -->
     </span>
     </footer>
   </div>
@@ -68,10 +79,9 @@ header {
 footer {
   position: fixed;
   bottom: 0px;
-  height: 56px;
-  padding: 0 16px 0 24px;
-  background-color: #000000;
-  color: #ffffff;
+  /* height: 56px; */
+  /* padding: 0 16px 0 24px; */
+  /* background-color: #ffa500;; */
   width: 100%;
 }
 </style>
