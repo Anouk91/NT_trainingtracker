@@ -1,12 +1,14 @@
 <template>
   <div id="app">
     <header>
-      <span>Vue.js PWA</span>
+      <span>NT training trackr</span>
     </header>
     <main>
-      <img src="./assets/logo.png" alt="Vue.js PWA">
       <router-view></router-view>
     </main>
+    <footer>
+      <span> menu here </span>
+    </footer>
   </div>
 </template>
 
@@ -30,14 +32,18 @@ body {
 
 main {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 56px;
+  margin-bottom: 56px;
 }
 
 header {
+  position: fixed;
+  top: 0px;
+  width: 100%;
   margin: 0;
   height: 56px;
   padding: 0 16px 0 24px;
-  background-color: #35495E;
+  background-color: #000000;
   color: #ffffff;
 }
 
@@ -50,5 +56,15 @@ header span {
   font-weight: 400;
   box-sizing: border-box;
   padding-top: 16px;
+}
+
+footer {
+  position: fixed;
+  bottom: 0px;
+  height: 56px;
+  padding: 0 16px 0 24px;
+  background-color: #000000;
+  color: #ffffff;
+  width: 100%;
 }
 </style>
