@@ -1,18 +1,39 @@
 <template>
   <div>
-    <ul>
-      <li v-for="(link, index) in links" :key="index">
-        <router-link :to="link.to">{{ link.name }}</router-link>
-      </li>
-    </ul>
+
     <main>
       <router-view />
     </main>
     <footer>
-      <span> menu here </span>
+      <span> menu here {{links}} 
+      <ul>
+      <li v-for="(link, index) in links" :key="index">
+        <router-link :to="link.to">{{ link.name }}</router-link>
+      </li>
+    </ul>
+    </span>
     </footer>
   </div>
 </template>
+
+
+<script>
+export default {
+  data: () => ({
+    links: [
+      {
+        name: 'Home',
+        to: '/'
+      },
+      {
+        name: 'User',
+        to: '/user'
+      }
+    ]
+  })
+}
+</script>
+
 
 <style scoped>
 ul {
@@ -54,19 +75,3 @@ footer {
   width: 100%;
 }
 </style>
-
-<script>
-export default {
-  data: () => ({
-    links: [
-      {
-        name: 'Home',
-        to: '/'
-      },
-      {
-        name: 'User',
-        to: '/user'
-      }
-    ]
-  })
-}
