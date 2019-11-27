@@ -11,8 +11,11 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "@firebase/app": "^0.4.25",
+    "@firebase/firestore": "^1.8.0",
     "firebase": "^7.5.0",
     "vue": "^2.5.2",
+    "vue-firestore": "^0.3.22",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
