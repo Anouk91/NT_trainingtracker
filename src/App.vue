@@ -41,6 +41,10 @@ export default {
         name: 'Add Exercise',
         to: '/new-exercise'
       },
+      {
+        name: 'User',
+        to: '/user'
+      },
     ]
   })
 }
