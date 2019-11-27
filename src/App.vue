@@ -1,54 +1,47 @@
 <template>
-  <div id="app">
-    <header>
-      <span>Vue.js PWA</span>
-    </header>
+  <div>
+    <ul>
+      <li v-for="(link, index) in links" :key="index">
+        <router-link :to="link.to">{{ link.name }}</router-link>
+      </li>
+    </ul>
     <main>
-      <img src="./assets/logo.png" alt="Vue.js PWA">
-      <router-view></router-view>
+      <router-view />
     </main>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'app'
+<style scoped>
+ul {
+  list-style: none;
+  display: flex;
+  padding: 0;
 }
-</script>
-
-<style>
-body {
-  margin: 0;
+li {
+  padding: 5px 15px 5px 0;
 }
-
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+li a {
+  text-decoration: none;
+  color: black;
 }
-
-main {
-  text-align: center;
-  margin-top: 40px;
-}
-
-header {
-  margin: 0;
-  height: 56px;
-  padding: 0 16px 0 24px;
-  background-color: #35495E;
-  color: #ffffff;
-}
-
-header span {
-  display: block;
-  position: relative;
-  font-size: 20px;
-  line-height: 1;
-  letter-spacing: .02em;
-  font-weight: 400;
-  box-sizing: border-box;
-  padding-top: 16px;
+li a:hover {
+  color: #404040;
 }
 </style>
+
+<script>
+export default {
+  data: () => ({
+    links: [
+      {
+        name: 'Home',
+        to: '/'
+      },
+      {
+        name: 'User',
+        to: '/user'
+      }
+    ]
+  })
+}
+</script>
