@@ -30,7 +30,7 @@ export default {
       fields: [
 
         { key: 'date', sortable: true },
-        { key: 'type', sortable: false },
+        { key: 'type', sortable: true },
         { key: 'name', sortable: true },
         { key: 'minutes', sortable: true }
       ],

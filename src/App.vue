@@ -5,24 +5,14 @@
     </main>
     <footer>
   <!-- Image and text -->
-  <b-navbar variant="dark" type="light">
-    <b-navbar-brand > 
+  <b-navbar toggleable="lg" type="dark" variant="info" >
       <!-- <img src="../static/img/nederland-orange.jpeg" class="d-inline-block align-top" alt="Kitten"> -->
-      <b-link :to="'/'">Home</b-link>
-        
-    </b-navbar-brand>
-    <!-- <b-nav-item > -->
-      <b-link :to="'/user'">User</b-link>
+      <b-navbar-brand :to="'/'" active>Home</b-navbar-brand>
+      <b-navbar-nav>
+      <b-nav-item :to="'/user'">User</b-nav-item>
+      </b-navbar-nav>
 
-    <!-- </b-nav-item> -->
   </b-navbar>
-      <span> 
-      <!-- <ul>
-      <li v-for="(link, index) in links" :key="index">
-        <router-link :to="link.to">{{ link.name }}</router-link>
-      </li>
-    </ul> -->
-    </span>
     </footer>
   </div>
 </template>
