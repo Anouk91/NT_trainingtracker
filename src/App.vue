@@ -8,6 +8,9 @@
     <main>
       <router-view />
     </main>
+    <footer>
+      <span> menu here </span>
+    </footer>
   </div>
 </template>
 
@@ -24,8 +27,31 @@ li a {
   text-decoration: none;
   color: black;
 }
-li a:hover {
-  color: #404040;
+
+main {
+  text-align: center;
+  margin-top: 56px;
+  margin-bottom: 56px;
+}
+
+header {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  margin: 0;
+  height: 56px;
+  padding: 0 16px 0 24px;
+  background-color: #000000;
+  color: #ffffff;
+}
+footer {
+  position: fixed;
+  bottom: 0px;
+  height: 56px;
+  padding: 0 16px 0 24px;
+  background-color: #000000;
+  color: #ffffff;
+  width: 100%;
 }
 </style>
 
@@ -44,4 +70,3 @@ export default {
     ]
   })
 }
-</script>
