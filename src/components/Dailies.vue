@@ -1,21 +1,17 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="http://chat.vuejs.org/" target="_blank" rel="noopener">Vue Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank" rel="noopener">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class="container-fluid">
+    <div v-for="exercise in lowerBody" :key="exercise.name">
+      <div class="card" style="width: 18rem;">
+        <!-- <img src="../static/img/nederland-orange.jpeg" class="d-inline-block align-top" alt="Leeuw"> -->
+        <div class="card-body">
+          <h5 class="card-title">{{ exercise.name }}</h5>
+          <p class="card-text">
+            Some quick example text to build on the card title and make up the
+            bulk of the card's content.
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -24,29 +20,45 @@ export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js PWA'
+      lowerBody: [
+        {
+          name: 'Single Leg deadlift',
+          sets: 3,
+          reps: '8-12 per leg',
+          video:
+            'https://drive.google.com/file/d/1dNvnhstl8HcBvPAeMFum6yprPGyqY2jS/view?usp=sharing',
+          opmerking:
+            'Belangrijk dat de buiging uit het heupgewricht komt en niet uit de rug; die moet recht blijven! Hou de heupen ook recht naast elkaar (linkerkant zelfde hoogte als rechterkant)'
+        },
+        {
+          name: 'Box jumps',
+          sets: '3/4',
+          reps: 10,
+          video:
+            'https://drive.google.com/file/d/1p55Ga_P8E574UiXTDsszwTf9iilsxqbs/view?usp=sharing',
+          opmerking: null
+        },
+        {
+          name: 'Step up',
+          sets: 3,
+          reps: 12,
+          video:
+            'https://drive.google.com/file/d/105yYsEbfo_MqvBHDJRyGhFzmUEPsEGje/view?usp=sharing',
+          opmerking: null
+        },
+        {
+          name: 'Crab',
+          sets: 3,
+          reps: '10-15',
+          video:
+            'https://drive.google.com/file/d/1Wklq1J5LNZbYxvZmnBJBiXHgHSLkBN8R/view?usp=sharing',
+          opmerking: null
+        }
+      ]
     }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #35495E;
-}
-</style>
+<style></style>

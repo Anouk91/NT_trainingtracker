@@ -4,6 +4,7 @@ import Router from 'vue-router'
 // Page content
 import Home from '@/components/Home'
 import User from '@/components/User'
+import Dailies from '@/components/Dailies'
 
 // Fallback page
 import PageNotFound from '@/components/PageNotFound'
@@ -21,6 +22,11 @@ export default new Router({
       path: '/user',
       name: 'User',
       component: User
+    },
+    {
+      path: '/dailies',
+      name: 'Dailies',
+      component: Dailies
     },
     {
       path: '**',

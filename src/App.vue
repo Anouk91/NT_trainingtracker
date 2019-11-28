@@ -6,10 +6,10 @@
     <footer>
   <!-- Image and text -->
   <b-navbar toggleable="lg" type="dark" variant="info" >
-      <!-- <img src="../static/img/nederland-orange.jpeg" class="d-inline-block align-top" alt="Kitten"> -->
+      <!-- <img src="../static/img/nederland-orange.jpeg" class="d-inline-block align-top" alt="Leeuw"> -->
       <b-navbar-brand :to="'/'" active>Home</b-navbar-brand>
-      <b-navbar-nav>
-      <b-nav-item :to="'/user'">User</b-nav-item>
+      <b-navbar-nav v-for="link in links" :key="link.to">
+      <b-nav-item :to="link.to">{{link.name}}</b-nav-item>
       </b-navbar-nav>
 
   </b-navbar>
@@ -22,13 +22,14 @@
 export default {
   data: () => ({
     links: [
-      {
-        name: 'Home',
-        to: '/'
-      },
+
       {
         name: 'User',
         to: '/user'
+      },
+      {
+        name: 'Dailies',
+        to: '/dailies'
       }
     ]
   })
