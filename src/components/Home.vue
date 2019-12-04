@@ -2,21 +2,24 @@
   <div class="hello">
     <datescroller :datelist="dates" />
     <div style="margin: 20px;">
-      <label>Selecteer een user</label>
-      <select>
-        <option
-          :key="user.id"
-          v-for="user in users_local"
-          value="user.firstname"
-        >
-          {{ user.firstname }}
-        </option>
-      </select>
-      <div class="logging_grid">
-        <button v-for="type in workout_types" :key="type.id">
-          {{ type.firstname }}
-        </button>
-      </div>
+      <b-form-select v-model="selected_user" :options="user_dropdown">
+        <option :value="null" disabled>-- Selecteer jezelf --</option>
+      </b-form-select>
+
+      <b-form-select v-model="selected_exercise" :options="exercise_dropdown">
+        <option :value="null" disabled>-- Selecteer het type training dat je hebt gedaan --</option>
+      </b-form-select>
+      <b-form-textarea id="textarea"
+        v-model="description_exercise"
+        placeholder="Optional extra info about your exercise"
+        rows="3"
+        max-rows="6"
+        v-if="selected_user && selected_exercise"></b-form-textarea>
+        <b-button v-if="selected_user && selected_exercise" v-on:click="addExercise(selected_user, selected_exercise, description_exercise)">
+          Save 
+        </b-button>
+
+
     </div>
   </div>
 </template>
@@ -29,8 +32,19 @@ export default {
   name: 'home',
   data () {
     return {
+      selected_user: null,
+      selected_exercise: null,
       users: [],
+      description_exercise: '',
       workout_types: [],
+      user_dropdown: [],
+      exercise_dropdown: [
+        {value: 1, text: 'Strength'},
+        {value: 2, text: 'Conditioning'},
+        {value: 3, text: 'Team Training'},
+        {value: 4, text: 'Throwing'},
+        {value: 5, text: 'Other'}
+      ],
       today: new Date(),
       users_local: [
         {
@@ -121,6 +135,11 @@ export default {
         dt = this.addDays(dt, 1)
       }
       return arr
+    },
+    addExercise (userId, exerciseId, text) {
+      console.log(userId, text)
+      // TODO push to Firebase
+      // db.ref('exercises').push({userId, text})
     }
   },
   components: {
@@ -128,6 +147,9 @@ export default {
   },
   created: function () {
     this.dates = this.getDateArray(7)
+    this.users_local.forEach(user => {
+      this.user_dropdown.push({ value: user.id, text: user.firstname })
+    })
   }
 }
 </script>
