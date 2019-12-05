@@ -1,48 +1,60 @@
 <template>
-  <b-row>
-    <b-col cols='12'>
-      <h2>
-        Excersises
-      </h2>
+  <div>
+    <b-form-select v-model="selected_user" :options="dropDown()">
+        <option :value="null" disabled>-- Selecteer jezelf --</option>
+    </b-form-select>
 
-      <b-table  hover 
-      :items="exercises"
-      :fields="fields"
-      :head-variant="light"
-      :bordered="true"
-      :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
-      responsive="sm"
-      :table-variant="secondary"
-
-      >
-      </b-table>
-    </b-col>
-  </b-row>
+    <div v-if="selected_user" >
+      <div class='card' v-for="exercise in exericesOfUser()" :key="exercise['.key']">
+        <div class="card-body">
+          {{exercise }}
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
+
+
 <script>
+import { db } from '../firebase'
+import datescroller from '../elements/datescroller.vue'
+
 export default {
+  name: 'home',
   data () {
     return {
-      sortBy: 'date',
-      sortDesc: false,
-      fields: [
-
-        { key: 'date', sortable: true },
-        { key: 'type', sortable: true },
-        { key: 'name', sortable: true },
-        { key: 'minutes', sortable: true }
-      ],
-      exercises: [
-        { type: 'daily', date: '27-11-2019', name: 'legs', minutes: 40 },
-        { type: 'daily', date: '26-11-2019', name: 'legs', minutes: 35 },
-        { type: 'training', date: '27-11-2019', name: 'AUC', minutes: 90 },
-        { type: 'training', date: '25-11-2019', name: 'goalti', minutes: 90 },
-        { type: 'training', date: '27-11-2019', name: 'UfO', minutes: 90 }
-      ],
-      errors: []
+      selected_user: null,
+      users: [],
+      exercises: []
     }
+  },
+  firestore () {
+    return {
+      users: db.collection('users'),
+      exercises: db.collection('exercises'),
+      workout_types: db.collection('workout_types').orderBy('index')
+    }
+  },
+  methods: {
+    dropDown () {
+      var dropdownList = []
+      this.users.forEach(user => {
+        dropdownList.push({value: user['.key'], text: `${user.firstname} ${user.lastname}`})
+      })
+      return dropdownList
+    },
+    exericesOfUser () {
+      var exercisesOfUser = this.exercises.filter(item => item.userId === this.selected_user)
+      console.log(exercisesOfUser)
+      return exercisesOfUser
+    }
+  },
+  components: {
+    datescroller
+  },
+  created: function () {
+    this.dates = this.getDateArray(7)
   }
 }
 </script>

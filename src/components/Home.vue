@@ -2,7 +2,7 @@
   <div class="hello">
     <datescroller :datelist="dates" />
     <div style="margin: 20px;">
-      <b-form-select v-model="selected_user" :options="user_dropdown">
+      <b-form-select v-model="selected_user" :options="dropDown()">
         <option :value="null" disabled>-- Selecteer jezelf --</option>
       </b-form-select>
 
@@ -34,10 +34,10 @@ export default {
     return {
       selected_user: null,
       selected_exercise: null,
+      selected_date: this.today,
       users: [],
       description_exercise: '',
       workout_types: [],
-      user_dropdown: [],
       exercise_dropdown: [
         {value: 1, text: 'Strength'},
         {value: 2, text: 'Conditioning'},
@@ -45,77 +45,13 @@ export default {
         {value: 4, text: 'Throwing'},
         {value: 5, text: 'Other'}
       ],
-      today: new Date(),
-      users_local: [
-        {
-          id: '77nRofkS0AlQ1u16NwPv',
-          firstname: 'Anna',
-          lastname: 'Hoefnagels'
-        },
-        {
-          id: 'A4kUyv2JPhcTJSTtHMjF',
-          firstname: 'Anniek',
-          lastname: 'Leinenga'
-        },
-        { id: '5m6HhvhJ7hHE6IcKRgTT', firstname: 'Anouk', lastname: 'Boukema' },
-        {
-          id: '8t1ykXymRJBLsRXGocM6',
-          firstname: 'Britt',
-          lastname: 'de Bruijn'
-        },
-        {
-          id: 'bLSAx8lL0XNmYPYz62B7',
-          firstname: 'Charlotte',
-          lastname: 'Verheij'
-        },
-        {
-          id: '38W7Udb7iZwrGFYRMcI6',
-          firstname: 'Camilla',
-          lastname: 'van Wirdum'
-        },
-        { id: 'ILbIQ0BIeJXYonsqwJZw', firstname: 'Eline', lastname: 'Wilhelm' },
-        { id: 'HbYi5oIsSkMvTv6HzuTL', firstname: 'Iris', lastname: 'Leinenga' },
-        { id: 'z0t4LTzzAo763VavIQju', firstname: 'Iris', lastname: 'Terpstra' },
-        {
-          id: '0qJT3xW1BFdCcIDhrktA',
-          firstname: 'Jill',
-          lastname: 'Steenkist'
-        },
-        { id: 'a1n0QQuDnwJBo7xjpHj0', firstname: 'Joske', lastname: 'Brouwer' },
-        { id: 'MmQygeTZkmNaQEyPodh3', firstname: 'Linde', lastname: 'Wits' },
-        { id: 'zm9fjuG9UwFhTSA8vTIm', firstname: 'Lisa', lastname: 'Wohlrab' },
-        {
-          id: 'R6IYa0zKzkCgdR4gRj6S',
-          firstname: 'Mirte',
-          lastname: 'van der Lee'
-        },
-        { id: '8UEoDBL3KN5uDftXZKns', firstname: 'Nena', lastname: 'Ruijs' },
-        { id: 'ux2Sx19OXDq2yEblPbOO', firstname: 'Paula', lastname: 'Baas' },
-        {
-          id: 'H8Ag78e9m4U0kuiPnE0H',
-          firstname: 'Roos',
-          lastname: 'Maaike Denisse'
-        },
-        { id: 'AockYXZeoYf1xGOHjewS', firstname: 'Sarah', lastname: 'Sparks' },
-        {
-          id: '4gpRUiuVO1vknaeSg3SF',
-          firstname: 'Suzanne',
-          lastname: 'Delwel'
-        },
-        {
-          id: 'bYbtfXX2oKI6gYMiiolH',
-          firstname: 'Tess',
-          lastname: 'van Middelaar'
-        },
-        { id: 'cXmkW4LBc9SaFZRXWLeR', firstname: 'Tirza', lastname: 'Moerman' },
-        { id: 'rpVd9PoCTsFuKbQ98aZ3', firstname: 'Julia', lastname: 'Ose' },
-        { id: 'gGxzMHEDmyy7Rr92Aycc', firstname: 'Rixt', lastname: 'Hofman' }
-      ]
+      today: new Date()
+
     }
   },
   firestore () {
     return {
-      users: db.collection('users'),
+      users: db.collection('users').orderBy('firstname'),
       workout_types: db.collection('workout_types').orderBy('index')
     }
   },
@@ -137,19 +73,23 @@ export default {
       return arr
     },
     addExercise (userId, exerciseId, text) {
-      console.log(userId, text)
-      // TODO push to Firebase
-      // db.ref('exercises').push({userId, text})
+      db.collection('exercises').add({userId, exerciseId, text})
+    },
+    dropDown () {
+      var dropdownList = []
+
+      this.users.forEach(user => {
+        dropdownList.push({value: user['.key'], text: `${user.firstname} ${user.lastname}`})
+      })
+      console.log(this.users, dropdownList)
+      return dropdownList
     }
   },
   components: {
     datescroller
   },
-  created: function () {
+  created () {
     this.dates = this.getDateArray(7)
-    this.users_local.forEach(user => {
-      this.user_dropdown.push({ value: user.id, text: user.firstname })
-    })
   }
 }
 </script>
