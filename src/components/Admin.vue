@@ -4,6 +4,7 @@
     <b-button v-on:click="deletePlayers(users, 'users')" class="btn btn-warning"> Delete Users </b-button>
     <b-button v-on:click="addListToDB(dailiesNov, 'dailies')"> Import Dailies november </b-button>
     <b-button v-on:click="deletePlayers(dailies, 'dailies')"> Delete Dailies </b-button>
+    <b-button v-on:click="deleteExercises(exercises, 'exercises')" class="btn btn-alert"> Delete Exercises </b-button>
   </div>
 </template>
 
@@ -18,6 +19,7 @@ export default {
     return {
       users: [],
       dailies: [],
+      exercises: [],
       dailiesNov,
       ntd
     }
@@ -25,7 +27,8 @@ export default {
   firestore () {
     return {
       users: db.collection('users'),
-      dailies: db.collection('dailies')
+      dailies: db.collection('dailies'),
+      exercises: db.collection('exercises')
     }
   },
   methods: {
@@ -35,6 +38,11 @@ export default {
       })
     },
     deletePlayers (theList, theDB) {
+      theList.forEach(x => {
+        db.collection(theDB).doc(x['.key']).delete()
+      })
+    },
+    deleteExercises (theList, theDB) {
       theList.forEach(x => {
         db.collection(theDB).doc(x['.key']).delete()
       })
