@@ -12,14 +12,20 @@
             <i class="material-icons"> {{exercise.exercise.icon}}</i>
             <p class=""> {{exercise.exercise.name}}</p>
           </div>
-          <div class="" v-for="(line, index) in exercise.splittedText" :key="`line ${index}`">
-           <p> {{line}} <br> </p>
+          <div class="col">
+            {{createString(exercise.splittedText)}}
+            </div>
+          <!-- <div class="col" v-for="(line, index) in exercise.splittedText" :key="`line ${index}`">
+          <div class ="row">
+           {{line}} {{index}}
+          </div> -->
           </div>
           <b-button class="col-1" > Edit </b-button>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -57,6 +63,12 @@ export default {
       var exercisesOfUser = this.exercises.filter(item => item.userId === this.selected_user)
       console.log(exercisesOfUser)
       return exercisesOfUser
+    },
+    createString (splittedTextArray) {
+      var text = ''
+      splittedTextArray.forEach(t => { text = text + t + '\n' })
+      console.log(text)
+      return text
     }
   },
   components: {
