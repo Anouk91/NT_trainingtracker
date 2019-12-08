@@ -12,35 +12,47 @@
 
   </div>
   <hr>
+
+  <!-- Team Stats -->
   <div class="row">
 
     <div class="col">
-      <h2> {{countDown()}} <br> #RoadToLeeuwarden</h2>
+      <div class="card">
+        <div style="display: inline; " >
+        <h2 class="number big"> {{countDown('week')}}</h2> <p>weeks </p> 
+        <h2 class="number small"> {{countDown()}}</h2> <p>days </p> <br>
+      </div>
+        <h3> #RoadToLeeuwarden</h3>
+      </div>
     </div>
 
     <div class="col">
-      <h3> {{exercises.length}} </h3>
-      <h3> Total Exercises done </h3>
+      <div class="card" >
+        <div style="display: inline;">
+          <h2 class="number big"> {{exercises.length}} </h2> <p>exercises </p>
+          <h3> DONE </h3>
+        </div>
+      </div>
     </div>
 
     <div class="col">
-      <table class="table">
-        <!-- <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Exercises done</th>
-          </tr>
-        </thead> -->
-        <tbody v-for="(player,index) in topThreeOfTheWeek()" :key="index">
-          <tr> 
-            <td> {{index +1 }} </td>
-            <td> {{player.username}}</td>
-            <td> {{player.count}} x</td>
-          </tr>
-        </tbody>
+      <div class="card">
+          <!-- <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First</th>
+              <th scope="col">Exercises done</th>
+            </tr>
+          </thead> -->
+        <div v-for="(player,index) in topThreeOfTheWeek()" :key="index">
+          <div class="row">
+                <div class="col-1 top3 rank"> {{index +1 }} </div>
+                <div class="col top3 name"> {{player.username}}</div>
+                <div class="col-2 top3 times"> {{player.count}} x</div>
+          </div>
+        </div>
         
-      </table>
+      </div>
     </div>
   </div>
   <hr>
@@ -112,13 +124,13 @@ export default {
       })
       return orderedById.sort((a, b) => { return b.count - a.count }).splice(0, 3)
     },
-    countDown () {
+    countDown (type) {
       const countDownDate = new Date('Jul 11, 2020 17:00:00')
       const today = new Date()
       const distance = countDownDate - today
       const weeks = Math.floor(distance / (1000 * 60 * 60 * 24 * 7))
       const days = Math.floor(distance / (1000 * 60 * 60 * 24)) % 7
-      return `${weeks} weeks and ${days} days to WUGC`
+      return type === 'week' ? weeks : days
       // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
       // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
       // var seconds = Math.floor((distance % (1000 * 60)) / 1000)
@@ -135,12 +147,43 @@ export default {
   width: 6rem;
   height: 6rem;
 }
+.number {
+  color: #ff6600; 
+  font-style: bold;
+  margin: 0;
+}
+
+.big {
+  font-size: 5rem;
+}
+
+.small {
+  font-size: 4rem;
+}
+
 .text {
   text-align: left;
-  color: orangered;
+  color: #ff6600;
 }
 
 .headerRow {
   margin-bottom: 2rem;
+}
+
+.top3 {
+  padding: .3rem;
+}
+
+.card {
+  background-color:#fff0e6;
+  margin: 2rem;
+  padding: 1rem;
+  justify-content: center;
+}
+
+
+
+h2, p {
+  display: inline;
 }
 </style>
