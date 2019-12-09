@@ -2,11 +2,12 @@
   <div class="hello">
     <datescroller :datelist="dates" />
     <div style="margin: 20px;">
-      <b-form-select v-model="selected_user" :options="dropDown()">
+      <b-form-select v-model="selected_user" :options="dropDownUsers()">
         <option :value="null" disabled>-- Selecteer jezelf --</option>
       </b-form-select>
 
-      <b-form-select v-model="selected_exercise" :options="exercise_dropdown">
+      <b-form-select v-model="selected_exercise" :options="dropDownWorkoutTypes()">
+                
         <option :value="null" disabled>-- Selecteer het type training dat je hebt gedaan --</option>
       </b-form-select>
       <b-form-textarea id="textarea"
@@ -18,7 +19,6 @@
         <b-button v-if="selected_user && selected_exercise" v-on:click="addExercise(selected_user, selected_exercise, description_exercise)">
           Save 
         </b-button>
-
 
     </div>
   </div>
@@ -38,13 +38,6 @@ export default {
       users: [],
       description_exercise: '',
       workout_types: [],
-      exercise_dropdown: [
-        {value: 1, text: 'Strength'},
-        {value: 2, text: 'Conditioning'},
-        {value: 3, text: 'Team Training'},
-        {value: 4, text: 'Throwing'},
-        {value: 5, text: 'Other'}
-      ],
       today: new Date()
 
     }
@@ -72,16 +65,24 @@ export default {
       }
       return arr
     },
-    addExercise (userId, exerciseId, text) {
-      db.collection('exercises').add({userId, exerciseId, text})
+    addExercise (userId, text) {
+      // var theWorkout = this.workout_types.findOne()
+      console.log(this.workout_types)
+      db.collection('exercises').add({userId, text})
     },
-    dropDown () {
+    dropDownWorkoutTypes () {
+      var dropdownList = []
+      this.workout_types.forEach(workoutType => {
+        dropdownList.push({value: workoutType['.key'], text: workoutType.name})
+      })
+      return dropdownList
+    },
+    dropDownUsers () {
       var dropdownList = []
 
       this.users.forEach(user => {
         dropdownList.push({value: user['.key'], text: `${user.firstname} ${user.lastname}`})
       })
-      console.log(this.users, dropdownList)
       return dropdownList
     }
   },
