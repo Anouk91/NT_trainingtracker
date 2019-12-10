@@ -16,6 +16,7 @@
     "bootstrap": "^4.4.0",
     "bootstrap-vue": "^2.1.0",
     "firebase": "^7.5.0",
+    "moment": "^2.24.0",
     "vue": "^2.6.10",
     "vue-firestore": "^0.3.22",
     "vue-router": "^3.0.1",

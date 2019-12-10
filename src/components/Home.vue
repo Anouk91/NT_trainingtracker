@@ -11,6 +11,7 @@
     </div>
 
   </div>
+  
   <hr>
 
   <!-- Team Stats -->
@@ -71,10 +72,8 @@
         </b-button>
 
       </div>
-      <div class="row">
-        <exercise-modal :email_user="selected_user"  v-if="showModal" @close="showModal = false">
-        </exercise-modal>
-      </div>
+      <exercise-modal :email_user="selected_user"  v-if="showModal" @close="showModal = false">
+      </exercise-modal>
     </div>
   </div>
 </template>
@@ -140,7 +139,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
 .lion {
   -webkit-clip-path: circle(50% at 50% 50%); 
   clip-path: circle(50% at 50% 50%);

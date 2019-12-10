@@ -7,7 +7,7 @@
 
           <div class="modal-header row">
             <slot name="header">
-              <h2> New Exercise </h2>
+              <h2> New Exercise! </h2>
                 <b-button 
                 variant="outline-danger"
                 class="modal-default-button" @click="$emit('close')">
@@ -25,13 +25,13 @@
                 <option :value="null" disabled>-- Selecteer het type training dat je hebt gedaan --</option>
               </b-form-select>
               <b-form-textarea id="textarea"
-                v-model="description_exercise"
+                v-model="exercise.text"
                 placeholder="Optional extra info about your exercise"
                 rows="3"
                 max-rows="6"></b-form-textarea>
             </slot>
           </div>
-
+          <!-- {{`${createText()}`}} -->
           <div class="modal-footer">
             <slot name="footer">
               <b-button 
@@ -57,6 +57,7 @@ import { db } from '../firebase'
 export default {
   name: 'exercise-modal',
   props: {
+    exercise: {type: Object},
     email_user: {
       type: String,
       required: true
@@ -85,7 +86,7 @@ export default {
     addExercise (exercise, text) {
       var userId = this.email_user
       var splittedText = text.split('\n')
-      db.collection('exercises').add({userId, exercise, splittedText})
+      db.collection('exercises').add({userId, exercise, splittedText, date: this.selected_date})
     },
     exerciseDropdown () {
       var dropdownList = []
@@ -95,6 +96,12 @@ export default {
       })
       return dropdownList
     }
+    // createText () {
+    //   var string = ''
+    //   this.exercise.splittedText.forEach(t => { string = string + t + '\n' })
+    //   console.log(string)
+    //   return string
+    // }
   }
 }
 </script>

@@ -10,22 +10,21 @@
           <div class="col-1">
             
             <i class="material-icons"> {{exercise.exercise.icon}}</i>
-            <p class=""> {{exercise.exercise.name}}</p>
+            <!-- <p class=""> {{exercise.exercise.name}}</p> -->
           </div>
-          <div class="col">
-            {{createString(exercise.splittedText)}}
-            </div>
-          <!-- <div class="col" v-for="(line, index) in exercise.splittedText" :key="`line ${index}`">
-          <div class ="row">
-           {{line}} {{index}}
+          <!-- <div class="col">
+            {{formatDate(exercise.date)}}
           </div> -->
-          </div>
-          <b-button class="col-1" > Edit </b-button>
+          <div class="col-10 optional-comments" >
+            {{exercise.text}}
+            </div>
+          <b-button class="col-1"  v-on:click="showModal = true" > Edit </b-button>
+          <exercise-modal :email_user="selected_user" :exercise="exercise"  v-if="showModal" @close="showModal = false">
+          </exercise-modal>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -33,12 +32,17 @@
 
 <script>
 import { db } from '../firebase'
-import datescroller from '../elements/datescroller.vue'
+import moment from 'moment'
+import ExerciseModal from '../elements/ExerciseModal.vue'
 
 export default {
   name: 'home',
+  components: {
+    ExerciseModal
+  },
   data () {
     return {
+      showModal: false,
       selected_user: null,
       users: [],
       exercises: []
@@ -64,18 +68,21 @@ export default {
       console.log(exercisesOfUser)
       return exercisesOfUser
     },
-    createString (splittedTextArray) {
-      var text = ''
-      splittedTextArray.forEach(t => { text = text + t + '\n' })
-      console.log(text)
-      return text
+    formatDate (date) {
+      return moment.unix(date.seconds).format('D-MMM')
     }
-  },
-  components: {
-    datescroller
-  },
-  created: function () {
-    this.dates = this.getDateArray(7)
   }
 }
 </script>
+
+<style>
+.optional-comments {
+  white-space: pre-line;
+  text-align: left;
+}
+
+/* .card-body {
+  padding: .5rem;
+  background-color: grey;
+} */
+</style>
