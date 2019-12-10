@@ -7,24 +7,29 @@
       <div class='card' v-for="exercise in exericesOfUser()" :key="exercise['.key']">
         <div class="card-body ">
           <div class="row">
-          <div class="col-1">
+          <div class="col-sm-1">
             
-            <i class="material-icons"> {{exercise.exercise.icon}}</i>
-            <!-- <p class=""> {{exercise.exercise.name}}</p> -->
-          </div>
-          <!-- <div class="col">
+            <i class="material-icons"> {{exercise.type.icon}}</i>
+          <div class="">
             {{formatDate(exercise.date)}}
-          </div> -->
-          <div class="col-10 optional-comments" >
-            {{exercise.text}}
-            </div>
-          <b-button class="col-1"  v-on:click="showModal = true" > Edit </b-button>
-          <exercise-modal :email_user="selected_user" :exercise="exercise"  v-if="showModal" @close="showModal = false">
-          </exercise-modal>
           </div>
+            <!-- <p class=""> {{exercise.type.name}}</p> -->
+          </div>
+          <div class="col ">
+          <p class="optional-comments" >
+            {{exercise.text}}
+            </p>
+            </div>
+          <b-button class="col-sm-1" v-on:click="(showModal = true) && (selected_exercise = exercise)" > 
+            <i class="material-icons"> edit</i>
+          </b-button>
+          </div>
+          </div>
+
         </div>
-      </div>
     </div>
+          <exercise-modal :email_user="selected_user" :toUpdateExercise="selected_exercise" :update_exercise="true" v-if="showModal" @close="showModal = false">
+          </exercise-modal>
   </div>
 </template>
 
@@ -44,6 +49,7 @@ export default {
     return {
       showModal: false,
       selected_user: null,
+      selected_exercise: null,
       users: [],
       exercises: []
     }
@@ -77,12 +83,10 @@ export default {
 
 <style>
 .optional-comments {
-  white-space: pre-line;
+  white-space: pre-line; /* Luistert naar \n */
   text-align: left;
-}
-
-/* .card-body {
-  padding: .5rem;
-  background-color: grey;
-} */
+  max-height: 4rem;
+  overflow: hidden;
+  /* text-overflow: ellipsis;  /* Deze zou (...) moeten maken, maar doet het niet omdat in white-space pre-line wil en het alleen voor width geldt */
+} 
 </style>

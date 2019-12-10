@@ -7,7 +7,7 @@
 
           <div class="modal-header row">
             <slot name="header">
-              <h2> New Exercise! </h2>
+              <h2> Exercise! </h2>
                 <b-button 
                 variant="outline-danger"
                 class="modal-default-button" @click="$emit('close')">
@@ -19,9 +19,9 @@
           <div class="modal-body row">
             <slot name="body">
               <div class="row">
-              <p class="col">Exercised on </p> <Datepicker class="col" v-model="selected_date"></Datepicker>
+              <p class="col">Exercised on </p> <Datepicker class="col" v-model="exercise.date"></Datepicker>
           </div>
-              <b-form-select v-model="selected_exercise" :options="exerciseDropdown()">
+              <b-form-select v-model="exercise.type" :options="exerciseDropdown()">
                 <option :value="null" disabled>-- Selecteer het type training dat je hebt gedaan --</option>
               </b-form-select>
               <b-form-textarea id="textarea"
@@ -35,8 +35,8 @@
           <div class="modal-footer">
             <slot name="footer">
               <b-button 
-              class="modal-default-button" @click="$emit('close') && addExercise( selected_exercise, description_exercise)" 
-              :disabled="!selected_exercise"
+              class="modal-default-button" @click="$emit('close') && saveExercise()" 
+              :disabled="!exercise.type"
               variant="success">
                 Save 
               </b-button>
@@ -53,27 +53,24 @@
 <script>
 import Datepicker from 'vuejs-datepicker'
 import { db } from '../firebase'
+// import moment from 'moment'
 
 export default {
   name: 'exercise-modal',
   props: {
-    exercise: {type: Object},
-    email_user: {
-      type: String,
-      required: true
-    }
+    toUpdateExercise: {type: Object},
+    email_user: {type: String},
+    update_exercise: {type: Boolean}
   },
   components: {
     Datepicker
   },
   data () {
     return {
-      selected_date: new Date(),
-      selected_user: this.email_user,
+      // selected_user: this.email_user,
       workout_types: [],
       users: [],
-      description_exercise: null,
-      selected_exercise: null
+      exercise: this.toUpdateExercise
     }
   },
   firestore () {
@@ -83,10 +80,21 @@ export default {
     }
   },
   methods: {
-    addExercise (exercise, text) {
+    saveExercise () {
+      console.log(this.exercise)
+      if (this.update_exercise) this.updateExercise()
+      else this.addExercise()
+    },
+    addExercise () {
       var userId = this.email_user
-      var splittedText = text.split('\n')
-      db.collection('exercises').add({userId, exercise, splittedText, date: this.selected_date})
+      // var splittedText = text.split('\n')
+      db.collection('exercises').add({userId, type: this.exercise.type, text: this.exercise.text, date: this.exercise.date})
+    },
+    updateExercise () {
+      var userId = this.email_user
+      var docRef = db.collection('exercises').doc(this.exercise['.key'])
+      console.log(docRef)
+      docRef.update({userId, type: this.exercise.type, text: this.exercise.text, date: this.exercise.date})
     },
     exerciseDropdown () {
       var dropdownList = []
@@ -96,12 +104,22 @@ export default {
       })
       return dropdownList
     }
-    // createText () {
-    //   var string = ''
-    //   this.exercise.splittedText.forEach(t => { string = string + t + '\n' })
-    //   console.log(string)
-    //   return string
-    // }
+  },
+  created () {
+    if (!this.update_exercise) {
+      console.log('No exercise giving, will create new')
+      this.exercise = {
+        date: new Date(),
+        text: null,
+        type: null,
+        userId: this.email_user
+      }
+    } else {
+      // Firebase seems to store a Date() as a timestamp. Have to re-translate it for DatePicker eachtime
+      var timeStamp = this.exercise.date.seconds
+      var dateForm = new Date(timeStamp * 1000)
+      this.exercise.date = dateForm
+    }
   }
 }
 </script>
