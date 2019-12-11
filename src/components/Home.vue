@@ -57,6 +57,7 @@
 
 <script>
 import { db } from '../firebase'
+import moment from 'moment'
 
 export default {
   name: 'home',
@@ -74,12 +75,20 @@ export default {
   },
   methods: {
     topThreeOfTheWeek () {
-      var orderedById = [] // [{userId, count}]
+      const orderedById = [] // [{userId, count}]
+      const exercisesThisWeek = []
+
+      const thisWeekNo = moment(new Date()).format('w')
       this.exercises.forEach(e => {
-        var player = orderedById.find(p => { return e.userId === p.userId })
+        const exerciseWeekNo = moment.unix(e.date.seconds).format('w')
+        if (exerciseWeekNo === thisWeekNo) exercisesThisWeek.push(e)
+      })
+
+      exercisesThisWeek.forEach(e => {
+        const player = orderedById.find(p => { return e.userId === p.userId })
 
         if (!player) {
-          var playerInfo = this.users.find(u => { return u.email_address === e.userId })
+          const playerInfo = this.users.find(u => { return u.email_address === e.userId })
           orderedById.push({ userId: e.userId, username: `${playerInfo.firstname} ${playerInfo.lastname}`, count: 1 })
         } else player.count++
       })
