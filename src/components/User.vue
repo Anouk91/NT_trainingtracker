@@ -1,8 +1,19 @@
 <template>
   <div class="container">
-    <b-form-select v-model="selected_user" :options="dropDown()">
-        <option :value="null" disabled>-- Selecteer jezelf --</option>
-    </b-form-select>
+
+    <div class="row">
+      <div class="col">
+        <b-form-select v-model="selected_user" :options="dropDown()">
+            <option :value="null" disabled>-- Selecteer jezelf --</option>
+        </b-form-select>
+      </div>
+      <div class="col">
+        <b-button v-on:click="showModal = true" :disabled="!selected_user" variant="primary">
+          Add Exercise
+        </b-button>
+      </div>
+    </div>
+
     <div v-if="selected_user" >
       <div class='card' v-for="exercise in exericesOfUser()" :key="exercise['.key']">
         <div class="card-body ">
@@ -20,7 +31,7 @@
             {{exercise.text}}
             </p>
             </div>
-          <b-button class="col-sm-1" v-on:click="(showModal = true) && (selected_exercise = exercise)" > 
+          <b-button class="col-sm-1" v-on:click="(showModal = true) && (selected_exercise = exercise) && (update_exercise = true)" > 
             <i class="material-icons"> edit</i>
           </b-button>
           </div>
@@ -28,7 +39,7 @@
 
         </div>
     </div>
-          <exercise-modal :email_user="selected_user" :toUpdateExercise="selected_exercise" :update_exercise="true" v-if="showModal" @close="showModal = false">
+          <exercise-modal :email_user="selected_user" :toUpdateExercise="selected_exercise" :update_exercise="update_exercise" v-if="showModal" @close="(showModal = false) && (update_exercise=false)">
           </exercise-modal>
   </div>
 </template>
@@ -50,6 +61,7 @@ export default {
       showModal: false,
       selected_user: null,
       selected_exercise: null,
+      update_exercise: false,
       users: [],
       exercises: []
     }
@@ -85,8 +97,8 @@ export default {
 .optional-comments {
   white-space: pre-line; /* Luistert naar \n */
   text-align: left;
-  max-height: 4rem;
-  overflow: hidden;
+  /* max-height: 4rem;
+  overflow: hidden; */
   /* text-overflow: ellipsis;  /* Deze zou (...) moeten maken, maar doet het niet omdat in white-space pre-line wil en het alleen voor width geldt */
 } 
 </style>

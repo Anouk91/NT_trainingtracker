@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 
-  <div class="row" >
+  <!-- <div class="row" >
     <div class="col"> 
       <img src="../../static/img/nederland-orange.jpeg" class="d-inline-block align-top lion" alt="Lion" >
       
@@ -12,88 +12,58 @@
 
   </div>
   
-  <hr>
+  <hr> -->
 
   <!-- Team Stats -->
   <div class="row">
 
     <div class="col">
       <div class="card">
-        <div style="display: inline; " >
-        <h2 class="number big"> {{countDown('week')}}</h2> <p>weeks </p> 
-        <h2 class="number small"> {{countDown()}}</h2> <p>days </p> <br>
-      </div>
         <h3> #RoadToLeeuwarden</h3>
+        <div class="inline" >
+        <h2 class="color big"> {{countDown('week')}}</h2> <p>weeks </p> 
+        <h2 class="color small"> {{countDown()}}</h2> <p>days </p> <br>
+      </div>
       </div>
     </div>
 
     <div class="col">
       <div class="card" >
-        <div style="display: inline;">
-          <h2 class="number big"> {{exercises.length}} </h2> <p>exercises </p>
-          <h3> DONE </h3>
-        </div>
+          <h3> Total Excersises</h3>
+          <h2 class="color big"> {{exercises.length}} </h2>
       </div>
     </div>
 
     <div class="col">
       <div class="card">
-          <!-- <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Exercises done</th>
-            </tr>
-          </thead> -->
-        <div v-for="(player,index) in topThreeOfTheWeek()" :key="index">
-          <div class="row">
-                <div class="col-1 top3 rank"> {{index +1 }} </div>
-                <div class="col top3 name"> {{player.username}}</div>
-                <div class="col-2 top3 times"> {{player.count}} x</div>
-          </div>
+          <h3> Top 3 of the week </h3>
+        <div v-for="(player,index) in topThreeOfTheWeek()" :key="index" style="display: inline;">
+          <div class="flex">
+            <div class="color rank"> {{index +1 }} </div>
+            <div class="name"> {{player.username}}</div>
+            <div> {{player.count}}x</div>
+          <!-- </div> -->
         </div>
         
       </div>
     </div>
   </div>
-  <hr>
-    <!-- <datescroller :datelist="dates" /> -->
-    <div class="row">
-      <div class="col">
-        <b-form-select v-model="selected_user" :options="userDropdown()">
-          <option :value="null" disabled>-- Selecteer jezelf --</option>
-        </b-form-select>
-      </div>
-      <div class="col">
 
-        <!-- Trigger the modal with a button -->
-        <b-button v-on:click="showModal = true" :disabled="!selected_user" variant="primary">
-          Add Exercise
-        </b-button>
 
-      </div>
-      <exercise-modal :email_user="selected_user"  v-if="showModal" @close="showModal = false">
-      </exercise-modal>
+
     </div>
   </div>
 </template>
 
 <script>
-import ExerciseModal from '../elements/ExerciseModal.vue'
 import { db } from '../firebase'
 
 export default {
   name: 'home',
-  components: {
-    ExerciseModal
-  },
   data () {
     return {
-      showModal: false,
       users: [],
-      exercises: [],
-      description_exercise: '',
-      selected_user: null
+      exercises: []
     }
   },
   firestore () {
@@ -103,14 +73,6 @@ export default {
     }
   },
   methods: {
-    userDropdown () {
-      var dropdownList = []
-
-      this.users.forEach(user => {
-        dropdownList.push({value: user.email_address, text: `${user.firstname} ${user.lastname}`})
-      })
-      return dropdownList
-    },
     topThreeOfTheWeek () {
       var orderedById = [] // [{userId, count}]
       this.exercises.forEach(e => {
@@ -146,10 +108,16 @@ export default {
   width: 6rem;
   height: 6rem;
 }
-.number {
+.inline > * {
+  display: inline;
+}
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.color {
   color: #ff6600; 
-  font-style: bold;
-  margin: 0;
 }
 
 .big {
@@ -160,6 +128,10 @@ export default {
   font-size: 4rem;
 }
 
+.rank {
+  font-size: 2rem;
+  text-align: left;
+}
 .text {
   text-align: left;
   color: #ff6600;
@@ -169,20 +141,13 @@ export default {
   margin-bottom: 2rem;
 }
 
-.top3 {
-  padding: .3rem;
-}
-
 .card {
   background-color:#fff0e6;
-  margin: 2rem;
+  margin-bottom: 2rem;
   padding: 1rem;
   justify-content: center;
+  
 }
 
 
-
-h2, p {
-  display: inline;
-}
 </style>

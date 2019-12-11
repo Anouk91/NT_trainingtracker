@@ -22,6 +22,10 @@
             </div>
             <div class="row">
               <div class="reps_sets col">
+                <p style="font-weight: bold;"> {{ exercise.type }} </p>
+              </div>
+            
+              <div class="reps_sets col">
                 {{ exercise.reps }}
                 <i class="fa fa-times"></i>
               </div>
@@ -65,13 +69,17 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
 .reps_sets {
-  /* border-style:¿ solid; */
+  /* border-style: solid; */
   /* border-color: grey; */
-  border-radius:15px;
-  border-width: thin;
+  /* border-radius:15px;
+  border-width: thin; */
   padding: 1rem;
   vertical-align: center;
+}
+
+.card {
+  border-radius:15px;
 }
 </style>
