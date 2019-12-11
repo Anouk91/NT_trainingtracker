@@ -14,33 +14,51 @@
       </div>
     </div>
 
-    <div v-if="selected_user" >
-      <div class='card' v-for="exercise in exericesOfUser()" :key="exercise['.key']">
-        <div class="card-body ">
-          <div class="row">
-          <div class="col-sm-1">
-            
-            <i class="material-icons"> {{exercise.type.icon}}</i>
-          <div class="">
-            {{formatDate(exercise.date)}}
-          </div>
-            <!-- <p class=""> {{exercise.type.name}}</p> -->
-          </div>
-          <div class="col ">
-          <p class="optional-comments" >
-            {{exercise.text}}
-            </p>
-            </div>
-          <b-button class="col-sm-1" v-on:click="(showModal = true) && (selected_exercise = exercise) && (update_exercise = true)" > 
-            <i class="material-icons"> edit</i>
-          </b-button>
-          </div>
-          </div>
-
+    <!-- <div class="row">
+      <div v-for="week in exercisesOfUserPerWeek()" :key="week.id">
+        <div class="col card">
+          {{week.exercises.length}} Exercises done in week {{week.id}}
         </div>
+      </div>
+    </div> -->
+
+    <div class="row" v-if="selected_user">
+      <div v-for="exercise in exericesOfUser()" :key="exercise['.key']">
+
+        <div class="col-sm">
+          <div class="card">
+
+            <div class="row justify-content-center">
+
+              <div class="col">
+                <i class="material-icons">{{exercise.type.icon}}</i>
+                <br/>
+                {{formatDate(exercise.date)}}
+                <br/>
+              </div>
+
+              <div class="col">
+                <b-button v-on:click="(showModal = true) && (selected_exercise = exercise) && (update_exercise = true)" > 
+                  <i class="material-icons">edit</i>
+                </b-button>
+              </div>
+
+            </div>
+            
+              <hr>
+            <div :v-if="exercise.text" class="row">
+              <p class="optional-comments" > {{exercise.text}} </p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
     </div>
-          <exercise-modal :email_user="selected_user" :toUpdateExercise="selected_exercise" :update_exercise="update_exercise" v-if="showModal" @close="(showModal = false) && (update_exercise=false)">
-          </exercise-modal>
+
+    <exercise-modal :email_user="selected_user" :toUpdateExercise="selected_exercise" :update_exercise="update_exercise" v-if="showModal" @close="(showModal = false) && (update_exercise=false)">
+    </exercise-modal>
+
   </div>
 </template>
 
@@ -61,6 +79,7 @@ export default {
       showModal: false,
       selected_user: null,
       selected_exercise: null,
+      selected_week: moment(new Date()).format('w'),
       update_exercise: false,
       users: [],
       exercises: []
@@ -84,7 +103,20 @@ export default {
     exericesOfUser () {
       var exercisesOfUser = this.exercises.filter(item => item.userId === this.selected_user)
       console.log(exercisesOfUser)
+
       return exercisesOfUser
+    },
+    exercisesOfUserPerWeek () {
+      const exercises = this.exericesOfUser()
+      const perWeek = [] // [{id: 52, exercises []}]
+      exercises.forEach(e => {
+        const exerciseWeekNo = moment.unix(e.date.seconds).format('w')
+        const week = perWeek.find(w => { return exerciseWeekNo === w.id })
+        if (!week) {
+          perWeek.push({id: exerciseWeekNo, exercises: [e]})
+        } else week.exercises.push(e)
+      })
+      return perWeek
     },
     formatDate (date) {
       return moment.unix(date.seconds).format('D-MMM')
@@ -93,12 +125,20 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .optional-comments {
   white-space: pre-line; /* Luistert naar \n */
   text-align: left;
+  padding: 1.5rem;
+  padding-bottom: 0;
   /* max-height: 4rem;
   overflow: hidden; */
   /* text-overflow: ellipsis;  /* Deze zou (...) moeten maken, maar doet het niet omdat in white-space pre-line wil en het alleen voor width geldt */
-} 
+}
+
+.card {
+  padding: 1rem;
+  width: 18rem;
+  margin:1.5rem;
+}
 </style>

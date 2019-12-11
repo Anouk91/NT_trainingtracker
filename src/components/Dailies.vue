@@ -62,7 +62,7 @@ export default {
         ? 'bg-danger'
         : exercise.type === 'Bovenlichaam'
           ? 'bg-light'
-          : 'bg-info'
+          : 'bg-primary'
     }
   }
 }
