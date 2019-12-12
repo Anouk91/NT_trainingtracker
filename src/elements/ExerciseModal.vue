@@ -19,7 +19,9 @@
           <div class="modal-body row">
             <slot name="body">
               <div class="row">
-              <p class="col">Exercised on </p> <Datepicker class="col" v-model="exercise.date"></Datepicker>
+               <Datepicker class="col" v-model="exercise.date"></Datepicker> 
+               <input class="col" v-model="exercise.hours">
+               <input class="col" v-model="exercise.minutes">
           </div>
               <b-form-select v-model="exercise.type" :options="exerciseDropdown()">
                 <option :value="null" disabled>-- Selecteer het type training dat je hebt gedaan --</option>
@@ -110,6 +112,8 @@ export default {
       console.log('No exercise giving, will create new')
       this.exercise = {
         date: new Date(),
+        hours: 60,
+        minutes: 0,
         text: null,
         type: null,
         userId: this.email_user
