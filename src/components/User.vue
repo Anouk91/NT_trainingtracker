@@ -34,9 +34,12 @@
                 <i class="material-icons">{{exercise.type.icon}}</i>
                 <br/>
                 {{formatDate(exercise.date)}}
-                <br/>
               </div>
-
+              <div class="col">
+                {{exercise.hours}}h
+                <br/>
+                {{exercise.minutes}}m
+              </div>
               <div class="col">
                 <b-button v-on:click="(showModal = true) && (selected_exercise = exercise) && (update_exercise = true)" > 
                   <i class="material-icons">edit</i>
@@ -44,9 +47,8 @@
               </div>
 
             </div>
-            
-              <hr>
-            <div :v-if="exercise.text" class="row">
+            <hr v-if="exercise.text">
+            <div v-if="exercise.text" class="row">
               <p class="optional-comments" > {{exercise.text}} </p>
             </div>
 
@@ -56,7 +58,7 @@
       </div>
     </div>
 
-    <exercise-modal :email_user="selected_user" :toUpdateExercise="selected_exercise" :update_exercise="update_exercise" v-if="showModal" @close="(showModal = false) && (update_exercise=false)">
+    <exercise-modal :email_user="selected_user" :exercise="selected_exercise" :update_exercise="update_exercise" v-if="showModal" @close="(showModal = false) && (update_exercise=false)">
     </exercise-modal>
 
   </div>
@@ -129,8 +131,9 @@ export default {
 .optional-comments {
   white-space: pre-line; /* Luistert naar \n */
   text-align: left;
-  padding: 1.5rem;
-  padding-bottom: 0;
+  padding-left: 1.5rem;
+  color: grey;
+  /* padding-bottom: 0; */
   /* max-height: 4rem;
   overflow: hidden; */
   /* text-overflow: ellipsis;  /* Deze zou (...) moeten maken, maar doet het niet omdat in white-space pre-line wil en het alleen voor width geldt */

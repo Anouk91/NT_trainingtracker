@@ -19,10 +19,12 @@
           <div class="modal-body row">
             <slot name="body">
               <div class="row">
-               <Datepicker class="col" v-model="exercise.date"></Datepicker> 
-               <input class="col" v-model="exercise.hours">
-               <input class="col" v-model="exercise.minutes">
-          </div>
+                <Datepicker class="col" v-model="exercise.date"></Datepicker> 
+                <div class="col time-input">
+                  <input v-model="exercise.hours">h
+                  <input v-model="exercise.minutes">m
+                </div>
+            </div>
               <b-form-select v-model="exercise.type" :options="exerciseDropdown()">
                 <option :value="null" disabled>-- Selecteer het type training dat je hebt gedaan --</option>
               </b-form-select>
@@ -62,17 +64,16 @@ export default {
   props: {
     toUpdateExercise: {type: Object},
     email_user: {type: String},
-    update_exercise: {type: Boolean}
+    exercise: {type: Boolean}
   },
   components: {
     Datepicker
   },
   data () {
     return {
-      // selected_user: this.email_user,
       workout_types: [],
-      users: [],
-      exercise: this.toUpdateExercise
+      users: []
+      // exercise: this.toUpdateExercise
     }
   },
   firestore () {
@@ -88,21 +89,27 @@ export default {
       else this.addExercise()
     },
     addExercise () {
-      var userId = this.email_user
-      // var splittedText = text.split('\n')
-      db.collection('exercises').add({userId, type: this.exercise.type, text: this.exercise.text, date: this.exercise.date})
+      db.collection('exercises').add(this.exerciseData())
     },
     updateExercise () {
-      var userId = this.email_user
       var docRef = db.collection('exercises').doc(this.exercise['.key'])
       console.log(docRef)
-      docRef.update({userId, type: this.exercise.type, text: this.exercise.text, date: this.exercise.date})
+      docRef.update(this.exerciseData())
+    },
+    exerciseData () {
+      return {
+        userId: this.email_user,
+        type: this.exercise.type,
+        text: this.exercise.text,
+        date: this.exercise.date,
+        hours: this.exercise.hours,
+        minutes: this.exercise.minutes}
     },
     exerciseDropdown () {
       var dropdownList = []
 
-      this.workout_types.forEach(exercise => {
-        dropdownList.push({value: exercise, text: exercise.name})
+      this.workout_types.forEach(type => {
+        dropdownList.push({value: type, text: type.name})
       })
       return dropdownList
     }
@@ -112,8 +119,8 @@ export default {
       console.log('No exercise giving, will create new')
       this.exercise = {
         date: new Date(),
-        hours: 60,
-        minutes: 0,
+        hours: 1,
+        minutes: 30,
         text: null,
         type: null,
         userId: this.email_user
@@ -140,7 +147,9 @@ export default {
   display: table;
   transition: opacity .3s ease;
 }
-
+.time-input > * {
+  width: 25px;
+} 
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
