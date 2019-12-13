@@ -49,7 +49,7 @@
             </div>
             <hr v-if="exercise.text">
             <div v-if="exercise.text" class="row">
-              <p class="optional-comments" > {{exercise.text}} </p>
+              <p class="optional-comments"> {{exercise.text}} </p>
             </div>
 
           </div>
@@ -104,9 +104,7 @@ export default {
     },
     exericesOfUser () {
       var exercisesOfUser = this.exercises.filter(item => item.userId === this.selected_user)
-      console.log(exercisesOfUser)
-
-      return exercisesOfUser
+      return exercisesOfUser.sort((a, b) => { return b.date.seconds - a.date.seconds })
     },
     exercisesOfUserPerWeek () {
       const exercises = this.exericesOfUser()
@@ -118,7 +116,7 @@ export default {
           perWeek.push({id: exerciseWeekNo, exercises: [e]})
         } else week.exercises.push(e)
       })
-      return perWeek
+      return perWeek.sort((a, b) => { return b.id - a.id })
     },
     formatDate (date) {
       return moment.unix(date.seconds).format('D-MMM')

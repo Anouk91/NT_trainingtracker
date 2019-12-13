@@ -57,14 +57,13 @@
 <script>
 import Datepicker from 'vuejs-datepicker'
 import { db } from '../firebase'
-// import moment from 'moment'
 
 export default {
   name: 'exercise-modal',
   props: {
-    toUpdateExercise: {type: Object},
+    exercise: {type: Object},
     email_user: {type: String},
-    exercise: {type: Boolean}
+    update_exercise: {type: Boolean}
   },
   components: {
     Datepicker
@@ -73,7 +72,6 @@ export default {
     return {
       workout_types: [],
       users: []
-      // exercise: this.toUpdateExercise
     }
   },
   firestore () {
