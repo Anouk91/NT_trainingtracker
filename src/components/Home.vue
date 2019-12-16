@@ -64,12 +64,18 @@ export default {
   data () {
     return {
       users: [],
-      exercises: []
+      exercises: [],
+      ndt: [],
+      nmt: [],
+      not: []
     }
   },
   firestore () {
     return {
       users: db.collection('users').orderBy('firstname'),
+      ndt: db.collection('ndt_members').orderBy('firstname'),
+      nmt: db.collection('nmt_members').orderBy('firstname'),
+      not: db.collection('not_members').orderBy('firstname'),
       exercises: db.collection('exercises').orderBy('userId')
     }
   },
