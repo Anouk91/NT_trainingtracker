@@ -2,6 +2,12 @@
   <div class="container">
 
     <div class="row">
+    
+      <div class="col-sm btn-team">
+        <div :class="'left' + isActive('ndt')" v-on:click="selected_team = 'ndt'">Dames</div>
+        <div :class="isActive('nmt')" v-on:click="selected_team = 'nmt'">Mixed</div>
+        <div :class="'right' + isActive('not')" v-on:click="selected_team = 'not'">Open</div>
+      </div>
       <div class="col">
         <b-form-select v-model="selected_user" :options="dropDown()">
             <option :value="null" disabled>-- Selecteer jezelf --</option>
@@ -79,17 +85,19 @@ export default {
   data () {
     return {
       showModal: false,
+      selected_team: 'ndt',
       selected_user: null,
       selected_exercise: null,
       selected_week: moment(new Date()).format('w'),
       update_exercise: false,
-      users: [],
       exercises: []
     }
   },
   firestore () {
     return {
-      users: db.collection('users').orderBy('firstname'),
+      ndt: db.collection('ndt_members').orderBy('firstname'),
+      nmt: db.collection('nmt_members').orderBy('firstname'),
+      not: db.collection('not_members').orderBy('firstname'),
       exercises: db.collection('exercises'),
       workout_types: db.collection('workout_types').orderBy('index')
     }
@@ -97,7 +105,8 @@ export default {
   methods: {
     dropDown () {
       var dropdownList = []
-      this.users.forEach(user => {
+      var playersList = this.selected_team === 'ndt' ? this.ndt : (this.selected_team === 'nmt' ? this.nmt : this.not)
+      playersList.forEach(user => {
         dropdownList.push({value: user.email_address, text: `${user.firstname} ${user.lastname}`})
       })
       return dropdownList
@@ -120,12 +129,38 @@ export default {
     },
     formatDate (date) {
       return moment.unix(date.seconds).format('D-MMM')
+    },
+    isActive (team) {
+      return team === this.selected_team ? ' active' : ''
     }
   }
 }
 </script>
 
 <style scoped>
+
+.btn-team {
+  font-size: 0;
+  margin-bottom: .5rem;
+}
+.btn-team > * {
+  display: inline-block;
+  font-size: 16px;
+  padding: .4rem;
+  color: white;
+  background-color: #f28a26;
+  cursor: pointer;
+}
+.active {
+  background-color: #ec5d22;
+}
+.left {
+  border-radius: 10px 0px 0px 10px;
+}
+
+.right {
+  border-radius: 0px 10px 10px 0px;
+}
 .optional-comments {
   white-space: pre-line; /* Luistert naar \n */
   text-align: left;
@@ -142,4 +177,5 @@ export default {
   width: 18rem;
   margin:1.5rem;
 }
+
 </style>

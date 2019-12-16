@@ -1,16 +1,28 @@
 <template>
-  <div>
-    <b-button v-on:click="addListToDB(ntd, 'users')" class="btn btn-warning"> Import NTD players </b-button>
-    <b-button v-on:click="deletePlayers(users, 'users')" class="btn btn-warning"> Delete Users </b-button>
-    <b-button v-on:click="addListToDB(dailiesNov, 'dailies')"> Import Dailies november </b-button>
-    <b-button v-on:click="deletePlayers(dailies, 'dailies')"> Delete Dailies </b-button>
-    <b-button v-on:click="deleteExercises(exercises, 'exercises')" class="btn btn-alert"> Delete Exercises </b-button>
+  <div class="container">
+    <div class="row justify-content-between">
+    <b-button v-on:click="addListToDB(ndt, 'ndt_members')" class="btn col btn-success"> Import dames players </b-button>
+    <b-button v-on:click="addListToDB(nmt, 'nmt_members')" class="btn col btn-success"> Import mixed players </b-button>
+    <b-button v-on:click="addListToDB(not, 'not_members')" class="btn col btn-success"> Import open players </b-button>
+  </div>
+    <div class="row justify-content-between">
+    <b-button v-on:click="deletePlayers(ndt, 'ndt_members')" class="btn col btn-warning"> Delete dames  </b-button>
+    <b-button v-on:click="deletePlayers(nmt, 'nmt_members')" class="btn col btn-warning"> Delete mixed </b-button>
+    <b-button v-on:click="deletePlayers(not, 'not_members')" class="btn col btn-warning"> Delete open </b-button>
+  </div>
+    <div class="row justify-content-between">
+    <b-button v-on:click="addListToDB(dailiesNov, 'dailies')" class="btn col btn-success"> Import Dailies november </b-button>
+    <b-button v-on:click="deletePlayers(dailies, 'dailies')" class="btn col btn-warning"> Delete Dailies </b-button>
+    <b-button v-on:click="deleteExercises(exercises, 'exercises')" class="btn col btn-warning"> Delete Exercises </b-button>
+  </div>
   </div>
 </template>
 
 <script>
 import { db } from '../firebase'
-import ntd from '../../static/NTD.json'
+import ndt from '../../static/NDT.json'
+import nmt from '../../static/NMT.json'
+import not from '../../static/NOT.json'
 import dailiesNov from '../../static/dailies_nov.json'
 
 export default {
@@ -21,12 +33,16 @@ export default {
       dailies: [],
       exercises: [],
       dailiesNov,
-      ntd
+      ndt,
+      nmt,
+      not
     }
   },
   firestore () {
     return {
-      users: db.collection('users'),
+      ndt: db.collection('ndt_members'),
+      nmt: db.collection('nmt_members'),
+      not: db.collection('not_members'),
       dailies: db.collection('dailies'),
       exercises: db.collection('exercises')
     }
@@ -50,3 +66,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.btn {
+  width: 250px;
+  margin: .5rem;
+}
+</style>
