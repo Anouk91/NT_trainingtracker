@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <exercise-modal :email_user="selected_user" :exercise="selected_exercise" :update_exercise="update_exercise" v-if="showModal" @close="(showModal = false) && (update_exercise=false)">
+    <exercise-modal :email_user="selected_user" :team="selected_team" :exercise="selected_exercise" :update_exercise="update_exercise" v-if="showModal" @close="(showModal = false) && (update_exercise=false)">
     </exercise-modal>
 
   </div>
@@ -95,9 +95,12 @@ export default {
   },
   firestore () {
     return {
-      ndt: db.collection('ndt_members').orderBy('firstname'),
-      nmt: db.collection('nmt_members').orderBy('firstname'),
-      not: db.collection('not_members').orderBy('firstname'),
+      ndt_members: db.collection('ndt_members').orderBy('firstname'),
+      nmt_members: db.collection('nmt_members').orderBy('firstname'),
+      not_members: db.collection('not_members').orderBy('firstname'),
+      ndt_exercises: db.collection('ndt_exercises'),
+      nmt_exercises: db.collection('nmt_exercises'),
+      not_exercises: db.collection('not_exercises'),
       exercises: db.collection('exercises'),
       workout_types: db.collection('workout_types').orderBy('index')
     }
@@ -105,14 +108,15 @@ export default {
   methods: {
     dropDown () {
       var dropdownList = []
-      var playersList = this.selected_team === 'ndt' ? this.ndt : (this.selected_team === 'nmt' ? this.nmt : this.not)
+      var playersList = this.selected_team === 'ndt' ? this.ndt_members : (this.selected_team === 'nmt' ? this.nmt_members : this.not_members)
       playersList.forEach(user => {
         dropdownList.push({value: user.email_address, text: `${user.firstname} ${user.lastname}`})
       })
       return dropdownList
     },
     exericesOfUser () {
-      var exercisesOfUser = this.exercises.filter(item => item.userId === this.selected_user)
+      var exerciseList = this.selected_team === 'ndt' ? this.ndt_exercises : (this.selected_team === 'nmt' ? this.nmt_exercises : this.not_exercises)
+      var exercisesOfUser = exerciseList.filter(item => item.userId === this.selected_user)
       return exercisesOfUser.sort((a, b) => { return b.date.seconds - a.date.seconds })
     },
     exercisesOfUserPerWeek () {

@@ -63,6 +63,7 @@ export default {
   props: {
     exercise: {type: Object},
     email_user: {type: String},
+    team: {type: String},
     update_exercise: {type: Boolean}
   },
   components: {
@@ -87,10 +88,10 @@ export default {
       else this.addExercise()
     },
     addExercise () {
-      db.collection('exercises').add(this.exerciseData())
+      db.collection(`${this.team}_exercises`).add(this.exerciseData())
     },
     updateExercise () {
-      var docRef = db.collection('exercises').doc(this.exercise['.key'])
+      var docRef = db.collection(`${this.team}_exercises`).doc(this.exercise['.key'])
       console.log(docRef)
       docRef.update(this.exerciseData())
     },
