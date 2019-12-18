@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <div class="row justify-content-between">
-    <b-button v-on:click="addListToDB(ndt, 'ndt_members')" class="btn col btn-success"> Import dames players </b-button>
-    <b-button v-on:click="addListToDB(nmt, 'nmt_members')" class="btn col btn-success"> Import mixed players </b-button>
-    <b-button v-on:click="addListToDB(not, 'not_members')" class="btn col btn-success"> Import open players </b-button>
+    <b-button v-on:click="addListToDB(NDTjson, 'ndt_members')" class="btn col btn-success"> Import dames players </b-button>
+    <b-button v-on:click="addListToDB(NMTjson, 'nmt_members')" class="btn col btn-success"> Import mixed players </b-button>
+    <b-button v-on:click="addListToDB(NOTjson, 'not_members')" class="btn col btn-success"> Import open players </b-button>
   </div>
     <div class="row justify-content-between">
     <b-button v-on:click="deletePlayers(ndt, 'ndt_members')" class="btn col btn-warning"> Delete dames  </b-button>
@@ -20,9 +20,9 @@
 
 <script>
 import { db } from '../firebase'
-import ndt from '../../static/NDT.json'
-import nmt from '../../static/NMT.json'
-import not from '../../static/NOT.json'
+import NDTjson from '../../static/NDT.json'
+import NMTjson from '../../static/NMT.json'
+import NOTjson from '../../static/NOT.json'
 import dailiesNov from '../../static/dailies_nov.json'
 
 export default {
@@ -33,9 +33,9 @@ export default {
       dailies: [],
       exercises: [],
       dailiesNov,
-      ndt,
-      nmt,
-      not
+      NDTjson,
+      NMTjson,
+      NOTjson
     }
   },
   firestore () {

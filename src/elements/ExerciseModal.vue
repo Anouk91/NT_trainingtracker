@@ -115,7 +115,7 @@ export default {
   },
   created () {
     if (!this.update_exercise) {
-      console.log('No exercise giving, will create new')
+      console.log('No exercise giving, will create new', this.email_user)
       this.exercise = {
         date: new Date(),
         hours: 1,

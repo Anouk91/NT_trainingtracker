@@ -15,43 +15,50 @@
   <hr> -->
 
   <!-- Team Stats -->
-  <div class="row">
+    <div class="row">
 
-    <div class="col">
-      <div class="card">
-        <h3> #RoadToLeeuwarden</h3>
-        <div class="inline" >
-        <h2 class="color big"> {{countDown('week')}}</h2> <p>weeks </p> 
-        <h2 class="color small"> {{countDown()}}</h2> <p>days </p> <br>
-      </div>
-      </div>
-    </div>
-
-    <div class="col">
-      <div class="card" >
-          <h3> Total Excersises</h3>
-          <h2 class="color big"> {{exercises.length}} </h2>
-      </div>
-    </div>
-
-    <div class="col-sm">
-      <div class="card">
-          <h3> Top 3 of the week </h3>
-        <div v-for="(player,index) in topThreeOfTheWeek()" :key="index" style="display: inline;">
-          <div class="flex">
-            <div class="color rank"> {{index +1 }} </div>
-            <div class="name"> {{player.username}}</div>
-            <div> {{player.count}}x</div>
-          <!-- </div> -->
+      <div class="col">
+        <div class="card">
+          <h3> #RoadToLeeuwarden</h3>
+          <div class="inline" >
+          <h2 class="color big"> {{countDown('week')}}</h2> <p>weeks </p> 
+          <h2 class="color small"> {{countDown()}}</h2> <p>days </p> <br>
         </div>
-        
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card" >
+            <h3> Total Excersises</h3>
+            <h2 class="color big"> {{totalExercises()}} </h2>
+        </div>
       </div>
     </div>
-  </div>
 
-
-
+    <div class="row">
+      <div class="col-sm" v-for="team in teams" :key="team.index">
+          <div class="card">
+            <h3> Top 3 of the week </h3>
+            <div v-for="(player,i) in topThreeOfTheWeek(team.short_name)" :key="i" style="display: inline;">
+              <div class="flex">
+                <div class="color rank"> {{i +1 }} </div>
+                <div class="name"> {{player.username}}</div>
+                <div> {{player.count}}x</div>
+              </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <div class="row">
+      <div class="col-sm" v-for="team in teams" :key="team.index">
+          <div class="card">
+            <h3> Total Excersises {{team.name.split(' ')[1]}}</h3>
+            <h2 class="color big"> {{totalExercises(team.short_name)}} </h2>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -63,42 +70,46 @@ export default {
   name: 'home',
   data () {
     return {
-      users: [],
       exercises: [],
-      ndt: [],
-      nmt: [],
-      not: []
+      ndt_members: [],
+      nmt_members: [],
+      not_members: [],
+      ndt_exercises: [],
+      nmt_exercises: [],
+      not_exercises: [],
+      teams: []
     }
   },
   firestore () {
     return {
-      users: db.collection('users').orderBy('firstname'),
-      ndt: db.collection('ndt_members').orderBy('firstname'),
-      nmt: db.collection('nmt_members').orderBy('firstname'),
-      not: db.collection('not_members').orderBy('firstname'),
-      exercises: db.collection('exercises').orderBy('userId')
+      ndt_members: db.collection('ndt_members').orderBy('firstname'),
+      nmt_members: db.collection('nmt_members').orderBy('firstname'),
+      not_members: db.collection('not_members').orderBy('firstname'),
+      ndt_exercises: db.collection('ndt_exercises'),
+      nmt_exercises: db.collection('nmt_exercises'),
+      not_exercises: db.collection('not_exercises'),
+      teams: db.collection('team')
     }
   },
   methods: {
-    topThreeOfTheWeek () {
+    topThreeOfTheWeek (team) {
       const orderedById = [] // [{userId, count}]
-      const exercisesThisWeek = this.exercises.filter(e => moment.unix(e.date.seconds).format('w') === moment(new Date()).format('w'))
-      // const thisWeekNo = moment(new Date()).format('w')
+      var exerciseList = team === 'ndt' ? this.ndt_exercises : (team === 'nmt' ? this.nmt_exercises : this.not_exercises)
+      var membersList = team === 'ndt' ? this.ndt_members : (team === 'nmt' ? this.nmt_members : this.not_members)
 
-      // this.exercises.forEach(e => {
-      // const exerciseWeekNo = moment.unix(e.date.seconds).format('w')
-      //   if (exerciseWeekNo === thisWeekNo) exercisesThisWeek.push(e)
-      // })
+      if ((exerciseList.length !== 0) && membersList.length !== 0) {
+        const exercisesThisWeek = exerciseList.filter(e => moment.unix(e.date.seconds).format('w') === moment(new Date()).format('w'))
 
-      exercisesThisWeek.forEach(e => {
-        const player = orderedById.find(p => { return e.userId === p.userId })
+        exercisesThisWeek.forEach(e => {
+          const player = orderedById.find(p => { return e.userId === p.userId })
 
-        if (!player) {
-          const playerInfo = this.users.find(u => { return u.email_address === e.userId })
-          orderedById.push({ userId: e.userId, username: `${playerInfo.firstname} ${playerInfo.lastname}`, count: 1 })
-        } else player.count++
-      })
-      return orderedById.sort((a, b) => { return b.count - a.count }).splice(0, 3)
+          if (!player) {
+            const playerInfo = membersList.find(m => { return m.email_address === e.userId })
+            orderedById.push({ userId: e.userId, username: `${playerInfo.firstname} ${playerInfo.lastname}`, count: 1 })
+          } else player.count++
+        })
+        return orderedById.sort((a, b) => { return b.count - a.count }).splice(0, 3)
+      }
     },
     countDown (type) {
       const countDownDate = new Date('Jul 11, 2020 17:00:00')
@@ -110,6 +121,11 @@ export default {
       // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
       // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
       // var seconds = Math.floor((distance % (1000 * 60)) / 1000)
+    },
+    totalExercises (team) {
+      return team === 'ndt' ? this.ndt_exercises.length
+        : team === 'nmt' ? this.nmt_exercises.length
+          : team === 'not' ? this.not_exercises.length : this.ndt_exercises.length + this.nmt_exercises.length + this.not_exercises.length
     }
   }
 }
