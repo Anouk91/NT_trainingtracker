@@ -15,7 +15,7 @@
   <hr> -->
 
   <!-- Team Stats -->
-    <div class="row">
+    <!-- <div class="row">
 
       <div class="col">
         <div class="card">
@@ -57,7 +57,7 @@
             <h2 class="color big"> {{totalExercises(team.short_name)}} </h2>
         </div>
       </div>
-    </div>
+    </div> -->
 
   </div>
 </template>
