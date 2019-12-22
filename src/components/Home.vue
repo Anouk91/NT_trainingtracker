@@ -123,7 +123,11 @@ export default {
       // var seconds = Math.floor((distance % (1000 * 60)) / 1000)
     },
     totalExercises (team) {
-      console.log(this.ndt_exercises)
+      db.collection('ndt_members').get().then(querySnapshot => {
+        const documents = querySnapshot.docs.map(doc => doc.data())
+        console.log(documents)
+      // do something with documents
+      })
       return team === 'ndt' ? this.ndt_exercises.length
         : team === 'nmt' ? this.nmt_exercises.length
           : team === 'not' ? this.not_exercises.length : this.ndt_exercises.length + this.nmt_exercises.length + this.not_exercises.length
