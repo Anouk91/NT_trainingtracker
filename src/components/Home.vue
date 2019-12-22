@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <!-- <div class="row">
+    <div class="row">
       <div class="col-sm" v-for="team in teams" :key="team.index">
           <div class="card">
             <h3> Top 3 of the week </h3>
@@ -57,7 +57,7 @@
             <h2 class="color big"> {{totalExercises(team.short_name)}} </h2>
         </div>
       </div>
-    </div> -->
+    </div>
 
   </div>
 </template>
@@ -123,11 +123,6 @@ export default {
       // var seconds = Math.floor((distance % (1000 * 60)) / 1000)
     },
     totalExercises (team) {
-      db.collection('ndt_members').get().then(querySnapshot => {
-        const documents = querySnapshot.docs.map(doc => doc.data())
-        console.log(documents)
-      // do something with documents
-      })
       return team === 'ndt' ? this.ndt_exercises.length
         : team === 'nmt' ? this.nmt_exercises.length
           : team === 'not' ? this.not_exercises.length : this.ndt_exercises.length + this.nmt_exercises.length + this.not_exercises.length
