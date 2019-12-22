@@ -15,7 +15,7 @@
   <hr> -->
 
   <!-- Team Stats -->
-    <!-- <div class="row">
+    <div class="row">
 
       <div class="col">
         <div class="card">
@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-sm" v-for="team in teams" :key="team.index">
           <div class="card">
             <h3> Top 3 of the week </h3>
@@ -96,7 +96,7 @@ export default {
       const orderedById = [] // [{userId, count}]
       var exerciseList = team === 'ndt' ? this.ndt_exercises : (team === 'nmt' ? this.nmt_exercises : this.not_exercises)
       var membersList = team === 'ndt' ? this.ndt_members : (team === 'nmt' ? this.nmt_members : this.not_members)
-
+      console.log(exerciseList)
       if ((exerciseList.length !== 0) && membersList.length !== 0) {
         const exercisesThisWeek = exerciseList.filter(e => moment.unix(e.date.seconds).format('w') === moment(new Date()).format('w'))
 
@@ -123,6 +123,7 @@ export default {
       // var seconds = Math.floor((distance % (1000 * 60)) / 1000)
     },
     totalExercises (team) {
+      console.log(this.ndt_exercises)
       return team === 'ndt' ? this.ndt_exercises.length
         : team === 'nmt' ? this.nmt_exercises.length
           : team === 'not' ? this.not_exercises.length : this.ndt_exercises.length + this.nmt_exercises.length + this.not_exercises.length
