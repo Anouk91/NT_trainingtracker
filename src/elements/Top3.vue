@@ -1,11 +1,15 @@
 <template>
-  <div class="card">
-    <h3> Top 3 of the week </h3>
-    <div v-for="(player,i) in topThreeOfTheWeek()" :key="i" style="display: inline;">
-      <div class="flex">
-        <div class="color rank"> {{i +1 }} </div>
-        <div class="name"> {{player.username}}</div>
-        <div> {{player.count}}x</div>
+  <div class="col-md">
+    <div class="card">
+    <div class="card-body">
+      <h3> Top 3 of the week </h3>
+      <div v-for="(player,i) in topThreeOfTheWeek()" :key="i" style="display: inline;">
+        <div class="flex">
+          <div class="color rank"> {{i +1 }} </div>
+          <div class="name"> {{player.username}}</div>
+          <div> {{player.count}}x</div>
+        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -47,19 +51,10 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
-.color {
-  color: #ff6600; 
-}
 
 .rank {
   font-size: 2rem;
   text-align: left;
-}
-.card {
-  background-color:#fff0e6;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  justify-content: center;
 }
 
 </style>

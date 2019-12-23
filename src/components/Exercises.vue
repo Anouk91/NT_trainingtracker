@@ -77,7 +77,4 @@ export default {
   vertical-align: center;
 }
 
-.card {
-  border-radius:15px;
-}
 </style>

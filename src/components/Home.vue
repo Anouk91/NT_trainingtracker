@@ -13,12 +13,8 @@
         </div>
         </div>
       </div>
-      <div class="col">
-      <top3 :exercises="exercises()" :members="members()"> </top3>
-      </div>
-      <div class="col">
       <total-exercises :exercises="exercises()" > </total-exercises>
-      </div>
+      <top3 :exercises="exercises()" :members="members()"> </top3>
     </div>
 
 
@@ -112,7 +108,6 @@ export default {
   background-color:#fff0e6;
   padding: 1rem;
   justify-content: center;
-  
 }
 
 

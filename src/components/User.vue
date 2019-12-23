@@ -5,6 +5,7 @@
       <top3 :exercises="this.exercises" :members="this.members"> </top3>
       <total-exercises :exercises="this.exercises" > </total-exercises>
     </div>
+
     <div class="row">
     
       <!-- <div class="col-sm btn-team">
@@ -187,10 +188,10 @@ export default {
   /* text-overflow: ellipsis;  /* Deze zou (...) moeten maken, maar doet het niet omdat in white-space pre-line wil en het alleen voor width geldt */
 }
 
+/* Overwrite styling of App.vue */
 .card {
   padding: 1rem;
-  width: 18rem;
-  margin:1.5rem;
+  background-color: white;
 }
 
 </style>

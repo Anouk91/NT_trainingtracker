@@ -47,7 +47,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style>
 .lion {
   -webkit-clip-path: circle(50% at 50% 50%); 
   clip-path: circle(50% at 50% 50%);
@@ -57,7 +57,7 @@ export default {
 
 main {
   text-align: center;
-  margin-top: 56px;
+  /* margin-top: 56px; */
   margin-bottom: 56px;
 }
 /* 
@@ -78,5 +78,15 @@ footer {
   /* padding: 0 16px 0 24px; */
   /* background-color: #ffa500;; */
   width: 100%;
+}
+
+.card {
+  margin: 1rem;
+  background-color:#fff0e6;
+  justify-content: center;
+}
+
+.color {
+  color: #ff6600; 
 }
 </style>

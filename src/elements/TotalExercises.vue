@@ -1,7 +1,11 @@
 <template>
-  <div class="card">
-    <h3> Total Excersises</h3>
-    <h2 class="color big"> {{exercises.length}} </h2>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <h3> Total Excersises</h3>
+        <h2 class="color big"> {{exercises.length}} </h2>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -17,17 +21,6 @@ export default {
 </script>
 
 <style scoped>
-.color {
-  color: #ff6600; 
-}
-
-.card {
-  background-color:#fff0e6;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  justify-content: center;
-}
-
 .big {
   font-size: 5rem;
 }
