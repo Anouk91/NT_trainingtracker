@@ -55,12 +55,12 @@ export default {
     },
     deletePlayers (theList, theDB) {
       theList.forEach(x => {
-        db.collection(theDB).doc(x['.key']).delete()
+        db.collection(theDB).doc(x.id).delete()
       })
     },
     deleteExercises (theList, theDB) {
       theList.forEach(x => {
-        db.collection(theDB).doc(x['.key']).delete()
+        db.collection(theDB).doc(x.id).delete()
       })
     }
   }

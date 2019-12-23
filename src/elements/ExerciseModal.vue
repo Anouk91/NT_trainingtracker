@@ -64,35 +64,33 @@ export default {
     exercise: {type: Object},
     email_user: {type: String},
     team: {type: String},
-    update_exercise: {type: Boolean}
+    update: {type: Boolean}
   },
   components: {
     Datepicker
   },
   data () {
     return {
-      workout_types: [],
-      users: []
+      workout_types: []
     }
   },
   firestore () {
     return {
-      users: db.collection('users').orderBy('firstname'),
       workout_types: db.collection('workout_types').orderBy('index')
     }
   },
   methods: {
     saveExercise () {
-      console.log(this.exercise)
-      if (this.update_exercise) this.updateExercise()
+      // console.log(this.exercise, this.update)
+      if (this.update) this.updateExercise()
       else this.addExercise()
     },
     addExercise () {
       db.collection(`${this.team}_exercises`).add(this.exerciseData())
     },
     updateExercise () {
-      var docRef = db.collection(`${this.team}_exercises`).doc(this.exercise['.key'])
-      console.log(docRef)
+      var docRef = db.collection(`${this.team}_exercises`).doc(this.exercise.id)
+      // console.log('docRef', docRef)
       docRef.update(this.exerciseData())
     },
     exerciseData () {
@@ -114,8 +112,13 @@ export default {
     }
   },
   created () {
-    if (!this.update_exercise) {
-      console.log('No exercise giving, will create new', this.email_user)
+    if (this.update) {
+      // console.log('We need to update', this.email_user)
+      // Firebase seems to store a Date() as a timestamp. Have to re-translate it for DatePicker eachtime
+      var timeStamp = this.exercise.date.seconds
+      var dateForm = new Date(timeStamp * 1000)
+      this.exercise.date = dateForm
+    } else {
       this.exercise = {
         date: new Date(),
         hours: 1,
@@ -124,11 +127,6 @@ export default {
         type: null,
         userId: this.email_user
       }
-    } else {
-      // Firebase seems to store a Date() as a timestamp. Have to re-translate it for DatePicker eachtime
-      var timeStamp = this.exercise.date.seconds
-      var dateForm = new Date(timeStamp * 1000)
-      this.exercise.date = dateForm
     }
   }
 }

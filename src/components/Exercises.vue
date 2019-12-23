@@ -8,7 +8,7 @@
         style="padding-bottom: 1.5rem"
       >
         <div class="card">
-          <div :class="'card-body ' + getColor(exercise)">
+          <div :class="'card-body' + getColor(exercise)">
             <h5 class="card-title">{{ exercise.name }}</h5>
             <p class="card-text">
               {{ exercise.remark }}
