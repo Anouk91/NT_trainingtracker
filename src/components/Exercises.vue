@@ -51,10 +51,8 @@ export default {
       dailies: []
     }
   },
-  firestore () {
-    return {
-      dailies: db.collection('dailies').orderBy('type')
-    }
+  firestore: {
+    dailies: db.collection('dailies').orderBy('type')
   },
   methods: {
     getColor (exercise) {

@@ -3,18 +3,18 @@
 
     <div class="row">
     
-      <div class="col-sm btn-team">
-        <div :class="'left' + isActive('ndt')" v-on:click="selected_team = 'ndt'">Dames</div>
-        <div :class="isActive('nmt')" v-on:click="selected_team = 'nmt'">Mixed</div>
-        <div :class="'right' + isActive('not')" v-on:click="selected_team = 'not'">Open</div>
-      </div>
+      <!-- <div class="col-sm btn-team">
+        <div :class="'left' + isActive('ndt')" v-on:click="selectedTeam = 'ndt'">Dames</div>
+        <div :class="isActive('nmt')" v-on:click="selectedTeam = 'nmt'">Mixed</div>
+        <div :class="'right' + isActive('not')" v-on:click="selectedTeam = 'not'">Open</div>
+      </div> -->
       <div class="col">
-        <b-form-select v-model="selected_user" :options="dropDown()">
+        <b-form-select v-model="selectedUser" :options="dropDown()" :key="selectedTeam">
             <option :value="null" disabled>-- Selecteer jezelf --</option>
         </b-form-select>
       </div>
       <div class="col">
-        <b-button v-on:click="showModal = true" :disabled="!selected_user" variant="primary">
+        <b-button v-on:click="showModal = true" :disabled="!selectedUser" variant="primary">
           Add Exercise
         </b-button>
       </div>
@@ -28,7 +28,7 @@
       </div>
     </div> -->
 
-    <div class="row" v-if="selected_user">
+    <div class="row" v-if="selectedUser">
       <div v-for="exercise in exericesOfUser()" :key="exercise['.key']">
 
         <div class="col-sm">
@@ -47,7 +47,7 @@
                 {{exercise.minutes}}m
               </div>
               <div class="col">
-                <b-button v-on:click="(showModal = true) && (selected_exercise = exercise) && (update_exercise = true)" > 
+                <b-button v-on:click="(showModal = true) && (selectedExercise = exercise) && (updateExercise = true)" > 
                   <i class="material-icons">edit</i>
                 </b-button>
               </div>
@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <exercise-modal :email_user="selected_user" :team="selected_team" :exercise="selected_exercise" :update_exercise="update_exercise" v-if="showModal" @close="(showModal = false) && (update_exercise=false)">
+    <exercise-modal :email_user="selectedUser" :team="selectedTeam" :exercise="selectedExercise" :updateExercise="updateExercise" v-if="showModal" @close="(showModal = false) && (updateExercise=false)">
     </exercise-modal>
 
   </div>
@@ -85,38 +85,34 @@ export default {
   data () {
     return {
       showModal: false,
-      selected_team: 'ndt',
-      selected_user: null,
-      selected_exercise: null,
-      selected_week: moment(new Date()).format('w'),
-      update_exercise: false,
-      exercises: []
+      selectedTeam: this.$route.path.slice(1),
+      selectedUser: null,
+      selectedExercise: null,
+      // selected_week: moment(new Date()).format('w'),
+      updateExercise: false,
+      exercises: [],
+      members: []
     }
   },
   firestore () {
     return {
-      ndt_members: db.collection('ndt_members').orderBy('firstname'),
-      nmt_members: db.collection('nmt_members').orderBy('firstname'),
-      not_members: db.collection('not_members').orderBy('firstname'),
-      ndt_exercises: db.collection('ndt_exercises'),
-      nmt_exercises: db.collection('nmt_exercises'),
-      not_exercises: db.collection('not_exercises'),
-      exercises: db.collection('exercises'),
+      members: db.collection(`${this.selectedTeam}_members`).orderBy('firstname'),
+      exercises: db.collection(`${this.selectedTeam}_exercises`),
       workout_types: db.collection('workout_types').orderBy('index')
     }
   },
   methods: {
     dropDown () {
-      var dropdownList = []
-      var playersList = this.selected_team === 'ndt' ? this.ndt_members : (this.selected_team === 'nmt' ? this.nmt_members : this.not_members)
-      playersList.forEach(user => {
-        dropdownList.push({value: user.email_address, text: `${user.firstname} ${user.lastname}`})
-      })
-      return dropdownList
+      if (this.members[0]) {
+        const list = []
+        this.members.forEach(user => {
+          list.push({value: user.email_address, text: `${user.firstname} ${user.lastname}`})
+        })
+        return list
+      }
     },
     exericesOfUser () {
-      var exerciseList = this.selected_team === 'ndt' ? this.ndt_exercises : (this.selected_team === 'nmt' ? this.nmt_exercises : this.not_exercises)
-      var exercisesOfUser = exerciseList.filter(item => item.userId === this.selected_user)
+      var exercisesOfUser = this.exercises.filter(item => item.userId === this.selectedUser)
       return exercisesOfUser.sort((a, b) => { return b.date.seconds - a.date.seconds })
     },
     exercisesOfUserPerWeek () {
@@ -135,7 +131,14 @@ export default {
       return moment.unix(date.seconds).format('D-MMM')
     },
     isActive (team) {
-      return team === this.selected_team ? ' active' : ''
+      return team === this.selectedTeam ? ' active' : ''
+    }
+  },
+  watch: {
+    $route (to, from) {
+      this.selectedTeam = to.path.slice(1)
+      this.$bind('members', db.collection(`${this.selectedTeam}_members`).orderBy('firstname'))
+      this.$bind('exercises', db.collection(`${this.selectedTeam}_exercises`))
     }
   }
 }

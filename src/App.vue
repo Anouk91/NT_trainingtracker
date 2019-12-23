@@ -10,7 +10,7 @@
       <b-navbar-brand :to="'/'" active>
 
       <img src="../static/img/nederland-orange.jpeg" class="d-inline-block align-top lion" alt="Lion" >
-      NT Dashboard</b-navbar-brand>
+      </b-navbar-brand>
       <b-navbar-nav v-for="link in links" :key="link.to">
       <b-nav-item :to="link.to">{{link.name}}</b-nav-item>
       </b-navbar-nav>
@@ -25,14 +25,21 @@
 export default {
   data: () => ({
     links: [
-
       {
-        name: 'User',
-        to: '/user'
+        name: 'Dames',
+        to: '/ndt'
       },
       {
-        name: 'Dailies',
-        to: '/dailies'
+        name: 'Mixed',
+        to: '/nmt'
+      },
+      {
+        name: 'Open',
+        to: '/not'
+      },
+      {
+        name: 'Exercises',
+        to: '/exercises'
       }
     ]
   })
