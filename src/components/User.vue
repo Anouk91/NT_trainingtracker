@@ -2,12 +2,17 @@
   <div class="container">
 
     <div class="row">
+      <top3 :exercises="this.exercises" :members="this.members"> </top3>
+      <total-exercises :exercises="this.exercises" > </total-exercises>
+    </div>
+    <div class="row">
     
       <!-- <div class="col-sm btn-team">
         <div :class="'left' + isActive('ndt')" v-on:click="selectedTeam = 'ndt'">Dames</div>
         <div :class="isActive('nmt')" v-on:click="selectedTeam = 'nmt'">Mixed</div>
         <div :class="'right' + isActive('not')" v-on:click="selectedTeam = 'not'">Open</div>
       </div> -->
+
       <div class="col">
         <b-form-select v-model="selectedUser" :options="dropDown()" :key="selectedTeam">
             <option :value="null" disabled>-- Selecteer jezelf --</option>
@@ -19,7 +24,6 @@
         </b-button>
       </div>
     </div>
-
     <!-- <div class="row">
       <div v-for="week in exercisesOfUserPerWeek()" :key="week.id">
         <div class="col card">
@@ -76,11 +80,15 @@
 import { db } from '../firebase'
 import moment from 'moment'
 import ExerciseModal from '../elements/ExerciseModal.vue'
+import Top3 from '../elements/Top3.vue'
+import TotalExercises from '../elements/TotalExercises.vue'
 
 export default {
   name: 'home',
   components: {
-    ExerciseModal
+    ExerciseModal,
+    Top3,
+    TotalExercises
   },
   data () {
     return {
