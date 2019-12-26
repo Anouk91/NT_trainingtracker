@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import VueFirestore from 'vue-firestore'
+import { firestorePlugin } from 'vuefire' // https://vuefire.vuejs.org/vuefire/querying.html
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -12,8 +12,8 @@ import firebase from 'firebase'
 import {config} from './helpers/firebaseConfig.js'
 Vue.use(VueRouter)
 
-Vue.use(VueFirestore)
 Vue.use(BootstrapVue)
+Vue.use(firestorePlugin)
 
 Vue.config.productionTip = false
 

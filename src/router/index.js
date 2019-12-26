@@ -4,7 +4,7 @@ import Router from 'vue-router'
 // Page content
 import Home from '@/components/Home'
 import User from '@/components/User'
-import Dailies from '@/components/Dailies'
+import Exercises from '@/components/Exercises'
 import Admin from '@/components/Admin'
 
 // Fallback page
@@ -22,14 +22,24 @@ export default new Router({
       component: Home
     },
     {
-      path: '/user',
+      path: '/ndt',
       name: 'User',
       component: User
     },
     {
-      path: '/dailies',
-      name: 'Dailies',
-      component: Dailies
+      path: '/nmt',
+      name: 'User',
+      component: User
+    },
+    {
+      path: '/not',
+      name: 'User',
+      component: User
+    },
+    {
+      path: '/exercises',
+      name: 'Exercises',
+      component: Exercises
     },
     {
       path: '/admin',
