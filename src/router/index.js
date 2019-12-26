@@ -10,7 +10,9 @@ import Admin from '@/components/Admin'
 // Fallback page
 import PageNotFound from '@/components/PageNotFound'
 
-Vue.use(Router)
+import Auth from './components/Auth.vue';
+import AuthSuccess from './components/AuthSuccess.vue';
+
 
 export default new Router({
   routes: [
@@ -38,6 +40,9 @@ export default new Router({
       path: '**',
       name: 'PageNotFound',
       component: PageNotFound
-    }
+    },
+    { path: '/', component: Auth },
+    { path: '/auth', component: Auth },
+    { path: '/success', component: AuthSuccess }
   ]
 })
