@@ -5,10 +5,9 @@
         v-for="exercise in dailies"
         :key="exercise.name"
         class="col-sm-4"
-        style="padding-bottom: 1.5rem"
       >
-        <div class="card">
-          <div :class="'card-body' + getColor(exercise)">
+        <div :class="'card ' + getColor(exercise)">
+          <div class="card-body">
             <h5 class="card-title">{{ exercise.name }}</h5>
             <p class="card-text">
               {{ exercise.remark }}
@@ -57,10 +56,10 @@ export default {
   methods: {
     getColor (exercise) {
       return exercise.type === 'Beenspieren'
-        ? 'bg-danger'
+        ? 'red'
         : exercise.type === 'Bovenlichaam'
-          ? 'bg-light'
-          : 'bg-primary'
+          ? 'white'
+          : 'blue'
     }
   }
 }
@@ -68,6 +67,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.container-fluid {
+  /* background-color: white; */
+}
 .reps_sets {
   /* border-style: solid; */
   /* border-color: grey; */
@@ -77,4 +79,17 @@ export default {
   vertical-align: center;
 }
 
+.red {
+  background-color: #AE1C28;
+  /* color: white; */
+}
+
+.white {
+  background-color: white;
+}
+
+.blue {
+  background-color: #21468B;
+  /* color: white; */
+}
 </style>

@@ -21,17 +21,17 @@ export default new Router({
     },
     {
       path: '/ndt',
-      name: 'User',
+      name: 'NDT',
       component: User
     },
     {
       path: '/nmt',
-      name: 'User',
+      name: 'NMT',
       component: User
     },
     {
       path: '/not',
-      name: 'User',
+      name: 'NOT',
       component: User
     },
     {

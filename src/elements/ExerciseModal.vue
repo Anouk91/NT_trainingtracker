@@ -7,8 +7,8 @@
 
           <div class="modal-header row">
             <slot name="header">
-              <h2> Exercise! </h2>
-                <b-button 
+              <h2> Training! </h2>
+                <b-button
                 variant="outline-danger"
                 class="modal-default-button" @click="$emit('close')">
                 x
@@ -21,16 +21,16 @@
               <div class="row">
                 <Datepicker class="col" v-model="exercise.date"></Datepicker> 
                 <div class="col time-input">
-                  <input v-model="exercise.hours">h
-                  <input v-model="exercise.minutes">m
+                  <input v-model="exercise.hours">u
+                  <input class="minutes" v-model="exercise.minutes">m
                 </div>
             </div>
               <b-form-select v-model="exercise.type" :options="exerciseDropdown()">
-                <option :value="null" disabled>-- Selecteer het type training dat je hebt gedaan --</option>
+                <option :value="null" disabled>-- Selecteer type training --</option>
               </b-form-select>
               <b-form-textarea id="textarea"
                 v-model="exercise.text"
-                placeholder="Optional extra info about your exercise"
+                placeholder="Extra info (hoeft niet mag wel)"
                 rows="3"
                 max-rows="6"></b-form-textarea>
             </slot>
@@ -42,7 +42,7 @@
               class="modal-default-button" @click="$emit('close') && saveExercise()" 
               :disabled="!exercise.type"
               variant="success">
-                Save 
+                Opslaan 
               </b-button>
             </slot>
           </div>
@@ -197,6 +197,16 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.time-input > *{
+  width: 12px;
+  border-style: none;
+}
+
+.minutes {
+  width: 22px;
+
 }
 
 </style>

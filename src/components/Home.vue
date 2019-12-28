@@ -8,8 +8,8 @@
         <div class="card">
           <h3> #RoadToLeeuwarden</h3>
           <div class="inline" >
-          <h2 class="color big"> {{countDown('week')}}</h2> <p>weeks </p> 
-          <h2 class="color small"> {{countDown()}}</h2> <p>days </p> <br>
+          <h2 class="color big"> {{weeks}}</h2> <p>{{meervoud_week}}</p> 
+          <h2 class="color small"> {{days}}</h2> <p>{{meervoud_dag}}</p> <br>
         </div>
         </div>
       </div>
@@ -40,7 +40,8 @@ export default {
       ndt_exercises: [],
       nmt_exercises: [],
       not_exercises: [],
-      teams: []
+      teams: [],
+      countDownDate: new Date('Jul 11, 2020 17:00:00')
     }
   },
   firestore () {
@@ -66,7 +67,10 @@ export default {
       const today = new Date()
       const distance = countDownDate - today
       const weeks = Math.floor(distance / (1000 * 60 * 60 * 24 * 7))
+      if (weeks > 0) this.weeks = weeks
+
       const days = Math.floor(distance / (1000 * 60 * 60 * 24)) % 7
+      if (days > 0) this.days = days
       return type === 'week' ? weeks : days
       // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
       // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
@@ -77,6 +81,29 @@ export default {
         : team === 'nmt' ? this.nmt_exercises.length
           : team === 'not' ? this.not_exercises.length : this.ndt_exercises.length + this.nmt_exercises.length + this.not_exercises.length
     }
+  },
+  computed: {
+    meervoud_week: function () {
+      return this.weeks > 1 ? 'weken' : 'week'
+    },
+    meervoud_dag: function () {
+      return this.days === 1 ? 'dag' : 'dagen'
+    },
+    weeks: function () {
+      const today = new Date()
+      const distance = this.countDownDate - today
+      const weeks = Math.floor(distance / (1000 * 60 * 60 * 24 * 7))
+      if (weeks > 0) return weeks
+      else return 0
+    },
+    days: function () {
+      const today = new Date()
+      const distance = this.countDownDate - today
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24)) % 7
+      if (days > 0) return days
+      else return 0
+    }
+
   }
 }
 </script>
@@ -102,12 +129,6 @@ export default {
 .text {
   text-align: left;
   color: #ff6600;
-}
-
-.card {
-  background-color:#fff0e6;
-  padding: 1rem;
-  justify-content: center;
 }
 
 

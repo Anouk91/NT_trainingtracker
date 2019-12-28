@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="background">
     <main>
       <router-view />
     </main>
     <footer>
   <!-- Image and text -->
-  <b-navbar toggleable="lg" type="dark" variant="info" >
+  <b-navbar toggleable="lg" >
       <!-- <img src="../static/img/nederland-orange.jpeg" class="d-inline-block align-top" alt="Leeuw"> -->
       <b-navbar-brand :to="'/'" active>
 
@@ -38,7 +38,7 @@ export default {
         to: '/not'
       },
       {
-        name: 'Exercises',
+        name: 'Gym',
         to: '/exercises'
       }
     ]
@@ -48,6 +48,15 @@ export default {
 
 
 <style>
+:root {
+  --primary-color: #ff6600;
+  background-color: #ff6600;
+}
+.navbar {
+  border-top: 1px solid  var(--primary-color);
+  background-color: white;
+}
+
 .lion {
   -webkit-clip-path: circle(50% at 50% 50%); 
   clip-path: circle(50% at 50% 50%);
@@ -57,36 +66,33 @@ export default {
 
 main {
   text-align: center;
-  /* margin-top: 56px; */
   margin-bottom: 56px;
 }
-/* 
-header {
-  position: fixed;
-  top: 0px;
-  width: 100%;
-  margin: 0;
-  height: 56px;
-  padding: 0 16px 0 24px;
-  background-color: #000000;
-  color: #ffffff;
-} */
 footer {
   position: fixed;
   bottom: 0px;
-  /* height: 56px; */
-  /* padding: 0 16px 0 24px; */
-  /* background-color: #ffa500;; */
   width: 100%;
 }
 
 .card {
   margin: 1rem;
-  background-color:#fff0e6;
   justify-content: center;
+  padding: 1rem;
 }
 
-.color {
-  color: #ff6600; 
+/* .dashboard-card {
+  background-color: #fff0e6;
+} */
+.background {
+  background-color: var(--primary-color);
 }
+.color {
+  color: var(--primary-color) 
+}
+
+.lastRow {
+  padding-bottom: 1rem;
+}
+
+
 </style>

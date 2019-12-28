@@ -1,8 +1,8 @@
 <template>
   <div class="col-md">
-    <div class="card">
+    <div class="card dashboard-card">
     <div class="card-body">
-      <h3> Top 3 of the week </h3>
+      <h3> Top 3 van de week </h3>
       <div v-for="(player,i) in topThreeOfTheWeek()" :key="i" style="display: inline;">
         <div class="flex">
           <div class="color rank"> {{i +1 }} </div>

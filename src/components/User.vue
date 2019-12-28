@@ -1,13 +1,13 @@
 <template>
   <div class="container">
 
-    <div class="row">
+    <div class="row" >
       <total-exercises :exercises="this.exercises" > </total-exercises>
       <top3 :exercises="this.exercises" :members="this.members"> </top3>
     </div>
     <hr>
 
-    <div class="row">
+    <div class="row lastRow">
     
       <!-- <div class="col-sm btn-team">
         <div :class="'left' + isActive('ndt')" v-on:click="selectedTeam = 'ndt'">Dames</div>
@@ -22,7 +22,7 @@
       </div>
       <div class="col">
         <b-button v-on:click="showModal = true" :disabled="!selectedUser" variant="primary">
-          Add Exercise
+          +
         </b-button>
       </div>
     </div>
@@ -33,7 +33,7 @@
         </div>
       </div>
     </div> -->
-    <div class="row" v-if="selectedUser">
+    <div class="row justify-content-center" v-if="selectedUser">
       <div v-for="exercise in exericesOfUser()" :key="exercise['.key']">
 
         <div class="col-sm">
@@ -47,7 +47,7 @@
                 {{formatDate(exercise.date)}}
               </div>
               <div class="col">
-                {{exercise.hours}}h
+                {{exercise.hours}}u
                 <br/>
                 {{exercise.minutes}}m
               </div>
@@ -186,12 +186,6 @@ export default {
   /* max-height: 4rem;
   overflow: hidden; */
   /* text-overflow: ellipsis;  /* Deze zou (...) moeten maken, maar doet het niet omdat in white-space pre-line wil en het alleen voor width geldt */
-}
-
-/* Overwrite styling of App.vue */
-.card {
-  padding: 1rem;
-  background-color: white;
 }
 
 </style>
