@@ -68,7 +68,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container-fluid {
-  /* background-color: white; */
+  background-color: white;
 }
 .reps_sets {
   /* border-style: solid; */

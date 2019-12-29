@@ -152,11 +152,14 @@ export default {
 }
 
 .time-input > * {
-  width: 2rem;
+  width: 1.5rem;
   text-align: right;
-  /* border-style: none; */
+  border-style: none;
 } 
+.minute {
+  width: 3rem;
 
+}
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
