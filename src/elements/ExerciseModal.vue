@@ -19,8 +19,8 @@
           <div class="modal-body">
             <slot name="body">
               <div class="row justify-content-between">
-                <Datepicker :monday-first="true" :language="nl" class="col date-input" v-model="dateFormat"></Datepicker> 
-                <div class="col time-input">
+                <Datepicker :monday-first="true" :language="nl" class="col-5 date-input" v-model="dateFormat"></Datepicker> 
+                <div class="col-7 time-input">
                   <input v-model="exercise.hours">u
                   <input class="minute" v-model="exercise.minutes">m
                 </div>
@@ -38,6 +38,12 @@
           <!-- {{`${createText()}`}} -->
           <div class="modal-footer">
             <slot name="footer">
+                <b-button 
+              v-if="update"
+              class="modal-default-button" @click="$emit('close') && deleteExercise()" 
+              variant="danger">
+                Verwijderen 
+              </b-button>
               <b-button 
               class="modal-default-button" @click="$emit('close') && saveExercise()" 
               :disabled="!exercise.type"
@@ -97,6 +103,11 @@ export default {
       // console.log('docRef', docRef)
       docRef.update(this.exerciseData())
     },
+    deleteExercise () {
+      var docRef = db.collection(`${this.team}_exercises`).doc(this.exercise.id)
+      // console.log('docRef', docRef)
+      docRef.delete()
+    },
     exerciseData () {
       return {
         userId: this.email_user,
@@ -145,10 +156,6 @@ export default {
 </script>
 
 <style scoped>
-.date-input {
-  width: 130px;
-}
-
 .time-input {
   text-align: right;
 }
@@ -180,7 +187,8 @@ export default {
 }
 
 .modal-container {
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
