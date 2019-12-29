@@ -19,7 +19,7 @@
           <div class="modal-body">
             <slot name="body">
               <div class="row justify-content-between">
-                <Datepicker class="col date-input" v-model="exercise.date"></Datepicker> 
+                <Datepicker :monday-first="true" :language="nl" class="col date-input" v-model="exercise.date"></Datepicker> 
                 <div class="col time-input">
                   <input v-model="exercise.hours">u
                   <input class="minute" v-model="exercise.minutes">m
@@ -57,7 +57,7 @@
 <script>
 import Datepicker from 'vuejs-datepicker'
 import { db } from '../firebase'
-
+import {nl} from 'vuejs-datepicker/dist/locale'
 export default {
   name: 'exercise-modal',
   props: {
@@ -71,7 +71,8 @@ export default {
   },
   data () {
     return {
-      workout_types: []
+      workout_types: [],
+      nl: nl
     }
   },
   firestore () {
@@ -135,6 +136,19 @@ export default {
   width: 130px;
 }
 
+.time-input {
+  text-align: right;
+}
+
+.time-input > * {
+  width: 1.5rem;
+  text-align: right;
+}
+
+.minute {
+  width: 3rem;
+}
+
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -147,19 +161,6 @@ export default {
   transition: opacity .3s ease;
 }
 
-.time-input {
-  text-align: right;
-}
-
-.time-input > * {
-  width: 1.5rem;
-  text-align: right;
-  border-style: none;
-} 
-.minute {
-  width: 3rem;
-
-}
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
