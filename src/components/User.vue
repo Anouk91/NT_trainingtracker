@@ -137,7 +137,7 @@ export default {
       return perWeek.sort((a, b) => { return b.id - a.id })
     },
     formatDate (date) {
-      return moment.unix(date.seconds).format('D-MMM')
+      return moment(date.toDate()).format('D-MMM')
     },
     isActive (team) {
       return team === this.selectedTeam ? ' active' : ''

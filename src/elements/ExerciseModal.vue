@@ -16,13 +16,13 @@
             </slot>
           </div>
 
-          <div class="modal-body row">
+          <div class="modal-body">
             <slot name="body">
-              <div class="row">
-                <Datepicker class="col" v-model="exercise.date"></Datepicker> 
+              <div class="row justify-content-between">
+                <Datepicker class="col date-input" v-model="exercise.date"></Datepicker> 
                 <div class="col time-input">
                   <input v-model="exercise.hours">u
-                  <input class="minutes" v-model="exercise.minutes">m
+                  <input class="minute" v-model="exercise.minutes">m
                 </div>
             </div>
               <b-form-select v-model="exercise.type" :options="exerciseDropdown()">
@@ -113,11 +113,9 @@ export default {
   },
   created () {
     if (this.update) {
-      // console.log('We need to update', this.email_user)
       // Firebase seems to store a Date() as a timestamp. Have to re-translate it for DatePicker eachtime
-      var timeStamp = this.exercise.date.seconds
-      var dateForm = new Date(timeStamp * 1000)
-      this.exercise.date = dateForm
+      console.log(' update! ', this.exercise.date.toDate(), new Date())
+      this.exercise.date = this.exercise.date.toDate()
     } else {
       this.exercise = {
         date: new Date(),
@@ -133,6 +131,10 @@ export default {
 </script>
 
 <style scoped>
+.date-input {
+  width: 130px;
+}
+
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -144,9 +146,17 @@ export default {
   display: table;
   transition: opacity .3s ease;
 }
+
+.time-input {
+  text-align: right;
+}
+
 .time-input > * {
-  width: 25px;
+  width: 2rem;
+  text-align: right;
+  /* border-style: none; */
 } 
+
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
@@ -197,16 +207,6 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
-}
-
-.time-input > *{
-  width: 12px;
-  border-style: none;
-}
-
-.minutes {
-  width: 22px;
-
 }
 
 </style>
