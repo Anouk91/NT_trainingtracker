@@ -19,7 +19,7 @@
           <div class="modal-body">
             <slot name="body">
               <div class="row justify-content-between">
-                <Datepicker :monday-first="true" :language="nl" class="col date-input" v-model="exercise.date"></Datepicker> 
+                <Datepicker :monday-first="true" :language="nl" class="col date-input" v-model="dateFormat"></Datepicker> 
                 <div class="col time-input">
                   <input v-model="exercise.hours">u
                   <input class="minute" v-model="exercise.minutes">m
@@ -58,6 +58,9 @@
 import Datepicker from 'vuejs-datepicker'
 import { db } from '../firebase'
 import {nl} from 'vuejs-datepicker/dist/locale'
+import firebase from 'firebase'
+// import firestore from 'firebase/firestore'
+
 export default {
   name: 'exercise-modal',
   props: {
@@ -113,18 +116,28 @@ export default {
     }
   },
   created () {
-    if (this.update) {
-      // Firebase seems to store a Date() as a timestamp. Have to re-translate it for DatePicker eachtime
-      console.log(' update! ', this.exercise.date.toDate(), new Date())
-      this.exercise.date = this.exercise.date.toDate()
-    } else {
+  // if (this.update) {
+    // Firebase seems to store a Date() as a timestamp. Have to re-translate it for DatePicker eachtime
+    // this.exercise.date = this.exercise.date.toDate()
+  // }
+    if (!this.update) {
       this.exercise = {
-        date: new Date(),
+        date: firebase.firestore.Timestamp.now(),
         hours: 1,
         minutes: 30,
         text: null,
         type: null,
         userId: this.email_user
+      }
+    }
+  },
+  computed: {
+    dateFormat: {
+      set: function (value) {
+        this.exercise.date = firebase.firestore.Timestamp.fromDate(value)
+      },
+      get: function () {
+        return this.exercise.date.toDate()
       }
     }
   }
