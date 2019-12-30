@@ -48,6 +48,9 @@ export default {
 
 
 <style>
+.vdp-datepicker__calendar {
+  left: -20px;
+}
 :root {
   --primary-color: #ff6600;
   background-color: #ff6600;
