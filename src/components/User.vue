@@ -175,15 +175,14 @@ export default {
     }
   },
   created () {
-    firebase.getCurrentUser = () => {
+    function getCurrentUser () {
       return new Promise((resolve, reject) => {
-        const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-          unsubscribe()
+        firebase.auth().onAuthStateChanged(user => {
           resolve(user)
         }, reject)
       })
     }
-    firebase.getCurrentUser().then(data => { this.userLoggedIn = data.email })
+    getCurrentUser().then(data => { this.userLoggedIn = data.email })
   }
 }
 </script>
