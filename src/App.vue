@@ -78,7 +78,7 @@ footer {
 }
 
 .card {
-  margin: 1rem;
+  margin: 1rem auto;
   justify-content: center;
   padding: 1rem;
 }

@@ -38,14 +38,17 @@
         </div>
       </div>
     </div> -->
-    <div class="row" v-if="selectedUser">
+    <div class="row justify-content" v-if="selectedUser">
+
       <div class="col-sm">
-        <div class="card exercise-card">
-          <b-button v-on:click="showModal = true" :disabled="userLoggedIn !== selectedUser">
+        <div class="card exercise-card" style="align-items: flex-end;">
+
+          <b-button v-on:click="showModal = true" :disabled="userLoggedIn !== selectedUser" style="width: 50px;">
             +
           </b-button>
         </div>
       </div>
+
       <div v-for="exercise in exericesOfUser()" :key="exercise['.key']" class="col-sm">
 
           <div class="card  exercise-card">
@@ -192,7 +195,9 @@ export default {
 <style scoped>
 .exercise-card {
   max-width: 250px;
+  min-width: 200px;
 }
+
 .btn-team {
   font-size: 0;
   margin-bottom: .5rem;
