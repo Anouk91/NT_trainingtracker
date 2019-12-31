@@ -7,8 +7,8 @@
 
           <div class="modal-header row">
             <slot name="header">
-              <h2> Exercise! </h2>
-                <b-button 
+              <h2> Training! </h2>
+                <b-button
                 variant="outline-danger"
                 class="modal-default-button" @click="$emit('close')">
                 x
@@ -16,21 +16,21 @@
             </slot>
           </div>
 
-          <div class="modal-body row">
+          <div class="modal-body">
             <slot name="body">
-              <div class="row">
-                <Datepicker class="col" v-model="exercise.date"></Datepicker> 
-                <div class="col time-input">
-                  <input v-model="exercise.hours">h
-                  <input v-model="exercise.minutes">m
+              <div class="row justify-content-between">
+                <Datepicker :monday-first="true" :language="nl" class="col-5 date-input" v-model="dateFormat"></Datepicker> 
+                <div class="col-7 time-input">
+                  <input v-model="exercise.hours">u
+                  <input class="minute" v-model="exercise.minutes">m
                 </div>
             </div>
               <b-form-select v-model="exercise.type" :options="exerciseDropdown()">
-                <option :value="null" disabled>-- Selecteer het type training dat je hebt gedaan --</option>
+                <option :value="null" disabled>-- Selecteer type training --</option>
               </b-form-select>
               <b-form-textarea id="textarea"
                 v-model="exercise.text"
-                placeholder="Optional extra info about your exercise"
+                placeholder="Extra info (hoeft niet mag wel)"
                 rows="3"
                 max-rows="6"></b-form-textarea>
             </slot>
@@ -38,11 +38,17 @@
           <!-- {{`${createText()}`}} -->
           <div class="modal-footer">
             <slot name="footer">
+                <b-button 
+              v-if="update"
+              class="modal-default-button" @click="$emit('close') && deleteExercise()" 
+              variant="danger">
+                Verwijderen 
+              </b-button>
               <b-button 
               class="modal-default-button" @click="$emit('close') && saveExercise()" 
               :disabled="!exercise.type"
               variant="success">
-                Save 
+                Opslaan 
               </b-button>
             </slot>
           </div>
@@ -57,6 +63,9 @@
 <script>
 import Datepicker from 'vuejs-datepicker'
 import { db } from '../firebase'
+import {nl} from 'vuejs-datepicker/dist/locale'
+import firebase from 'firebase'
+// import firestore from 'firebase/firestore'
 
 export default {
   name: 'exercise-modal',
@@ -71,7 +80,8 @@ export default {
   },
   data () {
     return {
-      workout_types: []
+      workout_types: [],
+      nl: nl
     }
   },
   firestore () {
@@ -93,6 +103,11 @@ export default {
       // console.log('docRef', docRef)
       docRef.update(this.exerciseData())
     },
+    deleteExercise () {
+      var docRef = db.collection(`${this.team}_exercises`).doc(this.exercise.id)
+      // console.log('docRef', docRef)
+      docRef.delete()
+    },
     exerciseData () {
       return {
         userId: this.email_user,
@@ -112,15 +127,13 @@ export default {
     }
   },
   created () {
-    if (this.update) {
-      // console.log('We need to update', this.email_user)
-      // Firebase seems to store a Date() as a timestamp. Have to re-translate it for DatePicker eachtime
-      var timeStamp = this.exercise.date.seconds
-      var dateForm = new Date(timeStamp * 1000)
-      this.exercise.date = dateForm
-    } else {
+  // if (this.update) {
+    // Firebase seems to store a Date() as a timestamp. Have to re-translate it for DatePicker eachtime
+    // this.exercise.date = this.exercise.date.toDate()
+  // }
+    if (!this.update) {
       this.exercise = {
-        date: new Date(),
+        date: firebase.firestore.Timestamp.now(),
         hours: 1,
         minutes: 30,
         text: null,
@@ -128,11 +141,34 @@ export default {
         userId: this.email_user
       }
     }
+  },
+  computed: {
+    dateFormat: {
+      set: function (value) {
+        this.exercise.date = firebase.firestore.Timestamp.fromDate(value)
+      },
+      get: function () {
+        return this.exercise.date.toDate()
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
+.time-input {
+  text-align: right;
+}
+
+.time-input > * {
+  width: 1.5rem;
+  text-align: right;
+}
+
+.minute {
+  width: 3rem;
+}
+
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -144,16 +180,15 @@ export default {
   display: table;
   transition: opacity .3s ease;
 }
-.time-input > * {
-  width: 25px;
-} 
+
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
 }
 
 .modal-container {
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;

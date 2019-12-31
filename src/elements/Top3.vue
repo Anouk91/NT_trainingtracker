@@ -1,8 +1,8 @@
 <template>
   <div class="col-md">
-    <div class="card">
+    <div class="card dashboard-card">
     <div class="card-body">
-      <h3> Top 3 of the week </h3>
+      <h3> Top 3 van week {{currentWeekNum}}</h3>
       <div v-for="(player,i) in topThreeOfTheWeek()" :key="i" style="display: inline;">
         <div class="flex">
           <div class="color rank"> {{i +1 }} </div>
@@ -28,7 +28,7 @@ export default {
     topThreeOfTheWeek () {
       const orderedById = [] // [{userId, count}]
       if ((this.exercises.length !== 0) && this.members.length !== 0) {
-        const exercisesThisWeek = this.exercises.filter(e => moment.unix(e.date.seconds).format('w') === moment(new Date()).format('w'))
+        const exercisesThisWeek = this.exercises.filter(e => this.currentWeekNum === moment.unix(e.date.seconds).isoWeekday(1).format('w'))
 
         exercisesThisWeek.forEach(e => {
           const player = orderedById.find(p => { return e.userId === p.userId })
@@ -40,6 +40,11 @@ export default {
         })
         return orderedById.sort((a, b) => { return b.count - a.count }).splice(0, 3)
       }
+    }
+  },
+  computed: {
+    currentWeekNum: function () {
+      return moment(new Date()).isoWeekday(1).format('w')
     }
   }
 }

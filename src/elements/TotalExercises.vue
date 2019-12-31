@@ -1,8 +1,8 @@
 <template>
   <div class="col">
-    <div class="card">
+    <div class="card dashboard-card">
       <div class="card-body">
-        <h3> Total Excersises</h3>
+        <h3> Trainingen Totaal</h3>
         <h2 class="color big"> {{exercises.length}} </h2>
       </div>
     </div>
