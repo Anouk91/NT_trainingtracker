@@ -6,7 +6,6 @@
       <top3 :exercises="this.exercises" :members="this.members"> </top3>
     </div>
     <hr>
-
     <div class="row">
     
       <!-- <div class="col-sm btn-team">
@@ -20,24 +19,35 @@
             <option :value="null" disabled>-- Selecteer jezelf --</option>
         </b-form-select>
       </div>
-      <div class="col">
-        <b-button v-on:click="showModal = true" :disabled="!selectedUser" variant="primary">
-          Add Exercise
+        <div class="col" v-if="!userLoggedIn">
+        <b-button v-on:click="showLoginModal = true" :disabled="!selectedUser" variant="primary">
+          login
+        </b-button>
+      </div>
+      <div class="col" v-if="userLoggedIn">
+        <b-button v-on:click="logOut()" variant="warning">
+          logout
         </b-button>
       </div>
     </div>
     <!-- <div class="row">
-      <div v-for="week in exercisesOfUserPerWeek()" :key="week.id">
+      <div v-for="week in exercisesOfUserPerWeek()" :key="week.ids">
         <div class="col card">
           {{week.exercises.length}} Exercises done in week {{week.id}}
         </div>
       </div>
     </div> -->
     <div class="row" v-if="selectedUser">
-      <div v-for="exercise in exericesOfUser()" :key="exercise['.key']">
+      <div class="col-sm">
+        <div class="card exercise-card">
+          <b-button v-on:click="showModal = true" variant="primary" :disabled="userLoggedIn !== selectedUser">
+            +
+          </b-button>
+        </div>
+      </div>
+      <div v-for="exercise in exericesOfUser()" :key="exercise['.key']" class="col-sm">
 
-        <div class="col-sm">
-          <div class="card">
+          <div class="card  exercise-card">
 
             <div class="row justify-content-center">
 
@@ -52,7 +62,7 @@
                 {{exercise.minutes}}m
               </div>
               <div class="col">
-                <b-button v-on:click="(showModal = true) && (selectedExercise = exercise) && (updateExercise = true)" > 
+                <b-button v-on:click="(showModal = true) && (selectedExercise = exercise) && (updateExercise = true)" :disabled="userLoggedIn !== selectedUser"> 
                   <i class="material-icons">edit</i>
                 </b-button>
               </div>
@@ -63,15 +73,16 @@
               <p class="optional-comments"> {{exercise.text}} </p>
             </div>
 
-          </div>
         </div>
 
       </div>
     </div>
 
+    <modal-auth :email_user="selectedUser" v-if="showLoginModal" @close="(showLoginModal = false)">
+    </modal-auth>
+
     <exercise-modal :email_user="selectedUser" :team="selectedTeam" :exercise="selectedExercise" :update="updateExercise" v-if="showModal" @close="(showModal = false) && (updateExercise=false)">
     </exercise-modal>
-
   </div>
 </template>
 
@@ -81,19 +92,24 @@
 import { db } from '../firebase'
 import moment from 'moment'
 import ExerciseModal from '../elements/ExerciseModal.vue'
+import ModalAuth from '../elements/ModalAuth.vue'
 import Top3 from '../elements/Top3.vue'
 import TotalExercises from '../elements/TotalExercises.vue'
+import firebase from 'firebase'
 
 export default {
   name: 'home',
   components: {
     ExerciseModal,
+    ModalAuth,
     Top3,
     TotalExercises
   },
   data () {
     return {
       showModal: false,
+      showLoginModal: false,
+      userLoggedIn: null,
       selectedTeam: this.$route.path.slice(1),
       selectedUser: null,
       selectedExercise: null,
@@ -141,6 +157,14 @@ export default {
     },
     isActive (team) {
       return team === this.selectedTeam ? ' active' : ''
+    },
+    logOut () {
+      firebase.auth().signOut().then(() => {
+        this.userLoggedIn = null
+      }).catch((err) => {
+        console.log(err)
+        alert(err.message)
+      })
     }
   },
   watch: {
@@ -149,12 +173,25 @@ export default {
       this.$bind('members', db.collection(`${this.selectedTeam}_members`).orderBy('firstname'))
       this.$bind('exercises', db.collection(`${this.selectedTeam}_exercises`))
     }
+  },
+  created () {
+    firebase.getCurrentUser = () => {
+      return new Promise((resolve, reject) => {
+        const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+          unsubscribe()
+          resolve(user)
+        }, reject)
+      })
+    }
+    firebase.getCurrentUser().then(data => { this.userLoggedIn = data.email })
   }
 }
 </script>
 
 <style scoped>
-
+.exercise-card {
+  max-width: 250px;
+}
 .btn-team {
   font-size: 0;
   margin-bottom: .5rem;
@@ -167,6 +204,7 @@ export default {
   background-color: #f28a26;
   cursor: pointer;
 }
+
 .active {
   background-color: #ec5d22;
 }

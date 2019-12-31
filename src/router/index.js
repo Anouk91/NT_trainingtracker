@@ -4,15 +4,10 @@ import Router from 'vue-router'
 // Page content
 import Home from '@/components/Home'
 import User from '@/components/User'
-// import Exercises from '@/components/Exercises'
+import Exercises from '@/components/Exercises'
 import Admin from '@/components/Admin'
-
 // Fallback page
 import PageNotFound from '@/components/PageNotFound'
-
-// Auth
-import Auth from '@/components/Auth.vue'
-import AuthSuccess from '@/components/AuthSuccess.vue'
 
 let router = new Router({
   routes: [
@@ -23,32 +18,29 @@ let router = new Router({
     },
     {
       path: '/ndt',
-      name: 'User',
+      name: 'NDT',
       component: User
     },
     {
       path: '/nmt',
-      name: 'User',
+      name: 'NMT',
       component: User
     },
     {
       path: '/not',
-      name: 'User',
+      name: 'NOT',
       component: User
     },
-    // {
-    //   path: '/exercises',
-    //   name: 'Exercises',
-    //   component: Exercises
-    // },
+    {
+      path: '/exercises',
+      name: 'Exercises',
+      component: Exercises
+    },
     {
       path: '/admin',
       name: 'Admin',
       component: Admin
     },
-    // { path: '/', component: Auth },
-    { path: '/auth', component: Auth },
-    { path: '/success', component: AuthSuccess },
     {
       path: '**',
       name: 'PageNotFound',
