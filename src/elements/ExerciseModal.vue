@@ -65,7 +65,6 @@ import Datepicker from 'vuejs-datepicker'
 import { db } from '../firebase'
 import {nl} from 'vuejs-datepicker/dist/locale'
 import firebase from 'firebase'
-// import firestore from 'firebase/firestore'
 
 export default {
   name: 'exercise-modal',
@@ -80,13 +79,14 @@ export default {
   },
   data () {
     return {
-      workout_types: [],
+      workout_types: [
+        {'id': 'XUFysn6P2xn4SnitKINr', 'icon': 'group', 'name': 'Team Training'},
+        {'id': 'osFdKyLd5g09d5LiDjTz', 'icon': 'directions_run', 'name': 'Endurance'},
+        {'id': 'g7efLzxKLb04pv6Kf3Qc', 'icon': 'trip_origin', 'name': 'Throwing'},
+        {'id': '2UqpbF01AVG6Z0Vw4Zte', 'icon': 'sports', 'name': 'Other'},
+        {'id': 'mxDAAZSM0bPnYjz5HlqP', 'icon': 'fitness_center', 'name': 'Strength'}
+      ],
       nl: nl
-    }
-  },
-  firestore () {
-    return {
-      workout_types: db.collection('workout_types').orderBy('index')
     }
   },
   methods: {
@@ -119,7 +119,6 @@ export default {
     },
     exerciseDropdown () {
       var dropdownList = []
-
       this.workout_types.forEach(type => {
         dropdownList.push({value: type, text: type.name})
       })
@@ -127,10 +126,6 @@ export default {
     }
   },
   created () {
-  // if (this.update) {
-    // Firebase seems to store a Date() as a timestamp. Have to re-translate it for DatePicker eachtime
-    // this.exercise.date = this.exercise.date.toDate()
-  // }
     if (!this.update) {
       this.exercise = {
         date: firebase.firestore.Timestamp.now(),

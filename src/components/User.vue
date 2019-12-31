@@ -82,7 +82,7 @@
     <modal-auth :email_user="selectedUser" v-if="showLoginModal" @close="(showLoginModal = false)">
     </modal-auth>
 
-    <exercise-modal :email_user="selectedUser" :team="selectedTeam" :exercise="selectedExercise" :update="updateExercise" v-if="showModal" @close="(showModal = false) && (updateExercise=false)">
+    <exercise-modal :email_user="selectedUser" :team="selectedTeam" :exercise="selectedExercise" :update="updateExercise" v-if="showModal" @close="resetValues()">
     </exercise-modal>
   </div>
 </template>
@@ -128,6 +128,10 @@ export default {
     }
   },
   methods: {
+    resetValues () {
+      this.updateExercise = false
+      this.showModal = false
+    },
     dropDown () {
       if (this.members[0]) {
         const list = []
@@ -176,14 +180,11 @@ export default {
     }
   },
   created () {
-    function getCurrentUser () {
-      return new Promise((resolve, reject) => {
-        firebase.auth().onAuthStateChanged(user => {
-          resolve(user)
-        }, reject)
-      })
-    }
-    getCurrentUser().then(data => { this.userLoggedIn = data.email })
+    new Promise((resolve, reject) => {
+      firebase.auth().onAuthStateChanged(user => {
+        resolve(user)
+      }, reject)
+    }).then(data => { this.userLoggedIn = data.email })
   }
 }
 </script>
