@@ -125,9 +125,7 @@ export default {
   },
   firestore () {
     return {
-      members: db.collection(`${this.selectedTeam}_members`).orderBy('firstname'),
-      exercises: db.collection(`${this.selectedTeam}_exercises`),
-      workout_types: db.collection('workout_types').orderBy('index')
+      exercises: db.collection(`${this.selectedTeam}_exercises`)
     }
   },
   methods: {
@@ -136,9 +134,10 @@ export default {
       this.showModal = false
     },
     dropDown () {
-      if (this.members[0]) {
+      var members = require(`../../static/${this.selectedTeam.toUpperCase()}.json`)
+      if (members[0]) {
         const list = []
-        this.members.forEach(user => {
+        members.forEach(user => {
           list.push({value: user.email_address, text: `${user.firstname} ${user.lastname}`})
         })
         return list

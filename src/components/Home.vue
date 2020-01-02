@@ -34,25 +34,20 @@ export default {
   },
   data () {
     return {
-      ndt_members: [],
-      nmt_members: [],
-      not_members: [],
+      ndt_members: require(`../../static/NDT.json`),
+      nmt_members: require(`../../static/NMT.json`),
+      not_members: require(`../../static/NOT.json`),
       ndt_exercises: [],
       nmt_exercises: [],
       not_exercises: [],
-      teams: [],
       countDownDate: new Date('Jul 11, 2020 17:00:00')
     }
   },
   firestore () {
     return {
-      ndt_members: db.collection('ndt_members').orderBy('firstname'),
-      nmt_members: db.collection('nmt_members').orderBy('firstname'),
-      not_members: db.collection('not_members').orderBy('firstname'),
       ndt_exercises: db.collection('ndt_exercises'),
       nmt_exercises: db.collection('nmt_exercises'),
-      not_exercises: db.collection('not_exercises'),
-      teams: db.collection('team')
+      not_exercises: db.collection('not_exercises')
     }
   },
   methods: {

@@ -19,7 +19,13 @@
           <div class="modal-body row">
             <slot name="body">
               <div class="row">
-                 <p>{{email_user}}</p>
+                  <input 
+                    type="email" 
+                    v-model="email_user"
+                    :placeholder="email_user"
+                    disabled="true" 
+                    class="input" 
+                    required>
                   <input 
                     type="password" 
                     v-model="password"
