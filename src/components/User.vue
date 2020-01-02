@@ -120,7 +120,7 @@ export default {
       // selected_week: moment(new Date()).format('w'),
       updateExercise: false,
       exercises: [],
-      members: []
+      members: require(`../../static/${this.$route.path.slice(1).toUpperCase()}.json`)
     }
   },
   firestore () {
