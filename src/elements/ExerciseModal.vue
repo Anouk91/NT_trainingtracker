@@ -83,8 +83,8 @@ export default {
         {'id': 'XUFysn6P2xn4SnitKINr', 'icon': 'group', 'name': 'Team Training'},
         {'id': 'osFdKyLd5g09d5LiDjTz', 'icon': 'directions_run', 'name': 'Endurance'},
         {'id': 'g7efLzxKLb04pv6Kf3Qc', 'icon': 'trip_origin', 'name': 'Throwing'},
-        {'id': '2UqpbF01AVG6Z0Vw4Zte', 'icon': 'sports', 'name': 'Other'},
         {'id': 'mxDAAZSM0bPnYjz5HlqP', 'icon': 'fitness_center', 'name': 'Strength'}
+        {'id': '2UqpbF01AVG6Z0Vw4Zte', 'icon': 'sports', 'name': 'Other'},
       ],
       nl: nl
     }
