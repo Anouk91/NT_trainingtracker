@@ -14,22 +14,26 @@ let router = new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      props: true
     },
     {
       path: '/ndt',
       name: 'NDT',
-      component: User
+      component: User,
+      props: true
     },
     {
       path: '/nmt',
       name: 'NMT',
-      component: User
+      component: User,
+      props: true
     },
     {
       path: '/not',
       name: 'NOT',
-      component: User
+      component: User,
+      props: true
     },
     {
       path: '/exercises',

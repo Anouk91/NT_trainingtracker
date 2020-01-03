@@ -91,9 +91,14 @@ export default {
   },
   methods: {
     saveExercise () {
-      // console.log(this.exercise, this.update)
-      if (this.update) this.updateExercise()
-      else this.addExercise()
+      // Om te voorkomen dat als je jezelf selecteerd en je naar ander team gaat je daar ook een training kan opslaan.
+      const correspondingUsers = require(`../../static/${this.team.toUpperCase()}.json`)
+      var result = correspondingUsers.find(u => { return u.email_address === this.email_user })
+
+      if (result) {
+        if (this.update) this.updateExercise()
+        else this.addExercise()
+      } else throw new Error('heee this is not your team!')
     },
     addExercise () {
       db.collection(`${this.team}_exercises`).add(this.exerciseData())

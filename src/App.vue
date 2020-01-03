@@ -1,7 +1,7 @@
 <template>
   <div class="background">
     <main>
-      <router-view />
+      <router-view :ndt_exercises="ndt_exercises" :nmt_exercises="nmt_exercises" :not_exercises="nmt_exercises"/>
     </main>
     <footer>
   <!-- Image and text -->
@@ -13,6 +13,7 @@
       </b-navbar-brand>
       <b-navbar-nav v-for="link in links" :key="link.to">
       <b-nav-item :to="link.to">{{link.name}}</b-nav-item>
+      <!-- <b-nav-item :to="link.to">{{link.name}}</b-nav-item> -->
       </b-navbar-nav>
 
   </b-navbar>
@@ -22,6 +23,8 @@
 
 
 <script>
+import { db } from './firebase'
+
 export default {
   data: () => ({
     links: [
@@ -41,11 +44,20 @@ export default {
         name: 'Gym',
         to: '/exercises'
       }
-    ]
-  })
+    ],
+    ndt_exercises: [],
+    nmt_exercises: [],
+    not_exercises: []
+  }),
+  firestore () {
+    return {
+      ndt_exercises: db.collection('ndt_exercises'),
+      nmt_exercises: db.collection('nmt_exercises'),
+      not_exercises: db.collection('not_exercises')
+    }
+  }
 }
 </script>
-
 
 <style>
 .vdp-datepicker__calendar {
