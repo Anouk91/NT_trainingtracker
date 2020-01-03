@@ -9,7 +9,7 @@
       <!-- <img src="../static/img/nederland-orange.jpeg" class="d-inline-block align-top" alt="Leeuw"> -->
       <b-navbar-brand :to="'/'" active>
 
-      <img src="../static/img/nederland-orange.jpeg" class="d-inline-block align-top lion" alt="Lion" >
+      <img src="../static/img/nederland-orange.jpg" class="d-inline-block align-top lion" alt="Lion" >
       </b-navbar-brand>
       <b-navbar-nav v-for="link in links" :key="link.to">
       <b-nav-item :to="link.to">{{link.name}}</b-nav-item>

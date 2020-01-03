@@ -26,11 +26,12 @@
             
               <div class="reps_sets col">
                 {{ exercise.reps }}
-                <i class="fa fa-times"></i>
+                <i class="material-icons">loop</i>
+                
               </div>
               <div class="reps_sets col">
                 {{ exercise.sets }}
-                <i class="fa fa-refresh"></i>
+                <i class="material-icons">clear</i>
               </div>
             </div>
           </div>
@@ -67,6 +68,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.material-icons {
+  vertical-align: bottom;
+}
 .container-fluid {
   background-color: white;
 }
