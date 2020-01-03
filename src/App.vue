@@ -1,7 +1,7 @@
 <template>
   <div class="background">
     <main>
-      <router-view :ndt_exercises="ndt_exercises" :nmt_exercises="nmt_exercises" :not_exercises="nmt_exercises"/>
+      <router-view :ndt_exercises="ndt_exercises" :nmt_exercises="nmt_exercises" :not_exercises="not_exercises"/>
     </main>
     <footer>
   <!-- Image and text -->
