@@ -43,7 +43,8 @@ let router = new Router({
     {
       path: '/admin',
       name: 'Admin',
-      component: Admin
+      component: Admin,
+      props: true
     },
     {
       path: '**',

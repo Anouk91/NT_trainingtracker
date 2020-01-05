@@ -21,8 +21,8 @@
               <div class="row justify-content-between">
                 <Datepicker :monday-first="true" :language="nl" class="col-5 date-input" v-model="dateFormat"></Datepicker> 
                 <div class="col-7 time-input">
-                  <input v-model="exercise.hours">u
-                  <input class="minute" v-model="exercise.minutes">m
+                  <input type="number" v-model.number="exercise.hours">u
+                  <input type="number" class="minute" v-model.number="exercise.minutes">m
                 </div>
             </div>
               <b-form-select v-model="exercise.type" :options="exerciseDropdown()">
