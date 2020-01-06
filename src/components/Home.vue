@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { db } from '../firebase'
+// import { db } from '../firebase'
 import Top3 from '../elements/Top3.vue'
 import TotalExercises from '../elements/TotalExercises.vue'
 
@@ -32,24 +32,20 @@ export default {
     Top3,
     TotalExercises
   },
+  props: {
+    ndt_exercises: {type: Array},
+    nmt_exercises: {type: Array},
+    not_exercises: {type: Array}
+  },
   data () {
     return {
       ndt_members: require(`../../static/NDT.json`),
       nmt_members: require(`../../static/NMT.json`),
       not_members: require(`../../static/NOT.json`),
-      ndt_exercises: [],
-      nmt_exercises: [],
-      not_exercises: [],
       countDownDate: new Date('Jul 11, 2020 17:00:00')
     }
   },
-  firestore () {
-    return {
-      ndt_exercises: db.collection('ndt_exercises'),
-      nmt_exercises: db.collection('nmt_exercises'),
-      not_exercises: db.collection('not_exercises')
-    }
-  },
+
   methods: {
     exercises () {
       return this.ndt_exercises.concat(this.nmt_exercises).concat(this.not_exercises)

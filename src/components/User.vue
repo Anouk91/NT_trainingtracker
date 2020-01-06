@@ -109,6 +109,11 @@ export default {
     Top3,
     TotalExercises
   },
+  props: {
+    ndt_exercises: {type: Array},
+    nmt_exercises: {type: Array},
+    not_exercises: {type: Array}
+  },
   data () {
     return {
       showModal: false,
@@ -119,13 +124,8 @@ export default {
       selectedExercise: null,
       // selected_week: moment(new Date()).format('w'),
       updateExercise: false,
-      exercises: [],
+      // exercises: [],
       members: require(`../../static/${this.$route.path.slice(1).toUpperCase()}.json`)
-    }
-  },
-  firestore () {
-    return {
-      exercises: db.collection(`${this.selectedTeam}_exercises`)
     }
   },
   methods: {
@@ -172,6 +172,12 @@ export default {
         console.log(err)
         alert(err.message)
       })
+    }
+  },
+  computed: {
+    exercises () {
+      const exercises = this.selectedTeam === 'ndt' ? this.ndt_exercises : (this.selectedTeam === 'nmt' ? this.nmt_exercises : this.not_exercises)
+      return exercises
     }
   },
   watch: {

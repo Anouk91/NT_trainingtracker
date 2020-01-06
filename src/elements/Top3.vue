@@ -8,6 +8,7 @@
           <div class="color rank"> {{i +1 }} </div>
           <div class="name"> {{player.username}}</div>
           <div> {{player.count}}x</div>
+          <div> {{player.hours}}u {{player.minutes}}m</div>
         </div>
       </div>
       </div>
@@ -35,8 +36,18 @@ export default {
 
           if (!player) {
             const playerInfo = this.members.find(m => { return m.email_address === e.userId })
-            orderedById.push({ userId: e.userId, username: `${playerInfo.firstname} ${playerInfo.lastname}`, count: 1 })
-          } else player.count++
+            orderedById.push({userId: e.userId, username: `${playerInfo.firstname} ${playerInfo.lastname}`, count: 1, hours: e.hours, minutes: Number(e.minutes)})
+          } else {
+            player.count++
+            player.hours += e.hours
+            player.minutes += e.minutes
+          }
+        })
+        orderedById.forEach(u => {
+          const extraHours = Math.floor(u.minutes / 60)
+          console.log(u.username, 'hour', u.hours, '\nminutes', u.minutes, '\nextra hours', extraHours, '\nmin left', u.minutes % 60)
+          u.hours += extraHours
+          u.minutes = u.minutes % 60
         })
         return orderedById.sort((a, b) => { return b.count - a.count }).splice(0, 3)
       }
