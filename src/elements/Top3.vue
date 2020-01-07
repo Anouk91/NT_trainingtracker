@@ -3,6 +3,7 @@
     <div class="card dashboard-card">
     <div class="card-body">
       <h3> Top {{amountOfTop}} - wk {{currentWeekNum}}</h3>
+      <selector-type :selectedTypes="allExlOther" @clicked="filterExercises"> </selector-type>
       <div v-for="(player,i) in topThreeOfTheWeek()" :key="i" style="display: inline;">
         <div class="flex">
           <div class="color rank"> {{i + 1 }} </div>
@@ -19,13 +20,22 @@
 
 <script>
 import moment from 'moment'
+import SelectorType from './SelectorType.vue'
 
 export default {
   name: 'top3',
+  components: {
+    SelectorType
+  },
   props: {
     exercises: {type: Array},
     members: {type: Array},
     amountOfTop: {type: Number}
+  },
+  data () {
+    return {
+      selectedArray: this.allExlOther
+    }
   },
   methods: {
     topThreeOfTheWeek () {
@@ -54,6 +64,10 @@ export default {
           else return b.minutes - a.minutes
         }).splice(0, this.amountOfTop)
       }
+    },
+    filterExercises (value) {
+      this.selectedArray = value
+      console.log('returned value', this.selectedArray)
     }
   },
   computed: {
@@ -61,8 +75,20 @@ export default {
       return moment(new Date()).isoWeekday(1).format('w')
     },
     exercisesThisWeek () {
-      if (this.exercises !== 0) return this.exercises.filter(e => this.currentWeekNum === moment.unix(e.date.seconds).isoWeekday(1).format('w'))
-      else return 0
+      if (this.exercises !== 0) {
+        return this.exercises.filter(e => this.currentWeekNum === moment.unix(e.date.seconds).isoWeekday(1).format('w'))
+      } else return 0
+    },
+    filteredExercises () {
+      var filtered = []
+      this.selectedArray.forEach(t => {
+        this.filered.push(this.exercisesThisWeek.filter(e => e.type.short === t))
+      })
+      return filtered
+    },
+    allExlOther () {
+      const workouts = require(`../../static/workout_types.json`).map(w => { return w.short })
+      return workouts.slice(0, -1)
     }
   }
 }
