@@ -14,7 +14,7 @@
         </div>
       </div>
       <total-exercises :exercises="exercises()" > </total-exercises>
-      <top3 :exercises="exercises()" :members="members()"> </top3>
+      <top3 :exercises="exercises()" :members="members()" :amountOfTop="5"> </top3>
     </div>
 
 

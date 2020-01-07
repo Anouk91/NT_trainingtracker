@@ -3,7 +3,7 @@
 
     <div class="row" >
       <total-exercises :exercises="this.exercises" > </total-exercises>
-      <top3 :exercises="this.exercises" :members="this.members"> </top3>
+      <top3 :exercises="this.exercises" :members="this.members" :amountOfTop="3"> </top3>
     </div>
     <hr>
 
@@ -175,9 +175,14 @@ export default {
     }
   },
   computed: {
-    exercises () {
-      const exercises = this.selectedTeam === 'ndt' ? this.ndt_exercises : (this.selectedTeam === 'nmt' ? this.nmt_exercises : this.not_exercises)
-      return exercises
+    exercises: {
+      get () {
+        const exercises = this.selectedTeam === 'ndt' ? this.ndt_exercises : (this.selectedTeam === 'nmt' ? this.nmt_exercises : this.not_exercises)
+        return exercises
+      },
+      set (value) {
+        // console.log('We do not want to remember old exercises so we do nothing with this setter')
+      }
     }
   },
   watch: {
