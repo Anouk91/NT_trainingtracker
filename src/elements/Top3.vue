@@ -3,6 +3,7 @@
     <div class="card dashboard-card">
     <div class="card-body">
       <h3> Top {{amountOfTop}} - wk {{currentWeekNum}}</h3>
+      <selector-type :selectedTypes="selectedArray" @clicked="filterExercises"> </selector-type>
       <div v-for="(player,i) in topThreeOfTheWeek()" :key="i" style="display: inline;">
         <div class="flex">
           <div class="color rank"> {{i + 1 }} </div>
@@ -11,7 +12,7 @@
           <!-- <div class="time"> {{player.hours}}u <br> {{player.minutes}}m</div> -->
         </div>
       </div>
-      <div class="total"> Totaal deze week <b> {{exercisesThisWeek.length}} </b> </div>
+      <div class="total"> Totaal deze week <b> {{filteredExercises.length}} </b> </div>
       </div>
     </div>
   </div>
@@ -19,19 +20,28 @@
 
 <script>
 import moment from 'moment'
+import SelectorType from './SelectorType.vue'
 
 export default {
   name: 'top3',
+  components: {
+    SelectorType
+  },
   props: {
     exercises: {type: Array},
     members: {type: Array},
     amountOfTop: {type: Number}
   },
+  data () {
+    return {
+      selectedArray: require(`../../static/workout_types.json`).map(w => { return w.name }).slice(0, -1)
+    }
+  },
   methods: {
     topThreeOfTheWeek () {
       const orderedById = [] // [{userId, count}]
       if ((this.exercises.length !== 0) && this.members.length !== 0) {
-        this.exercisesThisWeek.forEach(e => {
+        this.filteredExercises.forEach(e => {
           const player = orderedById.find(p => { return e.userId === p.userId })
 
           if (!player) {
@@ -54,6 +64,10 @@ export default {
           else return b.minutes - a.minutes
         }).splice(0, this.amountOfTop)
       }
+    },
+    filterExercises (value) {
+      console.log(value)
+      this.selectedArray = value
     }
   },
   computed: {
@@ -61,8 +75,22 @@ export default {
       return moment(new Date()).isoWeekday(1).format('w')
     },
     exercisesThisWeek () {
-      if (this.exercises !== 0) return this.exercises.filter(e => this.currentWeekNum === moment.unix(e.date.seconds).isoWeekday(1).format('w'))
-      else return 0
+      if (this.exercises !== 0) {
+        return this.exercises.filter(e => this.currentWeekNum === moment.unix(e.date.seconds).isoWeekday(1).format('w'))
+      } else return 0
+    },
+    filteredExercises () {
+      var filtered = []
+      if (this.selectedArray.length !== 0) {
+        this.exercisesThisWeek.forEach(e => {
+          this.selectedArray.forEach(t => {
+            if (e.type.name === t) {
+              filtered.push(e)
+            }
+          })
+        })
+        return filtered
+      } else return []
     }
   }
 }

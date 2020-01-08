@@ -1,0 +1,32 @@
+[
+  { "id": "XUFysn6P2xn4SnitKINr",
+    "icon": "group",
+    "name": "Team Training",
+    "short": "training",
+    "dutch_name": "Team Training"
+ },
+  {
+    "id": "osFdKyLd5g09d5LiDjTz",
+    "icon": "directions_run",
+    "name": "Endurance",
+    "short": "duur",
+    "dutch_name": "Duur"
+  },
+  { "id": "g7efLzxKLb04pv6Kf3Qc",
+    "icon": "trip_origin",
+    "name": "Throwing",
+    "short": "gooien",
+    "dutch_name": "Gooien"},
+  {
+    "id": "mxDAAZSM0bPnYjz5HlqP",
+    "icon": "fitness_center",
+    "name": "Strength",
+    "short": "kracht",
+    "dutch_name": "Kracht"
+  },
+  { "id": "2UqpbF01AVG6Z0Vw4Zte",
+    "icon": "sports",
+    "name": "Other",
+    "short": "anders",
+    "dutch_name": "Anders" }
+]

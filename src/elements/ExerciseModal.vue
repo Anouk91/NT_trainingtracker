@@ -79,13 +79,6 @@ export default {
   },
   data () {
     return {
-      workout_types: [
-        {'id': 'XUFysn6P2xn4SnitKINr', 'icon': 'group', 'name': 'Team Training'},
-        {'id': 'osFdKyLd5g09d5LiDjTz', 'icon': 'directions_run', 'name': 'Endurance'},
-        {'id': 'g7efLzxKLb04pv6Kf3Qc', 'icon': 'trip_origin', 'name': 'Throwing'},
-        {'id': 'mxDAAZSM0bPnYjz5HlqP', 'icon': 'fitness_center', 'name': 'Strength'},
-        {'id': '2UqpbF01AVG6Z0Vw4Zte', 'icon': 'sports', 'name': 'Other'}
-      ],
       nl: nl
     }
   },
@@ -124,8 +117,9 @@ export default {
     },
     exerciseDropdown () {
       var dropdownList = []
-      this.workout_types.forEach(type => {
-        dropdownList.push({value: type, text: type.name})
+      const workoutTypes = require(`../../static/workout_types.json`)
+      workoutTypes.forEach(type => {
+        dropdownList.push({value: type, text: type.dutch_name})
       })
       return dropdownList
     }

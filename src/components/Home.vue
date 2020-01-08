@@ -6,7 +6,7 @@
 
       <div class="col">
         <div class="card">
-          <h3> #RoadToLeeuwarden</h3>
+          <h4>#RoadToLeeuwarden</h4>
           <div class="inline" >
           <h2 class="color big"> {{weeks}}</h2> <p>{{meervoud_week}}</p> 
           <h2 class="color small"> {{days}}</h2> <p>{{meervoud_dag}}</p> <br>

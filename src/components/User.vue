@@ -97,9 +97,9 @@ import { db } from '../firebase'
 import moment from 'moment'
 import ExerciseModal from '../elements/ExerciseModal.vue'
 import ModalAuth from '../elements/ModalAuth.vue'
+import firebase from 'firebase'
 import Top3 from '../elements/Top3.vue'
 import TotalExercises from '../elements/TotalExercises.vue'
-import firebase from 'firebase'
 
 export default {
   name: 'home',
@@ -162,9 +162,7 @@ export default {
     formatDate (date) {
       return moment(date.toDate()).format('D-MMM')
     },
-    isActive (team) {
-      return team === this.selectedTeam ? ' active' : ''
-    },
+
     logOut () {
       firebase.auth().signOut().then(() => {
         this.userLoggedIn = null
@@ -208,29 +206,8 @@ export default {
   min-width: 200px;
 }
 
-.btn-team {
-  font-size: 0;
-  margin-bottom: .5rem;
-}
-.btn-team > * {
-  display: inline-block;
-  font-size: 16px;
-  padding: .4rem;
-  color: white;
-  background-color: #f28a26;
-  cursor: pointer;
-}
 
-.active {
-  background-color: #ec5d22;
-}
-.left {
-  border-radius: 10px 0px 0px 10px;
-}
 
-.right {
-  border-radius: 0px 10px 10px 0px;
-}
 .optional-comments {
   white-space: pre-line; /* Luistert naar \n */
   text-align: left;
