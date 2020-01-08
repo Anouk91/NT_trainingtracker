@@ -119,7 +119,7 @@ export default {
       var dropdownList = []
       const workoutTypes = require(`../../static/workout_types.json`)
       workoutTypes.forEach(type => {
-        dropdownList.push({value: type, text: type.name})
+        dropdownList.push({value: type, text: type.dutch_name})
       })
       return dropdownList
     }

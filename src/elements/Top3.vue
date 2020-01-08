@@ -9,7 +9,7 @@
           <div class="color rank"> {{i + 1 }} </div>
           <div class="name"> {{player.username}}</div>
           <div class="color"> {{player.count}}x</div>
-          <div class="time"> {{player.hours}}u <br> {{player.minutes}}m</div>
+          <!-- <div class="time"> {{player.hours}}u <br> {{player.minutes}}m</div> -->
         </div>
       </div>
       <div class="total"> Totaal deze week <b> {{filteredExercises.length}} </b> </div>
