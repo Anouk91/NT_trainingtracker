@@ -3,7 +3,7 @@
     <div class="card dashboard-card">
     <div class="card-body">
       <h3> Top {{amountOfTop}} - wk {{currentWeekNum}}</h3>
-      <selector-type :selectedTypes="allExlOther" @clicked="filterExercises"> </selector-type>
+      <selector-type :selectedTypes="selectedArray" @clicked="filterExercises"> </selector-type>
       <div v-for="(player,i) in topThreeOfTheWeek()" :key="i" style="display: inline;">
         <div class="flex">
           <div class="color rank"> {{i + 1 }} </div>
@@ -12,7 +12,7 @@
           <div class="time"> {{player.hours}}u <br> {{player.minutes}}m</div>
         </div>
       </div>
-      <div class="total"> Totaal deze week <b> {{exercisesThisWeek.length}} </b> </div>
+      <div class="total"> Totaal deze week <b> {{filteredExercises.length}} </b> </div>
       </div>
     </div>
   </div>
@@ -34,14 +34,14 @@ export default {
   },
   data () {
     return {
-      selectedArray: this.allExlOther
+      selectedArray: require(`../../static/workout_types.json`).map(w => { return w.name }).slice(0, -1)
     }
   },
   methods: {
     topThreeOfTheWeek () {
       const orderedById = [] // [{userId, count}]
       if ((this.exercises.length !== 0) && this.members.length !== 0) {
-        this.exercisesThisWeek.forEach(e => {
+        this.filteredExercises.forEach(e => {
           const player = orderedById.find(p => { return e.userId === p.userId })
 
           if (!player) {
@@ -66,8 +66,8 @@ export default {
       }
     },
     filterExercises (value) {
+      console.log(value)
       this.selectedArray = value
-      console.log('returned value', this.selectedArray)
     }
   },
   computed: {
@@ -81,14 +81,16 @@ export default {
     },
     filteredExercises () {
       var filtered = []
-      this.selectedArray.forEach(t => {
-        this.filered.push(this.exercisesThisWeek.filter(e => e.type.short === t))
-      })
-      return filtered
-    },
-    allExlOther () {
-      const workouts = require(`../../static/workout_types.json`).map(w => { return w.short })
-      return workouts.slice(0, -1)
+      if (this.selectedArray.length !== 0) {
+        this.exercisesThisWeek.forEach(e => {
+          this.selectedArray.forEach(t => {
+            if (e.type.name === t) {
+              filtered.push(e)
+            }
+          })
+        })
+        return filtered
+      } else return []
     }
   }
 }

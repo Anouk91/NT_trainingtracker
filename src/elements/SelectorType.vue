@@ -2,7 +2,7 @@
   <div>
     <div style=" display: inline-block;" v-for="(workoutType, i) in workoutTypes" :key="i">
   <div class="col-sm btn-team">
-      <div :class="isActive(workoutType.short, i)" v-on:click="addRemove(workoutType.short)" @click="$emit('clicked', selectedArray)">{{workoutType.short}}</div>
+      <div :class="isActive(workoutType.name, i)" v-on:click="addRemove(workoutType.name)" @click="$emit('clicked', selectedArray)">{{workoutType.short}}</div>
       <!-- <div :class="isActive('training')" v-on:click="addRemove('training')">training</div>
       <div :class="'right' + isActive('fitness')" v-on:click="addRemove('fitness')">fitness</div> -->
     </div>
