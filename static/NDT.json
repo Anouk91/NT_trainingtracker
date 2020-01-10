@@ -20,7 +20,7 @@
   { "firstname": "Sarah", "lastname": "Sparks", "number": 66, "birth_date": "23-06-1991", "phone_number": "06-12090968", "email_address": "snharrison66@gmail.com", "club": "UFO" },
   { "firstname": "Suzanne", "lastname": "Delwel", "number": 3, "birth_date": "03-03-1983", "phone_number": "06-48797084", "email_address": "suzannedelwel@hotmail.com", "club": "AUC" },
   { "firstname": "Tess", "lastname": "van Middelaar", "number": 88, "birth_date": "11-12-2000", "phone_number": "06-83556913", "email_address": "tessvanmiddelaar@hotmail.nl", "club": "UFO" },
-  { "firstname": "Tirza", "lastname": "Moerman", "number": 18, "birth_date": "04-02-1996", "phone_number": "06-30093448", "email_address": "Tirza.Moerman@hotmail.com", "club": "Gronical Dizziness" },
+  { "firstname": "Tirza", "lastname": "Moerman", "number": 18, "birth_date": "04-02-1996", "phone_number": "06-30093448", "email_address": "tirza.moerman@hotmail.com", "club": "Gronical Dizziness" },
   { "firstname": "Julia", "lastname": "Ose", "number": "C", "birth_date": "23-01-1981", "phone_number": "06-13017382", "email_address": "julia.ose@gmx.de" },
   { "firstname": "Rixt", "lastname": "Hofman", "number": "C", "birth_date": "3-1-1977", "phone_number": "06-46062198", "email_address": "rixthofman@hotmail.com" },
   { "firstname": "Tim", "lastname": "van Ommen", "number": "TM", "birth_date": "03-01-1986", "phone_number": "06-24131920", "email_address": "timvanommen@gmail.com" }
