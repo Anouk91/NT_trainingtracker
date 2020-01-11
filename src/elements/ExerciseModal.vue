@@ -89,6 +89,8 @@ export default {
       var result = correspondingUsers.find(u => { return u.email_address === this.email_user })
 
       if (result) {
+        if (typeof this.exercise.hours !== 'number') this.exercise.hours = 0
+        if (typeof this.exercise.minutes !== 'number') this.exercise.minutes = 0
         if (this.update) this.updateExercise()
         else this.addExercise()
       } else throw new Error('heee this is not your team!')
