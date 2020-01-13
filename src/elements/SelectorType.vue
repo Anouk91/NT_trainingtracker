@@ -22,7 +22,6 @@ export default {
   },
   methods: {
     isActive (type, i) {
-      console.log('type', type)
       var styleClass = this.exists(type) ? 'active' : ''
       if (i === 0) styleClass += ' left'
       if (i === this.workoutTypes.length - 1) styleClass += ' right'

@@ -8,8 +8,8 @@
     </div>
 
     <div class="row" v-if="selectedVersion.includes('team')">
-      <total-exercises :exercises="this.exercises" > </total-exercises>
-      <top3 :exercises="this.exercises" :members="this.members" :amountOfTop="3"> </top3>
+      <card-total-exercises :exercises="this.exercises" > </card-total-exercises>
+      <CardTop3 :exercises="this.exercises" :members="this.members" :amountOfTop="3"> </CardTop3>
     </div>
     <hr>
 
@@ -85,8 +85,8 @@
     <modal-auth :email_user="selectedUser" v-if="showLoginModal" @close="(showLoginModal = false)">
     </modal-auth>
 
-    <exercise-modal :email_user="selectedUser" :team="selectedTeam" :exercise="selectedExercise" :update="updateExercise" v-if="showModal" @close="resetValues()">
-    </exercise-modal>
+    <modal-exercise :email_user="selectedUser" :team="selectedTeam" :exercise="selectedExercise" :update="updateExercise" v-if="showModal" @close="resetValues()">
+    </modal-exercise>
   </div>
 </template>
 
@@ -96,19 +96,19 @@
 import { db } from '../firebase'
 import moment from 'moment'
 import firebase from 'firebase'
-import ExerciseModal from '../elements/ExerciseModal.vue'
+import ModalExercise from '../elements/ModalExercise.vue'
 import ModalAuth from '../elements/ModalAuth.vue'
-import Top3 from '../elements/Top3.vue'
-import TotalExercises from '../elements/TotalExercises.vue'
+import CardTop3 from '../elements/CardTop3.vue'
+import CardTotalExercises from '../elements/CardTotalExercises.vue'
 import SelectorVersion from '../elements/SelectorVersion.vue'
 
 export default {
   name: 'home',
   components: {
-    ExerciseModal,
+    ModalExercise,
     ModalAuth,
-    Top3,
-    TotalExercises,
+    CardTop3,
+    CardTotalExercises,
     SelectorVersion
   },
   props: {
