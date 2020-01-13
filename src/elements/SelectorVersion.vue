@@ -3,8 +3,6 @@
     <div style=" display: inline-block;" v-for="(version, i) in all" :key="i">
   <div class="col-sm btn-team">
       <div :class="isActive(version, i)" v-on:click="addRemove(version)" @click="$emit('clicked', selectedArray)">{{version}}</div>
-      <!-- <div :class="isActive('training')" v-on:click="addRemove('training')">training</div>
-      <div :class="'right' + isActive('fitness')" v-on:click="addRemove('fitness')">fitness</div> -->
     </div>
     </div>
   </div>
@@ -23,7 +21,6 @@ export default {
   },
   methods: {
     isActive (type, i) {
-      console.log('type', type)
       var styleClass = this.exists(type) ? 'active' : ''
       if (i === 0) styleClass += ' left'
       if (i === this.all.length - 1) styleClass += ' right'
@@ -35,7 +32,6 @@ export default {
       } else this.selectedArray.push(type)
     },
     exists (type) {
-      // console.log(this.selectedArray, this.selectedArray.find(t => { return t === type }))
       if (this.selectedArray.find(t => { return t === type })) return true
       else return false
     },
