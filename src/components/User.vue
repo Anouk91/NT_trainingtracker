@@ -1,13 +1,19 @@
 <template>
   <div class="container">
 
-    <div class="row" >
+    <!-- <div class="row" >
+      <div class="card"> 
+        <selector-version :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
+      </div>
+    </div> -->
+
+    <div class="row" :v-if="selectedVersion.includes('team')">
       <total-exercises :exercises="this.exercises" > </total-exercises>
       <top3 :exercises="this.exercises" :members="this.members" :amountOfTop="3"> </top3>
     </div>
     <hr>
 
-    <div class="row lastRow">
+    <div class="row lastRow" :v-if="selectedVersion.includes('individu')">
     
       <!-- <div class="col-sm btn-team">
         <div :class="'left' + isActive('ndt')" v-on:click="selectedTeam = 'ndt'">Dames</div>
@@ -95,11 +101,12 @@
 <script>
 import { db } from '../firebase'
 import moment from 'moment'
+import firebase from 'firebase'
 import ExerciseModal from '../elements/ExerciseModal.vue'
 import ModalAuth from '../elements/ModalAuth.vue'
-import firebase from 'firebase'
 import Top3 from '../elements/Top3.vue'
 import TotalExercises from '../elements/TotalExercises.vue'
+import SelectorVersion from '../elements/SelectorVersion.vue'
 
 export default {
   name: 'home',
@@ -107,7 +114,8 @@ export default {
     ExerciseModal,
     ModalAuth,
     Top3,
-    TotalExercises
+    TotalExercises,
+    SelectorVersion
   },
   props: {
     ndt_exercises: {type: Array},
@@ -122,6 +130,7 @@ export default {
       selectedTeam: this.$route.path.slice(1),
       selectedUser: null,
       selectedExercise: null,
+      selectedVersion: ['individu'],
       // selected_week: moment(new Date()).format('w'),
       updateExercise: false,
       // exercises: [],
@@ -161,6 +170,10 @@ export default {
     },
     formatDate (date) {
       return moment(date.toDate()).format('D-MMM')
+    },
+    changeVersion (value) {
+      this.selectedVersion = value
+      console.log('changeVersion:', value, this.selectedVersion)
     },
 
     logOut () {

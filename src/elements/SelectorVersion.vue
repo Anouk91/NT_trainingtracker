@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div style=" display: inline-block;" v-for="(workoutType, i) in workoutTypes" :key="i">
+    <div style=" display: inline-block;" v-for="(version, i) in all" :key="i">
   <div class="col-sm btn-team">
-      <div :class="isActive(workoutType.name, i)" v-on:click="addRemove(workoutType.name)" @click="$emit('clicked', selectedArray)">{{workoutType.short}}</div>
+      <div :class="isActive(version, i)" v-on:click="addRemove(version)" @click="$emit('clicked', selectedArray)">{{version}}</div>
       <!-- <div :class="isActive('training')" v-on:click="addRemove('training')">training</div>
       <div :class="'right' + isActive('fitness')" v-on:click="addRemove('fitness')">fitness</div> -->
     </div>
@@ -12,11 +12,12 @@
 
 <script>
 export default {
-  name: 'selector-type',
+  name: 'selector-version',
   props: {selectedTypes: {type: Array}},
   data () {
     return {
       selectedArray: this.selectedTypes,
+      all: ['individu', 'team'],
       workoutTypes: require(`../../static/workout_types.json`)
     }
   },
@@ -25,7 +26,7 @@ export default {
       console.log('type', type)
       var styleClass = this.exists(type) ? 'active' : ''
       if (i === 0) styleClass += ' left'
-      if (i === this.workoutTypes.length - 1) styleClass += ' right'
+      if (i === this.all.length - 1) styleClass += ' right'
       return styleClass
     },
     addRemove (type) {
@@ -52,7 +53,7 @@ export default {
   padding: 0;
 }
 .btn-team > * {
-  font-size: 10px;
+  font-size: 12px;
   padding: .4rem;
   color: white;
   background-color: #f28a26;
