@@ -13,8 +13,8 @@
         </div>
         </div>
       </div>
-      <!-- <card-over-time :exercises="exercises()"> </card-over-time> -->
       <card-total-exercises  :exercises="exercises()"> </card-total-exercises>
+      <card-over-time :exercises="exercises()"> </card-over-time>
       <CardTop3 :exercises="exercises()" :members="members()" :amountOfTop="5"> </CardTop3>
     </div>
 

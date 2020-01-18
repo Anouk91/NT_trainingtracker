@@ -3,16 +3,31 @@
 
     <div class="row">
       <div class="card"> 
-        <selector-version :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
+        <selector-version class="selector" :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
+      <div class="inline"> 
+        <h3 v-if="selectedVersion.includes('team')"> Team </h3> 
+        <h3 v-if="selectedVersion.includes('team') && selectedVersion.includes('individu')"> & </h3> 
+        <h3 v-if="selectedUser && selectedVersion.includes('individu')"> {{getFirstnameOf(selectedUser)}} </h3> 
+        <h3> Dashboard </h3>
+      </div>
       </div>
     </div>
 
-    <div class="row" v-if="selectedVersion.includes('team')">
-      <card-total-exercises :exercises="this.exercises" > </card-total-exercises>
-      <CardTop3 :exercises="this.exercises" :members="this.members" :amountOfTop="3"> </CardTop3>
+    <!-- Personal stats row -->
+    <div class="row" v-if="selectedUser && selectedVersion.includes('individu')">
+      <card-total-exercises :exercises="exercisesOfUser" > </card-total-exercises>
+      <card-over-time :exercises="exercisesOfUser"> </card-over-time>
     </div>
-    <hr>
 
+    <!-- Team stats row -->
+    <div class="row" v-if="selectedVersion.includes('team')">
+      <card-total-exercises :exercises="exercises" > </card-total-exercises>
+      <card-over-time :exercises="exercises"> </card-over-time>
+      <CardTop3 :exercises="exercises" :members="members" :amountOfTop="3"> </CardTop3>
+    </div>
+
+    <hr>
+    <!-- Select user row -->
     <div class="row lastRow" v-if="selectedVersion.includes('individu')">
 
       <div class="col">
@@ -31,13 +46,6 @@
         </b-button>
       </div>
     </div>
-    <!-- <div class="row">
-      <div v-for="week in exercisesOfUserPerWeek()" :key="week.ids">
-        <div class="col card">
-          {{week.exercises.length}} Exercises done in week {{week.id}}
-        </div>
-      </div>
-    </div> -->
     <div class="row justify-content" v-if="selectedUser">
 
       <div class="col-sm">
@@ -49,7 +57,8 @@
         </div>
       </div>
 
-      <div v-for="exercise in exericesOfUser()" :key="exercise['.key']" class="col-sm">
+    <!-- Exercises row -->
+      <div v-for="exercise in exercisesOfUser" :key="exercise['.key']" class="col-sm">
 
           <div class="card  exercise-card">
 
@@ -82,6 +91,7 @@
       </div>
     </div>
 
+    <!-- Modals -->
     <modal-auth :email_user="selectedUser" v-if="showLoginModal" @close="(showLoginModal = false)">
     </modal-auth>
 
@@ -100,6 +110,7 @@ import ModalExercise from '../elements/ModalExercise.vue'
 import ModalAuth from '../elements/ModalAuth.vue'
 import CardTop3 from '../elements/CardTop3.vue'
 import CardTotalExercises from '../elements/CardTotalExercises.vue'
+import CardOverTime from '../elements/CardOverTime.vue'
 import SelectorVersion from '../elements/SelectorVersion.vue'
 
 export default {
@@ -109,6 +120,7 @@ export default {
     ModalAuth,
     CardTop3,
     CardTotalExercises,
+    CardOverTime,
     SelectorVersion
   },
   props: {
@@ -125,9 +137,9 @@ export default {
       selectedUser: null,
       selectedExercise: null,
       selectedVersion: ['individu'],
+      exercisesOfUser: null,
       // selected_week: moment(new Date()).format('w'),
       updateExercise: false,
-      // exercises: [],
       members: require(`../../static/${this.$route.path.slice(1).toUpperCase()}.json`)
     }
   },
@@ -146,12 +158,33 @@ export default {
         return list
       }
     },
-    exericesOfUser () {
-      var exercisesOfUser = this.exercises.filter(item => item.userId === this.selectedUser)
-      return exercisesOfUser.sort((a, b) => { return b.date.seconds - a.date.seconds })
+    getFirstnameOf (email) {
+      var firstname = this.members.find(m => m.email_address === email).firstname
+      if (this.needsJustS(firstname)) firstname += 's'
+      else firstname += "'"
+      return firstname
     },
+    needsJustS (name) {
+      var last = name.split('')[name.length - 1]
+      if (last === 's') return false
+      if (last === 'z') return false
+      if (last === 'h' && (name.split('')[name.length - 2] === 'c')) return false
+      else return true
+    },
+    // exercisesOfUser () {
+    //   if (this.selectedUser) {
+    //     var result = this.exercises.filter(item => item.userId === this.selectedUser)
+    //     return result.sort((a, b) => { return b.date.seconds - a.date.seconds })
+    //   } else return []
+    // },
+    // updateExericesOfUser () {
+    //   if (this.selectedUser) {
+    //     var result = this.exercises.filter(item => item.userId === this.selectedUser)
+    //     this.exercisesOfUser = result.sort((a, b) => { return b.date.seconds - a.date.seconds })
+    //   }
+    // },
     exercisesOfUserPerWeek () {
-      const exercises = this.exericesOfUser()
+      const exercises = this.exercisesOfUser
       const perWeek = [] // [{id: 52, exercises []}]
       exercises.forEach(e => {
         const exerciseWeekNo = moment.unix(e.date.seconds).format('w')
@@ -166,9 +199,8 @@ export default {
       return moment(date.toDate()).format('D-MMM')
     },
     changeVersion (value) {
-      this.selectedVersion = JSON.stringify(value)
+      this.selectedVersion = value
     },
-
     logOut () {
       firebase.auth().signOut().then(() => {
         this.userLoggedIn = null
@@ -188,12 +220,22 @@ export default {
         // console.log('We do not want to remember old exercises so we do nothing with this setter')
       }
     }
+    // exercisesOfUser: function () {
+    //   if (this.selectedUser) {
+    //     var sub = this.exercises.filter(item => item.userId === this.selectedUser)
+    //     return sub.sort((a, b) => { return b.date.seconds - a.date.seconds })
+    //   } else return []
+    // }
   },
   watch: {
     $route (to, from) {
       this.selectedTeam = to.path.slice(1)
       this.$bind('members', db.collection(`${this.selectedTeam}_members`).orderBy('firstname'))
       this.$bind('exercises', db.collection(`${this.selectedTeam}_exercises`))
+    },
+    selectedUser () {
+      var result = this.exercises.filter(item => item.userId === this.selectedUser)
+      this.exercisesOfUser = result.sort((a, b) => { return b.date.seconds - a.date.seconds })
     }
   },
   created () {
@@ -201,7 +243,10 @@ export default {
       firebase.auth().onAuthStateChanged(user => {
         resolve(user)
       }, reject)
-    }).then(data => { this.userLoggedIn = data.email })
+    }).then(data => {
+      this.userLoggedIn = data.email
+      this.selectedUser = data.email
+    })
   }
 }
 </script>
@@ -212,7 +257,15 @@ export default {
   min-width: 200px;
 }
 
+.inline > * {
+  display: inline;
+}
 
+/* https://stackoverflow.com/questions/35854244/how-can-i-create-a-horizontal-scrolling-chart-js-line-chart-with-a-locked-y-axis */
+.selector {
+  min-width: 200px;
+  overflow-x: scroll;
+}
 
 .optional-comments {
   white-space: pre-line; /* Luistert naar \n */

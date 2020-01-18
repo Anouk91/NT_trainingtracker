@@ -2,15 +2,15 @@
   <div class="col">
     <div class="card dashboard-card">
       <div class="card-body">
-    <line-chart :chart-data="datacollection"></line-chart>
-    <button @click="fillData()">Button</button>
+    <!-- <line-chart ></line-chart> -->
+    <line-chart :style="getLineWidth()" :chartData="datacollection" :options="chartOptions"></line-chart>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import LineChart from './LineChart.js'
+import LineChart from '../helpers/LineChart.js'
 import moment from 'moment'
 
 export default {
@@ -23,68 +23,72 @@ export default {
   },
   data () {
     return {
-      datacollection: null
+      loaded: false,
+      datacollection: null,
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          yAxes: [{
+            display: true,
+            ticks: {
+              beginAtZero: true,
+              steps: 10,
+              stepValue: 1
+            }
+          }]
+        }
+      },
+      workOutTypes: require(`../../static/workout_types.json`),
+      currentWeekNum: Number(moment(new Date()).isoWeekday(1).format('w'))
+
     }
   },
-  mounted () {
+  created () {
     this.fillData()
   },
   methods: {
     fillData () {
       this.datacollection = {
-        labels: [this.getRandomInt(), this.getRandomInt()],
-        datasets: this.exercisesFormatted
-        // [
-        //   {
-        //     label: 'Data One',
-        //     backgroundColor: '#f87979',
-        //     data: [this.getRandomInt(), this.getRandomInt()]
-        //   },
-        //   {
-        //     label: 'Data Two',
-        //     backgroundColor: '#f87923',
-        //     data: [this.getRandomInt(), this.getRandomInt()]
-        //   }
-        // ]
+        labels: ['wk1', 'wk2', 'wk3'],
+        datasets: this.exerciseTypePerWeek()
       }
     },
-
-    getRandomInt () {
-      return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+    exerciseTypePerWeek () {
+      var result = []
+      // var yMax = 10
+      this.workOutTypes.forEach(workOutType => {
+        var y = []
+        for (let i = 1; i < this.currentWeekNum + 1; i++) {
+          var typeAmount = this.exercises.filter(e => (i === Number(moment.unix(e.date.seconds).isoWeekday(1).format('w'))) && (e.type.name === workOutType.name)).length
+          // if (typeAmount > yMax) yMax = typeAmount
+          y.push(typeAmount)
+        }
+        result.push({ data: y, label: workOutType.name, fill: false, borderColor: workOutType.color })
+      })
+      return result
     },
-    exerciseTypePerWeek (type) {
-      var currentWeekNum = moment(new Date()).isoWeekday(1).format('w')
-      console.log('curr week num', currentWeekNum)
-      var x = [1, 2, 3]
-      var y = []
-      for (let i = 1; i < 4; i++) {
-        var sub = this.exercises.filter(e => (i === Number(moment.unix(e.date.seconds).isoWeekday(1).format('w'))) && (e.type.name === type))
-        console.log('sub', i, sub)
-        y.push(sub.length)
-      }
-      var result = { x: x, y: y, mode: 'lines+markers', label: type }
-      console.log('sub info', result)
-      return y
+    getLineWidth () {
+      return `width: ${this.currentWeekNum * 100};`
     }
   },
-  computed: {
-    exercisesFormatted () {
-      var result = []
-      if (this.exercises) {
-        result.push({label: 'Strength', data: this.exerciseTypePerWeek('Strength')})
-        // result.push(this.exerciseTypePerWeek('Team Training'))
-        // result.push({label: 'teamTraining', backgroundColor: '#f22279', data: this.exerciseTypePerWeek('TeamTraining')})
-      }
-      return result
-      // }
+  watch: {
+    exercises () {
+      this.fillData()
     }
   }
 }
 </script>
 
 <style scoped>
-.big {
-  font-size: 5rem;
+.card-body {
+  padding: 0;
+  overflow-x: scroll;
+
+}
+.line-chart {
+    width: 400px;
+    /* pointer-events: none; */
 }
 </style>
 

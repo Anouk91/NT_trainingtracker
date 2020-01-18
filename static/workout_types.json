@@ -3,30 +3,37 @@
     "icon": "group",
     "name": "Team Training",
     "short": "training",
-    "dutch_name": "Team Training"
+    "dutch_name": "Team Training",
+    "color": "#ff6600"
  },
   {
     "id": "osFdKyLd5g09d5LiDjTz",
     "icon": "directions_run",
     "name": "Endurance",
     "short": "duur",
-    "dutch_name": "Duur"
+    "dutch_name": "Duur",
+    "color": "#ebd234"
   },
   { "id": "g7efLzxKLb04pv6Kf3Qc",
     "icon": "trip_origin",
     "name": "Throwing",
     "short": "gooien",
-    "dutch_name": "Gooien"},
+    "dutch_name": "Gooien",
+    "color": "#71eb34"
+  },
   {
     "id": "mxDAAZSM0bPnYjz5HlqP",
     "icon": "fitness_center",
     "name": "Strength",
     "short": "kracht",
-    "dutch_name": "Kracht"
+    "dutch_name": "Kracht",
+    "color": "#34b7eb"
   },
   { "id": "2UqpbF01AVG6Z0Vw4Zte",
     "icon": "sports",
     "name": "Other",
     "short": "anders",
-    "dutch_name": "Anders" }
+    "dutch_name": "Anders",
+    "color": "#ae34eb"
+  }
 ]
