@@ -24,6 +24,7 @@
 
 <script>
 import { db } from './firebase'
+import moment from 'moment'
 
 export default {
   data: () => ({
@@ -46,14 +47,45 @@ export default {
       }
     ],
     ndt_exercises: [],
+    ndt_pw_pt: [],
     nmt_exercises: [],
     not_exercises: []
   }),
   firestore () {
     return {
-      ndt_exercises: db.collection('ndt_exercises'),
-      nmt_exercises: db.collection('nmt_exercises'),
-      not_exercises: db.collection('not_exercises')
+      ndt_exercises: db.collection('ndt_exercises').orderBy('date'),
+      nmt_exercises: db.collection('nmt_exercises').orderBy('date'),
+      not_exercises: db.collection('not_exercises').orderBy('date')
+    }
+  },
+  watch: {
+    ndt_exercises () {
+      var result = [] // [{weekNum: 1, types: {type: 'Strength', exercises: []}}]
+      var weekResult = { number: 0 }
+
+      this.ndt_exercises.forEach(e => {
+        var weekNum = Number(moment.unix(e.date.seconds).isoWeekday(1).format('w'))
+        if (weekNum < 50) {
+          // push week result and initialize new
+          if (weekNum !== weekResult.number) {
+            if (weekResult.number !== 0) result.push(weekResult)
+
+            weekResult = { number: weekNum,
+              types: [
+                {name: 'Team Training', exercises: []},
+                {name: 'Throwing', exercises: []},
+                {name: 'Strength', exercises: []},
+                {name: 'Endurance', exercises: []},
+                {name: 'Other', exercises: []}
+              ] }
+          }
+
+          var type = weekResult.types.find(t => t.name === e.type.name)
+          type.exercises.push(e)
+        }
+      })
+      result.push(weekResult)
+      this.ndt_pw_pt = result
     }
   }
 }

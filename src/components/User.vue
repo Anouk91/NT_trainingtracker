@@ -1,51 +1,49 @@
 <template>
   <div class="container">
 
-    <div class="row">
-      <div class="card"> 
-        <selector-version class="selector" :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
-      <div class="inline"> 
-        <h3 v-if="selectedVersion.includes('team')"> Team </h3> 
-        <h3 v-if="selectedVersion.includes('team') && selectedVersion.includes('individu')"> & </h3> 
-        <h3 v-if="selectedUser && selectedVersion.includes('individu')"> {{getFirstnameOf(selectedUser)}} </h3> 
-        <h3> Dashboard </h3>
-      </div>
-      </div>
-    </div>
-
-    <!-- Personal stats row -->
-    <div class="row" v-if="selectedUser && selectedVersion.includes('individu')">
-      <card-total-exercises :exercises="exercisesOfUser" > </card-total-exercises>
-      <card-over-time :exercises="exercisesOfUser"> </card-over-time>
-    </div>
-
-    <!-- Team stats row -->
-    <div class="row" v-if="selectedVersion.includes('team')">
-      <card-total-exercises :exercises="exercises" > </card-total-exercises>
-      <card-over-time :exercises="exercises"> </card-over-time>
-      <CardTop3 :exercises="exercises" :members="members" :amountOfTop="3"> </CardTop3>
-    </div>
-
-    <hr>
     <!-- Select user row -->
-    <div class="row lastRow" v-if="selectedVersion.includes('individu')">
+    <div class="row user-login">
 
       <div class="col">
         <b-form-select v-model="selectedUser" :options="dropDown()" :key="selectedTeam">
             <option :value="null" disabled>-- Selecteer jezelf --</option>
         </b-form-select>
       </div>
-        <div class="col" v-if="!userLoggedIn">
-        <b-button v-on:click="showLoginModal = true" :disabled="!selectedUser" variant="primary">
-          login
-        </b-button>
-      </div>
-      <div class="col" v-if="userLoggedIn">
-        <b-button v-on:click="logOut()" variant="warning">
-          logout
-        </b-button>
-      </div>
+      <b-button v-if="!userLoggedIn" v-on:click="showLoginModal = true" :disabled="!selectedUser" variant="primary"> login </b-button>
+      <b-button v-if="userLoggedIn" v-on:click="logOut()" variant="warning"> logout </b-button>
     </div>
+    
+
+
+    <!-- Dashboard Row -->
+    <div class="row">
+
+    <!-- Settings -->
+      <div class="card"> 
+        <selector-version class="selector" :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
+        <div class="inline"> 
+          <h3 v-if="selectedVersion.includes('team')"> Team </h3> 
+          <h3 v-if="selectedVersion.includes('team') && selectedVersion.includes('individu')"> & </h3> 
+          <h3 v-if="selectedUser && selectedVersion.includes('individu')"> {{getFirstnameOf(selectedUser)}} </h3> 
+          <h3> Dashboard </h3>
+        </div>
+      </div>
+
+    <!-- Personal stats -->
+      <card-total-exercises v-if="selectedUser && selectedVersion.includes('individu')" :exercises="exercisesOfUser" > </card-total-exercises>
+      <card-over-time v-if="selectedUser && selectedVersion.includes('individu')" :exercises="exercisesOfUser"> </card-over-time>
+     
+      <hr v-if="selectedVersion.includes('team') && selectedVersion.includes('individu')"> 
+
+    <!-- Team stats -->
+      <card-total-exercises v-if="selectedVersion.includes('team')" :exercises="exercises" > </card-total-exercises>
+      <card-over-time v-if="selectedVersion.includes('team')" :exercises="exercises"> </card-over-time>
+      <CardTop3 v-if="selectedVersion.includes('team')" :exercises="exercises" :members="members" :amountOfTop="3"> </CardTop3>
+    </div>
+
+    <hr>
+
+
     <div class="row justify-content" v-if="selectedUser">
 
       <div class="col-sm">
@@ -244,6 +242,7 @@ export default {
         resolve(user)
       }, reject)
     }).then(data => {
+      console.log('created ')
       this.userLoggedIn = data.email
       this.selectedUser = data.email
     })
@@ -255,6 +254,10 @@ export default {
 .exercise-card {
   max-width: 250px;
   min-width: 200px;
+}
+
+.user-login > *{
+  margin: 1rem;
 }
 
 .inline > * {
