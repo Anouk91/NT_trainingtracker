@@ -11,12 +11,13 @@
 <script>
 export default {
   name: 'selector-version',
-  props: {selectedTypes: {type: Array}},
+  props: {
+    selectedTypes: { type: Array },
+    all: { type: Array }
+  },
   data () {
     return {
-      selectedArray: this.selectedTypes,
-      all: ['individu', 'team'],
-      workoutTypes: require(`../../static/workout_types.json`)
+      selectedArray: this.selectedTypes
     }
   },
   methods: {

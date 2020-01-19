@@ -12,23 +12,32 @@
       <b-button v-if="!userLoggedIn" v-on:click="showLoginModal = true" :disabled="!selectedUser" variant="primary"> login </b-button>
       <b-button v-if="userLoggedIn" v-on:click="logOut()" variant="warning"> logout </b-button>
     </div>
-    
-
 
     <!-- Dashboard Row -->
     <div class="row">
 
     <!-- Settings -->
-      <div class="card"> 
-        <selector-version class="selector" :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
-        <div class="inline"> 
-          <h3 v-if="selectedVersion.includes('team')"> Team </h3> 
-          <h3 v-if="selectedVersion.includes('team') && selectedVersion.includes('individu')"> & </h3> 
-          <h3 v-if="selectedUser && selectedVersion.includes('individu')"> {{getFirstnameOf(selectedUser)}} </h3> 
-          <h3> Dashboard </h3>
+      <div class="col"> 
+        <div class="card">
+        <div class="row">
+          <selector-version class="switch col" :all="['individu', 'team']" :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
+          <div class="col"> wk <input class="input-week-num" type="number" v-model.number="selectedWeek"> </div>
+
+          <!-- <selector-version class="selector" :all="['wk1', 'wk2', 'wk3']" :selectedTypes="selectedWeeks" @clicked="changeWeeks"> </selector-version> -->
+        </div>
         </div>
       </div>
 
+      <div class="col dashboard-text">
+        <h3 v-if="selectedVersion.includes('team')"> Team </h3> 
+        <h3 v-if="selectedVersion.includes('team') && selectedVersion.includes('individu')"> & </h3> 
+        <h3 v-if="selectedUser && selectedVersion.includes('individu')"> {{getFirstnameOf(selectedUser)}} </h3> 
+        <h3> Dashboard </h3>
+      </div>
+      </div>
+      
+    <div class="row">
+            <!-- <selector-type :selectedTypes="selectedArray" @clicked="filterExercises"> </selector-type> -->
     <!-- Personal stats -->
       <card-total-exercises v-if="selectedUser && selectedVersion.includes('individu')" :exercises="exercisesOfUser" > </card-total-exercises>
       <card-over-time v-if="selectedUser && selectedVersion.includes('individu')" :exercises="exercisesOfUser"> </card-over-time>
@@ -110,6 +119,7 @@ import CardTop3 from '../elements/CardTop3.vue'
 import CardTotalExercises from '../elements/CardTotalExercises.vue'
 import CardOverTime from '../elements/CardOverTime.vue'
 import SelectorVersion from '../elements/SelectorVersion.vue'
+import SelectorType from '../elements/SelectorType.vue'
 
 export default {
   name: 'home',
@@ -119,7 +129,8 @@ export default {
     CardTop3,
     CardTotalExercises,
     CardOverTime,
-    SelectorVersion
+    SelectorVersion,
+    SelectorType
   },
   props: {
     ndt_exercises: {type: Array},
@@ -135,6 +146,8 @@ export default {
       selectedUser: null,
       selectedExercise: null,
       selectedVersion: ['individu'],
+      selectedWeek: Number(moment(new Date()).isoWeekday(1).format('w')),
+      selectedArray: require(`../../static/workout_types.json`).map(w => { return w.name }).slice(0, -1),
       exercisesOfUser: null,
       // selected_week: moment(new Date()).format('w'),
       updateExercise: false,
@@ -169,18 +182,10 @@ export default {
       if (last === 'h' && (name.split('')[name.length - 2] === 'c')) return false
       else return true
     },
-    // exercisesOfUser () {
-    //   if (this.selectedUser) {
-    //     var result = this.exercises.filter(item => item.userId === this.selectedUser)
-    //     return result.sort((a, b) => { return b.date.seconds - a.date.seconds })
-    //   } else return []
-    // },
-    // updateExericesOfUser () {
-    //   if (this.selectedUser) {
-    //     var result = this.exercises.filter(item => item.userId === this.selectedUser)
-    //     this.exercisesOfUser = result.sort((a, b) => { return b.date.seconds - a.date.seconds })
-    //   }
-    // },
+    filterExercises (value) {
+      console.log(value)
+      this.selectedArray = value
+    },
     exercisesOfUserPerWeek () {
       const exercises = this.exercisesOfUser
       const perWeek = [] // [{id: 52, exercises []}]
@@ -218,12 +223,6 @@ export default {
         // console.log('We do not want to remember old exercises so we do nothing with this setter')
       }
     }
-    // exercisesOfUser: function () {
-    //   if (this.selectedUser) {
-    //     var sub = this.exercises.filter(item => item.userId === this.selectedUser)
-    //     return sub.sort((a, b) => { return b.date.seconds - a.date.seconds })
-    //   } else return []
-    // }
   },
   watch: {
     $route (to, from) {
@@ -256,18 +255,24 @@ export default {
   min-width: 200px;
 }
 
+.input-week-num {
+  width: 30px;
+}
+
 .user-login > *{
   margin: 1rem;
+}
+
+.dashboard-text > h3 {
+  color: white;
 }
 
 .inline > * {
   display: inline;
 }
 
-/* https://stackoverflow.com/questions/35854244/how-can-i-create-a-horizontal-scrolling-chart-js-line-chart-with-a-locked-y-axis */
-.selector {
-  min-width: 200px;
-  overflow-x: scroll;
+.switch {
+    min-width: 140px;
 }
 
 .optional-comments {
