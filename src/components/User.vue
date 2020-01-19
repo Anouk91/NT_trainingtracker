@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 
-    <!-- Select user row -->
+    <!-- Select user row + settings -->
     <div class="row user-login">
 
       <div class="col">
@@ -14,10 +14,6 @@
       <selector-version class="switch" :all="['individu', 'team']" :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
       <div style="color: white;"> wk <input class="week-input" type="number" v-model.number="selectedWeek"> </div>
     </div>
-
-
-    <!-- Settings -->
-
 
     <!-- Personal stats -->
     <div class="row" v-if="selectedUser && selectedVersion.includes('individu')">
@@ -136,7 +132,6 @@ export default {
       selectedWeek: Number(moment(new Date()).isoWeekday(1).format('w')),
       selectedArray: require(`../../static/workout_types.json`).map(w => { return w.name }).slice(0, -1),
       exercisesOfUser: null,
-      // selected_week: moment(new Date()).format('w'),
       updateExercise: false,
       members: require(`../../static/${this.$route.path.slice(1).toUpperCase()}.json`)
     }
@@ -198,6 +193,11 @@ export default {
         console.log(err)
         alert(err.message)
       })
+    },
+    setExercisesOfUser (userId, whom) {
+      var result = this.exercises.filter(item => item.userId === userId)
+      this.exercisesOfUser = result.sort((a, b) => { return b.date.seconds - a.date.seconds })
+      console.log('setting by', whom, this.exercisesOfUser)
     }
   },
   computed: {
@@ -216,10 +216,13 @@ export default {
       this.selectedTeam = to.path.slice(1)
       this.$bind('members', db.collection(`${this.selectedTeam}_members`).orderBy('firstname'))
       this.$bind('exercises', db.collection(`${this.selectedTeam}_exercises`))
+
+      const correspondingUsers = require(`../../static/${to.path.slice(1).toUpperCase()}.json`)
+      if (!correspondingUsers.find(u => { return u.email_address === this.email_user })) this.selectedUser = null
+      this.setExercisesOfUser()
     },
-    selectedUser () {
-      var result = this.exercises.filter(item => item.userId === this.selectedUser)
-      this.exercisesOfUser = result.sort((a, b) => { return b.date.seconds - a.date.seconds })
+    selectedUser (value) {
+      this.setExercisesOfUser(value, 'watch')
     }
   },
   created () {
@@ -231,6 +234,8 @@ export default {
       console.log('created ')
       this.userLoggedIn = data.email
       this.selectedUser = data.email
+      // var result = this.exercises.filter(item => item.userId === data.email)
+      // this.exercisesOfUser = result.sort((a, b) => { return b.date.seconds - a.date.seconds })
     })
   }
 }

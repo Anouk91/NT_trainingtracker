@@ -45,6 +45,8 @@ export default {
     }
   },
   created () {
+    console.log('created card overtime')
+
     this.fillData()
   },
   methods: {
@@ -74,6 +76,7 @@ export default {
   },
   watch: {
     exercises () {
+      console.log('watching')
       this.fillData()
     }
   }
