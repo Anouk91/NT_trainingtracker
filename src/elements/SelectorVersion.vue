@@ -1,9 +1,9 @@
 <template>
   <div>
     <div style=" display: inline-block;" v-for="(version, i) in all" :key="i">
-  <div class="col-sm btn-team">
-      <div :class="isActive(version, i)" v-on:click="addRemove(version)" @click="$emit('clicked', selectedArray)">{{version}}</div>
-    </div>
+      <div class="col-sm btn-team">
+        <div :class="isActive(version, i)" v-on:click="addRemove(version)" @click="$emit('clicked', selectedArray)">{{version}}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -50,20 +50,29 @@ export default {
   padding: 0;
 }
 .btn-team > * {
-  font-size: 12px;
+  font-size: 14px;
   padding: .4rem;
   color: white;
   background-color: #f28a26;
+  border-bottom: solid;
+  border-bottom-color: white;
+  border-top: solid;
+  border-top-color: white;
   cursor: pointer;
 }
 .active {
   background-color: #ec5d22;
+  font-weight: bold;
 }
 .left {
   border-radius: 10px 0px 0px 10px;
+  border-left-style: solid;
+  border-left-color: white;
 }
 
 .right {
   border-radius: 0px 10px 10px 0px;
+  border-right-style: solid;
+  border-right-color: white;
 }
 </style>

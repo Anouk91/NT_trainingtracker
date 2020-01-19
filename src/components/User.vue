@@ -6,50 +6,37 @@
 
       <div class="col">
         <b-form-select v-model="selectedUser" :options="dropDown()" :key="selectedTeam">
-            <option :value="null" disabled>-- Selecteer jezelf --</option>
+          <option :value="null" disabled>-- Selecteer jezelf --</option>
         </b-form-select>
       </div>
       <b-button v-if="!userLoggedIn" v-on:click="showLoginModal = true" :disabled="!selectedUser" variant="primary"> login </b-button>
       <b-button v-if="userLoggedIn" v-on:click="logOut()" variant="warning"> logout </b-button>
+      <selector-version class="switch" :all="['individu', 'team']" :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
+      <div style="color: white;"> wk <input class="week-input" type="number" v-model.number="selectedWeek"> </div>
     </div>
 
-    <!-- Dashboard Row -->
-    <div class="row">
 
     <!-- Settings -->
-      <div class="col"> 
-        <div class="card">
-        <div class="row">
-          <selector-version class="switch col" :all="['individu', 'team']" :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
-          <div class="col"> wk <input class="input-week-num" type="number" v-model.number="selectedWeek"> </div>
 
-          <!-- <selector-version class="selector" :all="['wk1', 'wk2', 'wk3']" :selectedTypes="selectedWeeks" @clicked="changeWeeks"> </selector-version> -->
-        </div>
-        </div>
-      </div>
 
-      <div class="col dashboard-text">
-        <h3 v-if="selectedVersion.includes('team')"> Team </h3> 
-        <h3 v-if="selectedVersion.includes('team') && selectedVersion.includes('individu')"> & </h3> 
-        <h3 v-if="selectedUser && selectedVersion.includes('individu')"> {{getFirstnameOf(selectedUser)}} </h3> 
-        <h3> Dashboard </h3>
-      </div>
-      </div>
-      
-    <div class="row">
-            <!-- <selector-type :selectedTypes="selectedArray" @clicked="filterExercises"> </selector-type> -->
     <!-- Personal stats -->
-      <card-total-exercises v-if="selectedUser && selectedVersion.includes('individu')" :exercises="exercisesOfUser" > </card-total-exercises>
-      <card-over-time v-if="selectedUser && selectedVersion.includes('individu')" :exercises="exercisesOfUser"> </card-over-time>
+    <div class="row" v-if="selectedUser && selectedVersion.includes('individu')">
+      <h3 class="dashboard-text col-12"> {{getFirstnameOf(selectedUser)}} Dashboard </h3>
+      <card-total-exercises :exercises="exercisesOfUser" > </card-total-exercises>
+      <card-over-time :exercises="exercisesOfUser"> </card-over-time>
      
-      <hr v-if="selectedVersion.includes('team') && selectedVersion.includes('individu')"> 
-
-    <!-- Team stats -->
-      <card-total-exercises v-if="selectedVersion.includes('team')" :exercises="exercises" > </card-total-exercises>
-      <card-over-time v-if="selectedVersion.includes('team')" :exercises="exercises"> </card-over-time>
-      <CardTop3 v-if="selectedVersion.includes('team')" :exercises="exercises" :members="members" :amountOfTop="3"> </CardTop3>
+      <hr> 
     </div>
 
+    <!-- Team stats -->
+    <div class="row" v-if="selectedVersion.includes('team')">
+      <h3 class="dashboard-text col-12"> Team Dashboard </h3>
+      <card-total-exercises :exercises="exercises" > </card-total-exercises>
+      <card-over-time :exercises="exercises"> </card-over-time>
+      <CardTop3 :exercises="exercises" :members="members" :amountOfTop="3"> </CardTop3>
+    </div>
+
+    
     <hr>
 
 
@@ -255,15 +242,20 @@ export default {
   min-width: 200px;
 }
 
-.input-week-num {
-  width: 30px;
+
+.week-input {
+ width: 2.4rem;
+ border-radius: 5px;
 }
 
-.user-login > *{
+.user-login{
+  align-items: center;
+}
+.user-login > * {
   margin: 1rem;
 }
 
-.dashboard-text > h3 {
+.dashboard-text {
   color: white;
 }
 
