@@ -18,8 +18,8 @@
     <!-- Personal stats -->
     <div class="row" v-if="selectedUser && selectedVersion.includes('individu')">
       <h3 class="dashboard-text col-12"> {{getFirstnameOf(selectedUser)}} Dashboard </h3>
-      <card-total-exercises :exercises="exercisesOfUser" > </card-total-exercises>
-      <card-over-time :exercises="exercisesOfUser"> </card-over-time>
+      <card-total-exercises :exercises="exercisesOfUser(selectedUser, 'template cardte')" > </card-total-exercises>
+      <card-over-time :exercises="exercisesOfUser(selectedUser, 'template cardot')"> </card-over-time>
      
       <hr> 
     </div>
@@ -48,7 +48,7 @@
       </div>
 
     <!-- Exercises row -->
-      <div v-for="exercise in exercisesOfUser" :key="exercise['.key']" class="col-sm">
+      <div v-for="exercise in exercisesOfUser(selectedUser, 'exercise Row')" :key="exercise['.key']" class="col-sm">
 
           <div class="card  exercise-card">
 
@@ -131,7 +131,7 @@ export default {
       selectedVersion: ['individu'],
       selectedWeek: Number(moment(new Date()).isoWeekday(1).format('w')),
       selectedArray: require(`../../static/workout_types.json`).map(w => { return w.name }).slice(0, -1),
-      exercisesOfUser: null,
+      // exercisesOfUser: null,
       updateExercise: false,
       members: require(`../../static/${this.$route.path.slice(1).toUpperCase()}.json`)
     }
@@ -169,7 +169,7 @@ export default {
       this.selectedArray = value
     },
     exercisesOfUserPerWeek () {
-      const exercises = this.exercisesOfUser
+      const exercises = this.exercisesOfUser(this.selectedUser, 'function ex u pw')
       const perWeek = [] // [{id: 52, exercises []}]
       exercises.forEach(e => {
         const exerciseWeekNo = moment.unix(e.date.seconds).format('w')
@@ -194,10 +194,10 @@ export default {
         alert(err.message)
       })
     },
-    setExercisesOfUser (userId, whom) {
+    exercisesOfUser (userId, triggeredBy) {
       var result = this.exercises.filter(item => item.userId === userId)
-      this.exercisesOfUser = result.sort((a, b) => { return b.date.seconds - a.date.seconds })
-      console.log('setting by', whom, this.exercisesOfUser)
+      // console.log('setting by', triggeredBy, result.length)
+      return result.sort((a, b) => { return b.date.seconds - a.date.seconds })
     }
   },
   computed: {
@@ -219,10 +219,10 @@ export default {
 
       const correspondingUsers = require(`../../static/${to.path.slice(1).toUpperCase()}.json`)
       if (!correspondingUsers.find(u => { return u.email_address === this.email_user })) this.selectedUser = null
-      this.setExercisesOfUser()
+      this.exercisesOfUser()
     },
     selectedUser (value) {
-      this.setExercisesOfUser(value, 'watch')
+      this.exercisesOfUser(value, 'watch')
     }
   },
   created () {
@@ -231,9 +231,9 @@ export default {
         resolve(user)
       }, reject)
     }).then(data => {
-      console.log('created ')
       this.userLoggedIn = data.email
       this.selectedUser = data.email
+      this.exercisesOfUser(data.email, 'created')
       // var result = this.exercises.filter(item => item.userId === data.email)
       // this.exercisesOfUser = result.sort((a, b) => { return b.date.seconds - a.date.seconds })
     })
@@ -246,7 +246,6 @@ export default {
   max-width: 250px;
   min-width: 200px;
 }
-
 
 .week-input {
  width: 2.4rem;

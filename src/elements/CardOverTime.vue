@@ -24,6 +24,7 @@ export default {
   data () {
     return {
       loaded: false,
+      maxY: null,
       datacollection: null,
       chartOptions: {
         responsive: true,
@@ -33,8 +34,7 @@ export default {
             display: true,
             ticks: {
               beginAtZero: true,
-              steps: 10,
-              stepValue: 1
+              stepSize: 1
             }
           }]
         }
@@ -51,24 +51,34 @@ export default {
   },
   methods: {
     fillData () {
-      this.datacollection = {
-        labels: ['wk1', 'wk2', 'wk3'],
-        datasets: this.exerciseTypePerWeek()
-      }
+      this.datacollection = this.exerciseTypePerWeek()
     },
     exerciseTypePerWeek () {
       var result = []
-      // var yMax = 10
+      var yMax = 0
       this.workOutTypes.forEach(workOutType => {
         var y = []
         for (let i = 1; i < this.currentWeekNum + 1; i++) {
-          var typeAmount = this.exercises.filter(e => (i === Number(moment.unix(e.date.seconds).isoWeekday(1).format('w'))) && (e.type.name === workOutType.name)).length
-          // if (typeAmount > yMax) yMax = typeAmount
-          y.push(typeAmount)
+          var t = this.exercises.filter(e =>
+            (i === Number(moment.unix(e.date.seconds).isoWeekday(1).format('w'))) &&
+            (e.type.name === workOutType.name))
+          if (t.length > yMax) {
+            yMax = t.length
+            this.chartOptions.scales.yAxes[0].ticks.max = t.length
+          }
+          y.push(t.length)
         }
         result.push({ data: y, label: workOutType.name, fill: false, borderColor: workOutType.color })
       })
-      return result
+      this.maxY = yMax
+      console.log(yMax)
+      if (yMax > 5) this.chartOptions.scales.yAxes[0].ticks.max = yMax
+      // this.chartOptions.scales.yAxes[0].ticks.max = yMax > 5 ? yMax : 5
+
+      return {
+        labels: Array.apply(null, Array(this.currentWeekNum)).map((x, i) => { return `wk${i + 1}` }),
+        datasets: result
+      }
     },
     getLineWidth () {
       return `width: ${this.currentWeekNum * 100};`
