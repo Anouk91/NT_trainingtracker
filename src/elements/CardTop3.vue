@@ -66,7 +66,6 @@ export default {
       }
     },
     filterExercises (value) {
-      console.log(value)
       this.selectedArray = value
     }
   },

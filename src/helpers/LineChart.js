@@ -4,14 +4,13 @@ const { reactiveProp } = mixins
 export default {
   extends: Line,
   mixins: [reactiveProp],
-  props: {
-    chartData: {
-      type: Object,
-      default: null
-    },
-    options: {
-      type: Object,
-      default: null
+  props: ['chartData', 'options'],
+  watch: {
+    'chartData': {
+      handler (newOption, oldOption) {
+        this.renderChart(this.chartData, this.options)
+      },
+      deep: true
     }
   },
   mounted () {

@@ -6,13 +6,13 @@
 
       <div class="col">
         <b-form-select v-model="selectedUser" :options="dropDown()" :key="selectedTeam">
-          <option :value="null" disabled>-- Selecteer jezelf --</option>
+          <option :value="null" disabled>-- Selecteer gebruiker --</option>
         </b-form-select>
       </div>
       <b-button v-if="!userLoggedIn" v-on:click="showLoginModal = true" :disabled="!selectedUser" variant="primary"> login </b-button>
       <b-button v-if="userLoggedIn" v-on:click="logOut()" variant="warning"> logout </b-button>
       <selector-version class="switch" :all="['individu', 'team']" :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
-      <div style="color: white;"> wk <input class="week-input" type="number" v-model.number="selectedWeek"> </div>
+      <!-- <div style="color: white;"> wk <input class="week-input" type="number" v-model.number="selectedWeek"> </div> -->
     </div>
 
     <!-- Personal stats -->
@@ -152,10 +152,13 @@ export default {
       }
     },
     getFirstnameOf (email) {
-      var firstname = this.members.find(m => m.email_address === email).firstname
-      if (this.needsJustS(firstname)) firstname += 's'
-      else firstname += "'"
-      return firstname
+      var user = this.members.find(m => m.email_address === email)
+      if (user) {
+        var firstname = user.firstname
+        if (this.needsJustS(firstname)) firstname += 's'
+        else firstname += "'"
+        return firstname
+      } else return 'Selecteer een gebruiker voor individueel '
     },
     needsJustS (name) {
       var last = name.split('')[name.length - 1]
@@ -165,7 +168,6 @@ export default {
       else return true
     },
     filterExercises (value) {
-      console.log(value)
       this.selectedArray = value
     },
     exercisesOfUserPerWeek () {
@@ -198,6 +200,21 @@ export default {
       var result = this.exercises.filter(item => item.userId === userId)
       // console.log('setting by', triggeredBy, result.length)
       return result.sort((a, b) => { return b.date.seconds - a.date.seconds })
+    },
+    setSelectedUser () {
+      new Promise((resolve, reject) => {
+        firebase.auth().onAuthStateChanged(user => {
+          resolve(user)
+        }, reject)
+      }).then(data => {
+        if (data) {
+          this.userLoggedIn = data.email
+          const correspondingUsers = require(`../../static/${this.selectedTeam.toUpperCase()}.json`)
+          if (correspondingUsers.find(u => { return u.email_address === data.email })) this.selectedUser = data.email
+          else this.selectedUser = null
+          this.exercisesOfUser(data.email, 'created')
+        } else this.selectedUser = null
+      })
     }
   },
   computed: {
@@ -217,26 +234,14 @@ export default {
       this.$bind('members', db.collection(`${this.selectedTeam}_members`).orderBy('firstname'))
       this.$bind('exercises', db.collection(`${this.selectedTeam}_exercises`))
 
-      const correspondingUsers = require(`../../static/${to.path.slice(1).toUpperCase()}.json`)
-      if (!correspondingUsers.find(u => { return u.email_address === this.email_user })) this.selectedUser = null
-      this.exercisesOfUser()
-    },
-    selectedUser (value) {
-      this.exercisesOfUser(value, 'watch')
+      this.setSelectedUser()
+    // },
+    // selectedUser (value) {
+    //   this.exercisesOfUser(value, 'watch')
     }
   },
   created () {
-    new Promise((resolve, reject) => {
-      firebase.auth().onAuthStateChanged(user => {
-        resolve(user)
-      }, reject)
-    }).then(data => {
-      this.userLoggedIn = data.email
-      this.selectedUser = data.email
-      this.exercisesOfUser(data.email, 'created')
-      // var result = this.exercises.filter(item => item.userId === data.email)
-      // this.exercisesOfUser = result.sort((a, b) => { return b.date.seconds - a.date.seconds })
-    })
+    this.setSelectedUser()
   }
 }
 </script>

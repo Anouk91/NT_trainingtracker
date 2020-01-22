@@ -24,7 +24,6 @@ export default {
   data () {
     return {
       loaded: false,
-      maxY: null,
       datacollection: null,
       chartOptions: {
         responsive: true,
@@ -45,8 +44,7 @@ export default {
     }
   },
   created () {
-    console.log('created card overtime')
-
+    // console.log('created card overtime')
     this.fillData()
   },
   methods: {
@@ -62,18 +60,14 @@ export default {
           var t = this.exercises.filter(e =>
             (i === Number(moment.unix(e.date.seconds).isoWeekday(1).format('w'))) &&
             (e.type.name === workOutType.name))
-          if (t.length > yMax) {
-            yMax = t.length
-            this.chartOptions.scales.yAxes[0].ticks.max = t.length
-          }
+          if (t.length > yMax) yMax = t.length
           y.push(t.length)
         }
         result.push({ data: y, label: workOutType.name, fill: false, borderColor: workOutType.color })
       })
-      this.maxY = yMax
-      console.log(yMax)
-      if (yMax > 5) this.chartOptions.scales.yAxes[0].ticks.max = yMax
-      // this.chartOptions.scales.yAxes[0].ticks.max = yMax > 5 ? yMax : 5
+
+      if (yMax > 5) this.chartOptions.scales.yAxes[0].ticks.max = Math.ceil((yMax + 1) / 5) * 5
+      else this.chartOptions.scales.yAxes[0].ticks.max = yMax + 1
 
       return {
         labels: Array.apply(null, Array(this.currentWeekNum)).map((x, i) => { return `wk${i + 1}` }),
@@ -86,7 +80,6 @@ export default {
   },
   watch: {
     exercises () {
-      console.log('watching')
       this.fillData()
     }
   }
