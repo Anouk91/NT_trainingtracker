@@ -18,5 +18,5 @@ npm run build
 npm run build --report
 ```
 
-Font Awesome Cheatsheet
-https://fontawesome.bootstrapcheatsheets.com/#
+# Dashboard
+https://app.google.stackdriver.com/dashboards/14829374003838636523?project=trainingtrackr-productie&timeDomain=1w
