@@ -13,8 +13,9 @@
         </div>
         </div>
       </div>
-      <total-exercises :exercises="exercises()" > </total-exercises>
-      <top3 :exercises="exercises()" :members="members()" :amountOfTop="5"> </top3>
+      <card-total-exercises  :exercises="exercises()"> </card-total-exercises>
+      <card-over-time :exercises="exercises()"> </card-over-time>
+      <CardTop3 :exercises="exercises()" :members="members()" :amountOfTop="5"> </CardTop3>
     </div>
 
 
@@ -23,14 +24,16 @@
 
 <script>
 // import { db } from '../firebase'
-import Top3 from '../elements/Top3.vue'
-import TotalExercises from '../elements/TotalExercises.vue'
+import CardTop3 from '../elements/CardTop3.vue'
+import CardTotalExercises from '../elements/CardTotalExercises.vue'
+import CardOverTime from '../elements/CardOverTime.vue'
 
 export default {
   name: 'home',
   components: {
-    Top3,
-    TotalExercises
+    CardTop3,
+    CardTotalExercises,
+    CardOverTime
   },
   props: {
     ndt_exercises: {type: Array},
@@ -67,7 +70,7 @@ export default {
       // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
       // var seconds = Math.floor((distance % (1000 * 60)) / 1000)
     },
-    totalExercises (team) {
+    CardTotalExercises (team) {
       return team === 'ndt' ? this.ndt_exercises.length
         : team === 'nmt' ? this.nmt_exercises.length
           : team === 'not' ? this.not_exercises.length : this.ndt_exercises.length + this.nmt_exercises.length + this.not_exercises.length

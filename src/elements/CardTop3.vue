@@ -23,7 +23,7 @@ import moment from 'moment'
 import SelectorType from './SelectorType.vue'
 
 export default {
-  name: 'top3',
+  name: 'CardTop3',
   components: {
     SelectorType
   },

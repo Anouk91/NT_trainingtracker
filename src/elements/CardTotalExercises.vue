@@ -13,7 +13,7 @@
 <script>
 
 export default {
-  name: 'total-exercises',
+  name: 'card-total-exercises',
   props: {
     exercises: {type: Array}
   }

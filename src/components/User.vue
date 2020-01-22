@@ -1,43 +1,41 @@
 <template>
   <div class="container">
 
-    <div class="row" >
-      <total-exercises :exercises="this.exercises" > </total-exercises>
-      <top3 :exercises="this.exercises" :members="this.members" :amountOfTop="3"> </top3>
-    </div>
-    <hr>
-
-    <div class="row lastRow">
-    
-      <!-- <div class="col-sm btn-team">
-        <div :class="'left' + isActive('ndt')" v-on:click="selectedTeam = 'ndt'">Dames</div>
-        <div :class="isActive('nmt')" v-on:click="selectedTeam = 'nmt'">Mixed</div>
-        <div :class="'right' + isActive('not')" v-on:click="selectedTeam = 'not'">Open</div>
-      </div> -->
+    <!-- Select user row + settings -->
+    <div class="row user-login">
 
       <div class="col">
         <b-form-select v-model="selectedUser" :options="dropDown()" :key="selectedTeam">
-            <option :value="null" disabled>-- Selecteer jezelf --</option>
+          <option :value="null" disabled>-- Selecteer jezelf --</option>
         </b-form-select>
       </div>
-        <div class="col" v-if="!userLoggedIn">
-        <b-button v-on:click="showLoginModal = true" :disabled="!selectedUser" variant="primary">
-          login
-        </b-button>
-      </div>
-      <div class="col" v-if="userLoggedIn">
-        <b-button v-on:click="logOut()" variant="warning">
-          logout
-        </b-button>
-      </div>
+      <b-button v-if="!userLoggedIn" v-on:click="showLoginModal = true" :disabled="!selectedUser" variant="primary"> login </b-button>
+      <b-button v-if="userLoggedIn" v-on:click="logOut()" variant="warning"> logout </b-button>
+      <selector-version class="switch" :all="['individu', 'team']" :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
+      <div style="color: white;"> wk <input class="week-input" type="number" v-model.number="selectedWeek"> </div>
     </div>
-    <!-- <div class="row">
-      <div v-for="week in exercisesOfUserPerWeek()" :key="week.ids">
-        <div class="col card">
-          {{week.exercises.length}} Exercises done in week {{week.id}}
-        </div>
-      </div>
-    </div> -->
+
+    <!-- Personal stats -->
+    <div class="row" v-if="selectedUser && selectedVersion.includes('individu')">
+      <h3 class="dashboard-text col-12"> {{getFirstnameOf(selectedUser)}} Dashboard </h3>
+      <card-total-exercises :exercises="exercisesOfUser(selectedUser, 'template cardte')" > </card-total-exercises>
+      <card-over-time :exercises="exercisesOfUser(selectedUser, 'template cardot')"> </card-over-time>
+     
+      <hr> 
+    </div>
+
+    <!-- Team stats -->
+    <div class="row" v-if="selectedVersion.includes('team')">
+      <h3 class="dashboard-text col-12"> Team Dashboard </h3>
+      <card-total-exercises :exercises="exercises" > </card-total-exercises>
+      <card-over-time :exercises="exercises"> </card-over-time>
+      <CardTop3 :exercises="exercises" :members="members" :amountOfTop="3"> </CardTop3>
+    </div>
+
+    
+    <hr>
+
+
     <div class="row justify-content" v-if="selectedUser">
 
       <div class="col-sm">
@@ -49,7 +47,8 @@
         </div>
       </div>
 
-      <div v-for="exercise in exericesOfUser()" :key="exercise['.key']" class="col-sm">
+    <!-- Exercises row -->
+      <div v-for="exercise in exercisesOfUser(selectedUser, 'exercise Row')" :key="exercise['.key']" class="col-sm">
 
           <div class="card  exercise-card">
 
@@ -82,11 +81,12 @@
       </div>
     </div>
 
+    <!-- Modals -->
     <modal-auth :email_user="selectedUser" v-if="showLoginModal" @close="(showLoginModal = false)">
     </modal-auth>
 
-    <exercise-modal :email_user="selectedUser" :team="selectedTeam" :exercise="selectedExercise" :update="updateExercise" v-if="showModal" @close="resetValues()">
-    </exercise-modal>
+    <modal-exercise :email_user="selectedUser" :team="selectedTeam" :exercise="selectedExercise" :update="updateExercise" v-if="showModal" @close="resetValues()">
+    </modal-exercise>
   </div>
 </template>
 
@@ -95,19 +95,25 @@
 <script>
 import { db } from '../firebase'
 import moment from 'moment'
-import ExerciseModal from '../elements/ExerciseModal.vue'
-import ModalAuth from '../elements/ModalAuth.vue'
 import firebase from 'firebase'
-import Top3 from '../elements/Top3.vue'
-import TotalExercises from '../elements/TotalExercises.vue'
+import ModalExercise from '../elements/ModalExercise.vue'
+import ModalAuth from '../elements/ModalAuth.vue'
+import CardTop3 from '../elements/CardTop3.vue'
+import CardTotalExercises from '../elements/CardTotalExercises.vue'
+import CardOverTime from '../elements/CardOverTime.vue'
+import SelectorVersion from '../elements/SelectorVersion.vue'
+import SelectorType from '../elements/SelectorType.vue'
 
 export default {
   name: 'home',
   components: {
-    ExerciseModal,
+    ModalExercise,
     ModalAuth,
-    Top3,
-    TotalExercises
+    CardTop3,
+    CardTotalExercises,
+    CardOverTime,
+    SelectorVersion,
+    SelectorType
   },
   props: {
     ndt_exercises: {type: Array},
@@ -122,9 +128,11 @@ export default {
       selectedTeam: this.$route.path.slice(1),
       selectedUser: null,
       selectedExercise: null,
-      // selected_week: moment(new Date()).format('w'),
+      selectedVersion: ['individu'],
+      selectedWeek: Number(moment(new Date()).isoWeekday(1).format('w')),
+      selectedArray: require(`../../static/workout_types.json`).map(w => { return w.name }).slice(0, -1),
+      // exercisesOfUser: null,
       updateExercise: false,
-      // exercises: [],
       members: require(`../../static/${this.$route.path.slice(1).toUpperCase()}.json`)
     }
   },
@@ -143,12 +151,25 @@ export default {
         return list
       }
     },
-    exericesOfUser () {
-      var exercisesOfUser = this.exercises.filter(item => item.userId === this.selectedUser)
-      return exercisesOfUser.sort((a, b) => { return b.date.seconds - a.date.seconds })
+    getFirstnameOf (email) {
+      var firstname = this.members.find(m => m.email_address === email).firstname
+      if (this.needsJustS(firstname)) firstname += 's'
+      else firstname += "'"
+      return firstname
+    },
+    needsJustS (name) {
+      var last = name.split('')[name.length - 1]
+      if (last === 's') return false
+      if (last === 'z') return false
+      if (last === 'h' && (name.split('')[name.length - 2] === 'c')) return false
+      else return true
+    },
+    filterExercises (value) {
+      console.log(value)
+      this.selectedArray = value
     },
     exercisesOfUserPerWeek () {
-      const exercises = this.exericesOfUser()
+      const exercises = this.exercisesOfUser(this.selectedUser, 'function ex u pw')
       const perWeek = [] // [{id: 52, exercises []}]
       exercises.forEach(e => {
         const exerciseWeekNo = moment.unix(e.date.seconds).format('w')
@@ -162,7 +183,9 @@ export default {
     formatDate (date) {
       return moment(date.toDate()).format('D-MMM')
     },
-
+    changeVersion (value) {
+      this.selectedVersion = value
+    },
     logOut () {
       firebase.auth().signOut().then(() => {
         this.userLoggedIn = null
@@ -170,6 +193,11 @@ export default {
         console.log(err)
         alert(err.message)
       })
+    },
+    exercisesOfUser (userId, triggeredBy) {
+      var result = this.exercises.filter(item => item.userId === userId)
+      // console.log('setting by', triggeredBy, result.length)
+      return result.sort((a, b) => { return b.date.seconds - a.date.seconds })
     }
   },
   computed: {
@@ -188,6 +216,13 @@ export default {
       this.selectedTeam = to.path.slice(1)
       this.$bind('members', db.collection(`${this.selectedTeam}_members`).orderBy('firstname'))
       this.$bind('exercises', db.collection(`${this.selectedTeam}_exercises`))
+
+      const correspondingUsers = require(`../../static/${to.path.slice(1).toUpperCase()}.json`)
+      if (!correspondingUsers.find(u => { return u.email_address === this.email_user })) this.selectedUser = null
+      this.exercisesOfUser()
+    },
+    selectedUser (value) {
+      this.exercisesOfUser(value, 'watch')
     }
   },
   created () {
@@ -195,7 +230,13 @@ export default {
       firebase.auth().onAuthStateChanged(user => {
         resolve(user)
       }, reject)
-    }).then(data => { this.userLoggedIn = data.email })
+    }).then(data => {
+      this.userLoggedIn = data.email
+      this.selectedUser = data.email
+      this.exercisesOfUser(data.email, 'created')
+      // var result = this.exercises.filter(item => item.userId === data.email)
+      // this.exercisesOfUser = result.sort((a, b) => { return b.date.seconds - a.date.seconds })
+    })
   }
 }
 </script>
@@ -206,7 +247,29 @@ export default {
   min-width: 200px;
 }
 
+.week-input {
+ width: 2.4rem;
+ border-radius: 5px;
+}
 
+.user-login{
+  align-items: center;
+}
+.user-login > * {
+  margin: 1rem;
+}
+
+.dashboard-text {
+  color: white;
+}
+
+.inline > * {
+  display: inline;
+}
+
+.switch {
+    min-width: 140px;
+}
 
 .optional-comments {
   white-space: pre-line; /* Luistert naar \n */
