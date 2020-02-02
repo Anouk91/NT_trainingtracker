@@ -141,5 +141,8 @@ footer {
   padding-bottom: 1rem;
 }
 
+.firstRow {
+  padding-top: 1rem;
+}
 
 </style>

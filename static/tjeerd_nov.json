@@ -1,4 +1,6 @@
-[
+{
+  "first_read": "https://docs.google.com/document/d/1mp5P956Gm9r0uJghQ-Ek6wWLvwaK7HkNPtW2D1d2Jjw/edit",
+  "exercises":  [
   {
     "name": "Bulgarian Split Squat",
     "sets": 3,
@@ -80,3 +82,4 @@
     "type": "Buikspieren"
   }
 ]
+}

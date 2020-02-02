@@ -1,0 +1,76 @@
+ 
+{
+  "first_read": "https://docs.google.com/document/d/1SJb-2I5mzEU_wVTWXLXn4FmD_B-eKetofnwl4Epnw5M/edit",
+  "exercises": [
+    {
+      "name": "BOSU single leg squat",
+      "sets": 3,
+      "reps": 12,
+      "video": "https://www.youtube.com/embed/k9WU0bRaeIM",
+      "remark": " Je kan deze oefening op verschillende niveau's uitvoeren. PLatte kant van de BOSU is makkelijker dan de bolle kant,dus begin eventueel daarmee. Je kan dit ook opbouwen naar een sprongoefening. Doe dat echter alleen met de bolle kant van de BOSU boven.",
+      "type": "Beenspieren"
+    },
+    {
+      "name": "Hamstring curl op bal",
+      "sets": 3,
+      "reps": "maximaal",
+      "video": "https://www.youtube.com/embed/Kk8dpH4ZPos",
+      "remark": " Maak met je lichaam een rechte lijn van je schouders tot je knieën en probeerd die lijn vast te houden terwijl je je knieën intret. Leg je kuiten op de bal ipv je voeten om het zwaarder te maken.",
+      "type": "Beenspieren"
+    },
+    {
+      "name": "Step up",
+      "sets": 4 ,
+      "reps": "5-8",
+      "video": "https://drive.google.com/file/d/1U7ZdwGgAp47lHN1joqvPYyzjgdJ4IN0a/preview",
+      "remark": " Zet af met het been dat op de box staat en ontspan het achterste been (til je tenen daarvan op). Probeer je bovenbeen recht naar voren te laten wijzen (als je dit voor een spiegel doet, wijs je knie naar de knie van je spiegelbeeld)",
+      "type": "Beenspieren"
+    },
+    
+    {
+      "name": "Rienks kniehef-oefening",
+      "sets": 3,
+      "reps": "30 sec per been",
+      "remark": "2x links, 1x rechts en andersom. Actief hameren met de voorvoet. Hiel net van de grond af houden",
+      "type": "Beenspieren"
+    }, 
+    {
+      "name": "Face pull",
+      "sets": 3,
+      "reps": 12,
+      "video": "https://www.youtube.com/embed/eFxMixk_qPQ",
+      "remark": " Tranquilo en focus met deze. Deze oefening voer je uit in een paar stappen. Eerst met gestrekte armen de schouders naar achteren trekkn",
+      "video2": "https://www.youtube.com/embed/eIq5CB9JfKE&t=356s",
+      "remark2": "Stap 2 is de handen langs de oren trekken terwijl de schouders bij elkaar en laag blijven. Knijp die schouderbladen laag tegen alkaar aan!",
+      "type": "Bovenlichaam"
+    },
+    {
+      "name": "Dumbell shoulder press",
+      "sets": 3,
+      "reps": 12,
+      "video": "https://www.youtube.com/embed/M2rwvNhTOu0",
+      "remark": "Zet je armen recht voor je lichaam, of iets daarbuiten. Zorg dat je pols recht is en niet gebogen (rechte lijn van knokkels langs de arm omlaag). Je lichaam wil achterover gaan leunen om meer spieren te gebruiken. LAAT DIT NIET GEBEUREN! Trek je buik in en maak je rug bol voor je gevoel.",
+      "type": "Bovenlichaam"
+    },
+    {
+      "name": "1 arm cable row",
+      "sets": 3,
+      "reps": 12,
+      "video": "https://drive.google.com/file/d/1ynN6r1lQKM7gafRHKh6c96VFQd5gCdWO/preview",
+      "remark": "Begin een goeie stap van het apparaat af met de schouder 'los' (naar voren), maar zonder rotatie in de ruggegraat.Trek eerst het schouderblad naar achter en daarna de elleboog langs het lichaam zover mogelijk naar achteren. Ook hier, geen rotatie in de rug",
+      "type": "Bovenlichaam"
+    },  
+    {
+      "name": "6 minuten aan buikspieren ",
+      "video": "https://www.youtube.com/embed/gg33A9qlFh8",
+      "remark": " Kies één van deze twee, of mix en match een beetje",
+      "type": "Buikspieren"
+    },
+    
+    {
+      "name": "7 minuten aan buikspieren",
+      "video": "https://www.youtube.com/embed/DHD1-2P94DI&t=224s",
+      "type": "Buikspieren"
+    }
+  ]
+}
