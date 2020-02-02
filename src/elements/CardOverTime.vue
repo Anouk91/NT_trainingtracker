@@ -45,8 +45,6 @@ export default {
     }
   },
   created () {
-    console.log('created card overtime')
-
     this.fillData()
   },
   methods: {
@@ -71,7 +69,6 @@ export default {
         result.push({ data: y, label: workOutType.name, fill: false, borderColor: workOutType.color })
       })
       this.maxY = yMax
-      console.log(yMax)
       if (yMax > 5) this.chartOptions.scales.yAxes[0].ticks.max = yMax
       // this.chartOptions.scales.yAxes[0].ticks.max = yMax > 5 ? yMax : 5
 
@@ -86,7 +83,6 @@ export default {
   },
   watch: {
     exercises () {
-      console.log('watching')
       this.fillData()
     }
   }

@@ -25,11 +25,9 @@ export default {
       var styleClass = obj === this.selectedType ? 'active' : ''
       if (i === 0) styleClass += ' left'
       if (i === this.all.length - 1) styleClass += ' right'
-      console.log(styleClass)
       return styleClass
     },
     change (type) {
-      console.log('changing!', type)
       this.selectedType = type
     }
   }

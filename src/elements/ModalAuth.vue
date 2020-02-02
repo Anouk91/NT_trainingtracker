@@ -71,7 +71,6 @@ export default {
   },
   methods: {
     login () {
-      console.log('auth')
       firebase.auth().signInWithEmailAndPassword(this.email_user, this.password).then((user) => {
         this.$emit('close')
         this.$parent.userLoggedIn = user.user.email

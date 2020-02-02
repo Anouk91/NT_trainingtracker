@@ -133,6 +133,11 @@ footer {
 .background {
   background-color: var(--primary-color);
 }
+
+.dashboard-text {
+  color: white;
+}
+
 .color {
   color: var(--primary-color) 
 }
