@@ -62,6 +62,7 @@ export default {
     return {
       exercises: jan,
       nov,
+      jan,
       selectedMonth: 'jan',
       selectedView: 'exercises'
     }
@@ -75,6 +76,7 @@ export default {
           : 'blue'
     },
     changeExercises (value) {
+      console.log('jan', value === 'jan')
       this.exercises = value === 'jan' ? this.jan : this.nov
       this.selectedMonth = value
     },
