@@ -9,7 +9,7 @@
 
     <div class="row" >
       <div
-        v-for="exercise in dailies.exercises"
+        v-for="exercise in exercises.exercises"
         :key="exercise.name"
         class="col-sm-4"
       >
@@ -60,7 +60,7 @@ export default {
   },
   data () {
     return {
-      dailies: jan,
+      exercises: jan,
       nov,
       selectedMonth: 'jan',
       selectedView: 'exercises'
@@ -75,7 +75,7 @@ export default {
           : 'blue'
     },
     changeExercises (value) {
-      this.selectedView = value === 'first read' ? 'first' : this.nov
+      this.exercises = value === 'jan' ? this.jan : this.nov
       this.selectedMonth = value
     },
     changeView (value) {

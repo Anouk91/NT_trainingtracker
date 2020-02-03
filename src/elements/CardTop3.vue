@@ -118,7 +118,7 @@ export default {
 }
 
 .week-input {
-  width: 2.4rem;
+  width: 40px;
   background-color: var(--primary-color);
   color: white;
   border: auto;

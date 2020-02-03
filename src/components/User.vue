@@ -12,7 +12,7 @@
       <b-button v-if="!userLoggedIn" v-on:click="showLoginModal = true" :disabled="!selectedUser" variant="primary"> login </b-button>
       <b-button v-if="userLoggedIn" v-on:click="logOut()" variant="warning"> logout </b-button>
       <selector-version class="switch" :all="['individu', 'team']" :selectedTypes="selectedVersion" @clicked="changeVersion"> </selector-version>
-      <div style="color: white;"> wk <input class="week-input" type="number" v-model.number="selectedWeek"> </div>
+      <!-- <div style="color: white;"> wk <input class="week-input" type="number" v-model.number="selectedWeek"> </div> -->
     </div>
 
     <!-- Personal stats -->
@@ -231,9 +231,11 @@ export default {
         resolve(user)
       }, reject)
     }).then(data => {
-      this.userLoggedIn = data.email
-      this.selectedUser = data.email
-      this.exercisesOfUser(data.email, 'created')
+      if (data) {
+        this.userLoggedIn = data.email
+        this.selectedUser = data.email
+        this.exercisesOfUser(data.email, 'created')
+      }
       // var result = this.exercises.filter(item => item.userId === data.email)
       // this.exercisesOfUser = result.sort((a, b) => { return b.date.seconds - a.date.seconds })
     })
