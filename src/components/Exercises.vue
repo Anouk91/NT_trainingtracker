@@ -3,7 +3,7 @@
     <div class="row firstRow">
       <selector-radio class="col" :all="['nov', 'jan']" :selected="selectedMonth" @clicked="changeExercises"></selector-radio>
       <div class="col">
-        <a target="_blank" rel="noopener noreferrer" href="https://docs.google.com/document/d/1mp5P956Gm9r0uJghQ-Ek6wWLvwaK7HkNPtW2D1d2Jjw/edit" class="btn btn-info" role="button">Extra info - {{getFullMonth(selectedMonth)}}</a>
+        <a target="_blank" rel="noopener noreferrer" :href="exercises.first_read" class="btn btn-info" role="button">Extra info - {{getFullMonth(selectedMonth)}}</a>
       </div>
     </div>
 
