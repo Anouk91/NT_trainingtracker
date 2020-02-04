@@ -1,16 +1,20 @@
 <template>
   <div class="col-md">
-    <div class="card dashboard-card">
+    <div class="card dashboard-card ">
     <div class="card-body">
-      <h3> Top {{amountOfTop}} - wk {{currentWeekNum}}</h3>
+      <h3> Top - wk <input class="week-input" type="number" v-model.number="selectedWeek">
+      
+      </h3>
       <selector-type :selectedTypes="selectedArray" @clicked="filterExercises"> </selector-type>
-      <div v-for="(player,i) in topThreeOfTheWeek()" :key="i" style="display: inline;">
+      <div class="scroll">
+      <div  v-for="(player,i) in topThreeOfTheWeek()" :key="i" style="display: inline;">
         <div class="flex">
           <div class="color rank"> {{i + 1 }} </div>
           <div class="name"> {{player.username}}</div>
           <div class="color"> {{player.count}}x</div>
           <div class="time"> {{player.hours}}u <br> {{player.minutes}}m</div>
         </div>
+      </div>
       </div>
       <div class="total"> Totaal deze week <b> {{filteredExercises.length}} </b> </div>
       </div>
@@ -29,11 +33,11 @@ export default {
   },
   props: {
     exercises: {type: Array},
-    members: {type: Array},
-    amountOfTop: {type: Number}
+    members: {type: Array}
   },
   data () {
     return {
+      selectedWeek: moment(new Date()).isoWeekday(1).format('w'),
       selectedArray: require(`../../static/workout_types.json`).map(w => { return w.name }).slice(0, -1)
     }
   },
@@ -62,7 +66,7 @@ export default {
           if (b.count !== a.count) return b.count - a.count
           if (b.hours !== a.hours) return b.hours - a.hours
           else return b.minutes - a.minutes
-        }).splice(0, this.amountOfTop)
+        })
       }
     },
     filterExercises (value) {
@@ -70,12 +74,10 @@ export default {
     }
   },
   computed: {
-    currentWeekNum: function () {
-      return moment(new Date()).isoWeekday(1).format('w')
-    },
+
     exercisesThisWeek () {
       if (this.exercises !== 0) {
-        return this.exercises.filter(e => this.currentWeekNum === moment.unix(e.date.seconds).isoWeekday(1).format('w'))
+        return this.exercises.filter(e => `${this.selectedWeek}` === moment.unix(e.date.seconds).isoWeekday(1).format('w'))
       } else return 0
     },
     filteredExercises () {
@@ -107,9 +109,21 @@ export default {
   border-radius: 5px;
 }
 
+.card-body {
+  padding: 0; 
+}
 .rank {
   font-size: 2rem;
   text-align: left;
+}
+
+.week-input {
+  width: 2em;
+  background-color: var(--primary-color);
+  color: white;
+  border: auto;
+  border-radius: 5px;
+  align-items: center;
 }
 
 .name {
@@ -118,6 +132,11 @@ export default {
 
 .time {
   width: 50px;
+}
+
+.scroll {
+  max-height: 200px;
+  overflow-y: scroll;
 }
 
 .total {

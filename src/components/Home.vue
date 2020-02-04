@@ -2,7 +2,8 @@
   <div class="container">
 
   <!-- Teams Stats -->
-    <div class="row">
+    <div class="row firstRow">
+      <h3 class="dashboard-text col-12"> National Teams Dashboard </h3>
 
       <div class="col">
         <div class="card">
@@ -15,7 +16,7 @@
       </div>
       <card-total-exercises  :exercises="exercises()"> </card-total-exercises>
       <card-over-time :exercises="exercises()"> </card-over-time>
-      <CardTop3 :exercises="exercises()" :members="members()" :amountOfTop="5"> </CardTop3>
+      <CardTop3 :exercises="exercises()" :members="members()" > </CardTop3>
     </div>
 
 

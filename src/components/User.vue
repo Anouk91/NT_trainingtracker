@@ -241,7 +241,19 @@ export default {
     }
   },
   created () {
-    this.setSelectedUser()
+    new Promise((resolve, reject) => {
+      firebase.auth().onAuthStateChanged(user => {
+        resolve(user)
+      }, reject)
+    }).then(data => {
+      if (data) {
+        this.userLoggedIn = data.email
+        this.selectedUser = data.email
+        this.exercisesOfUser(data.email, 'created')
+      }
+      // var result = this.exercises.filter(item => item.userId === data.email)
+      // this.exercisesOfUser = result.sort((a, b) => { return b.date.seconds - a.date.seconds })
+    })
   }
 }
 </script>

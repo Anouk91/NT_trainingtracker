@@ -1,8 +1,15 @@
 <template>
   <div class="container-fluid">
-    <div class="row">
+    <div class="row firstRow">
+      <selector-radio class="col" :all="['nov', 'jan']" :selected="selectedMonth" @clicked="changeExercises"></selector-radio>
+      <div class="col">
+        <a target="_blank" rel="noopener noreferrer" :href="exercises.first_read" class="btn btn-info" role="button">Extra info - {{getFullMonth(selectedMonth)}}</a>
+      </div>
+    </div>
+
+    <div class="row" >
       <div
-        v-for="exercise in dailies"
+        v-for="exercise in exercises.exercises"
         :key="exercise.name"
         class="col-sm-4"
       >
@@ -42,17 +49,23 @@
 </template>
 
 <script>
-import { db } from '../firebase'
+import SelectorRadio from '../elements/SelectorRadio.vue'
+import jan from '../../static/tjeerd_jan.json'
+import nov from '../../static/tjeerd_nov.json'
 
 export default {
-  name: 'hello',
+  name: 'exersices',
+  components: {
+    SelectorRadio
+  },
   data () {
     return {
-      dailies: []
+      exercises: jan,
+      nov,
+      jan,
+      selectedMonth: 'jan',
+      selectedView: 'exercises'
     }
-  },
-  firestore: {
-    dailies: db.collection('dailies').orderBy('type')
   },
   methods: {
     getColor (exercise) {
@@ -61,6 +74,17 @@ export default {
         : exercise.type === 'Bovenlichaam'
           ? 'white'
           : 'blue'
+    },
+    changeExercises (value) {
+      console.log('jan', value === 'jan')
+      this.exercises = value === 'jan' ? this.jan : this.nov
+      this.selectedMonth = value
+    },
+    changeView (value) {
+      this.selectedView = value
+    },
+    getFullMonth (short) {
+      return short === 'jan' ? 'januari' : 'november'
     }
   }
 }

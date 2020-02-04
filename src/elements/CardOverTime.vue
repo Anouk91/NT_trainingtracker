@@ -44,7 +44,6 @@ export default {
     }
   },
   created () {
-    // console.log('created card overtime')
     this.fillData()
   },
   methods: {
@@ -65,9 +64,9 @@ export default {
         }
         result.push({ data: y, label: workOutType.name, fill: false, borderColor: workOutType.color })
       })
-
-      if (yMax > 5) this.chartOptions.scales.yAxes[0].ticks.max = Math.ceil((yMax + 1) / 5) * 5
-      else this.chartOptions.scales.yAxes[0].ticks.max = yMax + 1
+      this.maxY = yMax
+      if (yMax > 5) this.chartOptions.scales.yAxes[0].ticks.max = yMax
+      // this.chartOptions.scales.yAxes[0].ticks.max = yMax > 5 ? yMax : 5
 
       return {
         labels: Array.apply(null, Array(this.currentWeekNum)).map((x, i) => { return `wk${i + 1}` }),

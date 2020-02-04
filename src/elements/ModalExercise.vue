@@ -157,12 +157,12 @@ export default {
 }
 
 .time-input > * {
-  width: 1.5rem;
+  width: 2em;
   text-align: right;
 }
 
 .minute {
-  width: 3rem;
+  width: 3em;
 }
 
 .modal-mask {

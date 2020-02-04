@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div class="row justify-content-between">
-    <b-button v-on:click="addListToDB(dailiesNov, 'dailies')" class="btn col btn-success"> Import Dailies november </b-button>
     <b-button v-on:click="deletePlayers(dailies, 'dailies')" class="btn col btn-warning"> Delete Dailies </b-button>
   </div>
     <div class="row justify-content-between">
@@ -14,7 +13,6 @@
 
 <script>
 import { db } from '../firebase'
-import dailiesNov from '../../static/dailies_nov.json'
 
 export default {
   name: 'home',
@@ -25,13 +23,6 @@ export default {
   },
   data () {
     return {
-      dailies: [],
-      dailiesNov
-    }
-  },
-  firestore () {
-    return {
-      dailies: db.collection('dailies')
     }
   },
   methods: {
