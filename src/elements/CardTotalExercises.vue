@@ -1,5 +1,5 @@
 <template>
-  <div class="col">
+  <div class="">
     <div class="card dashboard-card">
       <div class="card-body">
         <h3> Trainingen Totaal</h3>
@@ -21,7 +21,10 @@ export default {
 </script>
 
 <style scoped>
+.card-body {
+  }
 .big {
+  white-space:nowrap;
   font-size: 5rem;
 }
 </style>

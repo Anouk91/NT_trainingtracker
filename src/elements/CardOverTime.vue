@@ -1,5 +1,5 @@
 <template>
-  <div class="col">
+  <div class="">
     <div class="card dashboard-card">
       <div class="card-body">
     <!-- <line-chart ></line-chart> -->
@@ -93,7 +93,10 @@ export default {
 .card-body {
   padding: 0;
   overflow-x: scroll;
+}
 
+.card {
+  min-width: 275px;
 }
 .line-chart {
     width: 400px;
