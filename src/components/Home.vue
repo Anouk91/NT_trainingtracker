@@ -5,7 +5,7 @@
     <div class="row firstRow">
       <h3 class="dashboard-text col-12"> National Teams Dashboard </h3>
 
-      <div class="col">
+      <div class="">
         <div class="card">
           <h4>#RoadToLeeuwarden</h4>
           <div class="inline" >
@@ -105,6 +105,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+main {
+  display: flex;
+  justify-content: center;
+}
 .inline > * {
   display: inline;
 }

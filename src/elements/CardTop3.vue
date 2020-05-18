@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md">
+  <div class="">
     <div class="card dashboard-card ">
     <div class="card-body">
       <h3> Top - wk <input class="week-input" type="number" v-model.number="selectedWeek">

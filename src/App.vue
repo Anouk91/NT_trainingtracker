@@ -91,7 +91,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import "helpers/scss/fontawesome";
+@import "helpers/scss/solid";
 .vdp-datepicker__calendar {
   left: -20px;
 }
@@ -132,6 +134,7 @@ footer {
 } */
 .background {
   background-color: var(--primary-color);
+  width: 100%;
 }
 
 .dashboard-text {
@@ -148,6 +151,10 @@ footer {
 
 .firstRow {
   padding-top: 1rem;
+}
+
+.row {
+  justify-content: space-evenly;
 }
 
 </style>

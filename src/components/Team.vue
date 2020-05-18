@@ -3,45 +3,42 @@
 
     <!-- Select user row + settings -->
     <div class="row user-login">
-      <div :class="`switch ${selectedType === 'individu'? 'active': 'inactive'}`" @click="selectedType= 'individu'">Speler</div>
-      <div :class="`switch ${selectedType === 'team'? 'active': 'inactive'}`" @click="selectedType= 'team'">Team</div>
-      <!-- <selector-radio class="switch" :all="['individu', 'team']" :selected="selectedType" @clicked="changeType"> </selector-radio> -->
-    </div>
-    <div class="row">
+
       <div class="col">
         <b-form-select v-model="selectedUser" :options="dropDown()" :key="selectedTeam">
-          <option :value="null" disabled>-- Selecteer gebruiker --</option>
+          <option :value="null" disabled>-- Selecteer jezelf --</option>
         </b-form-select>
       </div>
-      <b-button class=" button" v-if="!userLoggedIn" v-on:click="showLoginModal = true" :disabled="!selectedUser" variant="primary"> login </b-button>
-      <b-button class=" button" v-if="userLoggedIn" v-on:click="logOut()" variant="warning"> logout </b-button>
-      <!-- <b-button to='team-page'> team </b-button> -->
+      <b-button v-if="!userLoggedIn" v-on:click="showLoginModal = true" :disabled="!selectedUser" variant="primary"> login </b-button>
+      <b-button v-if="userLoggedIn" v-on:click="logOut()" variant="warning"> logout </b-button>
+      <selector-radio class="switch" :all="['individu', 'team']" :selected="selectedType" @clicked="changeType"> </selector-radio>
       <!-- <div style="color: white;"> wk <input class="week-input" type="number" v-model.number="selectedWeek"> </div> -->
     </div>
 
+    <!-- Personal stats -->
+    <div class="row" v-if="selectedUser && (selectedType == 'individu')">
+      <h3 class="dashboard-text col-12"> {{getFirstnameOf(selectedUser)}} Dashboard </h3>
+      <card-total-exercises :exercises="exercisesOfUser(selectedUser, 'template cardte')" > </card-total-exercises>
+      <card-over-time :exercises="exercisesOfUser(selectedUser, 'template cardot')"> </card-over-time>
+     
+      <hr> 
+    </div>
 
     <!-- Team stats -->
     <div class="row" v-if="selectedType == 'team'">
-      <!-- <h3 class="dashboard-text col-12"> Team Dashboard </h3> -->
+      <h3 class="dashboard-text col-12"> Team Dashboard </h3>
       <card-total-exercises :exercises="exercises" > </card-total-exercises>
       <card-over-time :exercises="exercises"> </card-over-time>
       <CardTop3 :exercises="exercises" :members="members" :amountOfTop="3"> </CardTop3>
     </div>
 
-    <!-- Personal stats -->
-    <div class="" v-if="selectedUser && (selectedType == 'individu')">
-      <!-- <h3 class="dashboard-text col-12"> {{getFirstnameOf(selectedUser)}} Dashboard </h3> -->
-      <card-total-exercises :exercises="exercisesOfUser(selectedUser, 'template cardte')" > </card-total-exercises>
-      <card-over-time :exercises="exercisesOfUser(selectedUser, 'template cardot')"> </card-over-time>
-     
-    </div>
-
     
     <hr>
 
-    <div class="row justify-content stretch" v-if="selectedUser">
 
-      <div class="exercise">
+    <div class="row justify-content" v-if="selectedUser">
+
+      <div class="col-sm">
         <div class="card exercise-card" style="align-items: flex-end;">
 
           <b-button v-on:click="showModal = true" :disabled="userLoggedIn !== selectedUser" style="width: 50px;">
@@ -51,7 +48,7 @@
       </div>
 
     <!-- Exercises row -->
-      <div v-for="exercise in exercisesOfUser(selectedUser, 'exercise Row')" :key="exercise['.key']" class="exercise">
+      <div v-for="exercise in exercisesOfUser(selectedUser, 'exercise Row')" :key="exercise['.key']" class="col-sm">
 
           <div class="card  exercise-card">
 
@@ -168,6 +165,7 @@ export default {
       else return true
     },
     filterExercises (value) {
+      console.log(value)
       this.selectedArray = value
     },
     exercisesOfUserPerWeek () {
@@ -267,44 +265,11 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-.button {
-  margin-right: 15px;
-}
-
+<style scoped>
 .exercise-card {
   max-width: 250px;
   min-width: 200px;
 }
-.exercise {
-  margin: 3px;
-}
-
-.stretch {
-  align-items: stretch;
-  
-}
-.switch {
-  width: 50%;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  &:hover {
-    cursor: pointer;
- }
-}
-
-.active {
-  font-weight: bold;
-  font-size: 20px;
- }  
-.inactive {
-
-  color: white;
-
-  border-style: solid 2px;
-  border-radius: 0 0 20px 20px;
-}
-
 
 .week-input {
  width: 2.4rem;
@@ -314,9 +279,9 @@ export default {
 .user-login{
   align-items: center;
 }
-/* .user-login > * {
+.user-login > * {
   margin: 1rem;
-} */
+}
 
 .dashboard-text {
   color: white;

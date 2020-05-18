@@ -4,6 +4,7 @@ import Router from 'vue-router'
 // Page content
 import Home from '@/components/Home'
 import User from '@/components/User'
+import Team from '@/components/Team'
 import Exercises from '@/components/Exercises'
 import Admin from '@/components/Admin'
 // Fallback page
@@ -21,7 +22,13 @@ let router = new Router({
       path: '/ndt',
       name: 'NDT',
       component: User,
-      props: true
+      props: true,
+      children: [
+        {
+          path: 'team-page',
+          component: Team
+        }
+      ]
     },
     {
       path: '/nmt',
@@ -53,14 +60,5 @@ let router = new Router({
     }
   ]
 })
-
-// router.beforeEach((to, from, next) => {
-//   let currentUser = firebase.auth().currentUser
-//   let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-
-//   if (requiresAuth && !currentUser) next('login')
-//   else if (!requiresAuth && currentUser) next('comics')
-//   else next()
-// })
 
 export default router
