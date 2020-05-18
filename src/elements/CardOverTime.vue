@@ -3,7 +3,7 @@
     <div class="card dashboard-card">
       <div class="card-body">
     <!-- <line-chart ></line-chart> -->
-    <line-chart :style="getLineWidth()" :chartData="datacollection" :options="chartOptions"></line-chart>
+      <line-chart :style="getLineWidth()" :chartData="datacollection" :options="chartOptions"></line-chart>
       </div>
     </div>
   </div>
@@ -92,11 +92,18 @@ export default {
 <style scoped>
 .card-body {
   padding: 0;
-  overflow-x: scroll;
+  width: 400px;
 }
 
 .card {
-  min-width: 275px;
+  overflow-x: scroll;
+  width: 450px;
+}
+
+@media only screen and (max-width: 600px) {
+  .card {
+  width: 275px;
+  }
 }
 .line-chart {
     width: 400px;

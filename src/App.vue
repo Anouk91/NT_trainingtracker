@@ -134,6 +134,7 @@ footer {
 } */
 .background {
   background-color: var(--primary-color);
+  width: 100%;
 }
 
 .dashboard-text {

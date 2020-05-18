@@ -34,16 +34,14 @@
       <card-total-exercises :exercises="exercisesOfUser(selectedUser, 'template cardte')" > </card-total-exercises>
       <card-over-time :exercises="exercisesOfUser(selectedUser, 'template cardot')"> </card-over-time>
      
-      <hr> 
     </div>
 
     
     <hr>
 
-
     <div class="row justify-content stretch" v-if="selectedUser">
 
-      <div class="col-sm">
+      <div class="exercise">
         <div class="card exercise-card" style="align-items: flex-end;">
 
           <b-button v-on:click="showModal = true" :disabled="userLoggedIn !== selectedUser" style="width: 50px;">
